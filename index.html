@@ -1574,26 +1574,33 @@ function clearFoodSearch(){
 }
 function buildFoodResultHTML(f,idx,prefix){
   const [name,kcal,protein,carbs,fat,fibre,salt,servG,servLabel]=f;
-  // Determine if this is a liquid/spoon food for unit hints
   const isTbsp=servLabel.toLowerCase().includes('tbsp');
   const isTsp=servLabel.toLowerCase().includes('tsp');
   const isSpoon=isTbsp||isTsp;
+  const isFav=((state.favouriteFoods||[]).includes(idx));
+  // Apply any user overrides
+  const ov=(state.foodOverrides||{})[idx]||{};
+  const dKcal=ov.kcal??kcal, dP=ov.p??protein, dC=ov.c??carbs, dF=ov.f??fat, dFi=ov.fi??fibre, dSalt=ov.salt??salt;
+  const per100=`${dKcal} kcal/100g`;
   return `<div style="background:var(--bg);border:1px solid var(--border);padding:10px 12px;margin-bottom:6px;border-radius:2px" id="${prefix}_${idx}" data-name="${name.replace(/"/g,'&quot;')}">
     <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
-      <div style="font-size:13px;font-weight:400;color:var(--text)">${name}</div>
+      <div style="display:flex;align-items:center;gap:6px;flex:1">
+        <div style="font-size:13px;font-weight:400;color:var(--text)">${name}</div>
+        <button onclick="toggleFavFood(${idx})" style="background:none;border:none;cursor:pointer;font-size:14px;padding:0;line-height:1;flex-shrink:0">${isFav?'⭐':'☆'}</button>
+      </div>
       <div style="font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${servLabel}</div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap" id="${prefix}_macros_${idx}">
-      <span style="font-size:11px;color:var(--ink);font-weight:500">${Math.round(kcal*servG/100)} kcal</span>
-      <span style="font-size:11px;color:#b8934a">${(protein*servG/100).toFixed(1)}g P</span>
-      <span style="font-size:11px;color:#4a8c6a">${(carbs*servG/100).toFixed(1)}g C</span>
-      <span style="font-size:11px;color:#6a9898">${(fat*servG/100).toFixed(1)}g F</span>
-      <span style="font-size:11px;color:#9a7060">${(fibre*servG/100).toFixed(1)}g fibre</span>
-      ${salt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(salt*servG/100)}mg salt</span>`:''}
+      <span style="font-size:11px;color:var(--ink);font-weight:500">${Math.round(dKcal*servG/100)} kcal</span>
+      <span style="font-size:11px;color:#b8934a">${(dP*servG/100).toFixed(1)}g P</span>
+      <span style="font-size:11px;color:#4a8c6a">${(dC*servG/100).toFixed(1)}g C</span>
+      <span style="font-size:11px;color:#6a9898">${(dF*servG/100).toFixed(1)}g F</span>
+      <span style="font-size:11px;color:#9a7060">${(dFi*servG/100).toFixed(1)}g fibre</span>
+      ${dSalt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(dSalt*servG/100)}mg salt</span>`:''}
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">per 100g: ${kcal} kcal · ${protein}g P · ${fat}g F · ${carbs}g C</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">${per100} · ${dP}g P · ${dF}g F · ${dC}g C</div>
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <select id="${prefix}_unit_${idx}" onchange="switchFoodUnit('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})"
+      <select id="${prefix}_unit_${idx}" onchange="switchFoodUnit('${prefix}',${idx},${dKcal},${dP},${dC},${dF},${dFi},${dSalt||0})"
         style="padding:5px 6px;border:1px solid var(--border);background:var(--white);font-size:12px;color:var(--text);border-radius:2px;font-family:inherit">
         <option value="g" ${!isSpoon?'selected':''}>g</option>
         <option value="tsp" ${isTsp?'selected':''}>tsp (~5g)</option>
@@ -1602,12 +1609,16 @@ function buildFoodResultHTML(f,idx,prefix){
       </select>
       <input type="number" inputmode="decimal" value="${servG}" id="${prefix}_srv_${idx}"
         style="width:60px;padding:5px 8px;border:1px solid var(--border);background:var(--white);font-size:13px;color:var(--text);border-radius:2px;text-align:center"
-        oninput="updateSearchMacros('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})">
-      <button onclick="addSearchFoodToLog('${prefix}',${idx},${fKcal},${fP},${fC},${fF},${fFi},${fSalt||0})"
+        oninput="updateSearchMacros('${prefix}',${idx},${dKcal},${dP},${dC},${dF},${dFi},${dSalt||0})">
+      <button onclick="addSearchFoodToLog('${prefix}',${idx},${dKcal},${dP},${dC},${dF},${dFi},${dSalt||0})"
         style="flex:1;min-width:100px;padding:7px 12px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">
         + Add to Log
       </button>
     </div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button onclick="openFoodEdit(${idx})" style="padding:2px 7px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">✏️ Edit nutrition</button>
+    </div>
+    <div id="foodEdit_${idx}" style="display:none"></div>
     ${GUT_BOOSTERS.some(g=>g.l.toLowerCase().includes(f[0].toLowerCase().split(' ')[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green)"> Tick gut booster?</label>`:''}
     <div id="${prefix}_status_${idx}" style="font-size:11px;margin-top:4px;min-height:16px;color:var(--green)"></div>
   </div>`;
@@ -2972,7 +2983,7 @@ function logRestOrder(cartKey,restaurantName){
   if(!items.length)return;
   const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f,fi:s.fi+(i.fi||0),salt:s.salt+(i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
   const name=`${restaurantName}: ${items.map(i=>i.name).join(' + ')}`;
-  copyMealToLog(name,t.p,t.f,t.c,t.fi,t.kcal,Math.round(t.salt*1000));
+  copyMealToLog(name,t.p,t.f,t.c,t.fi,t.kcal,Math.round(t.salt));
   clearRestCart(cartKey);
 }
 
