@@ -215,7 +215,6 @@ button,input,textarea,select{font-family:inherit}
   <div class="card-dark" id="summaryCard"></div>
   <div class="card" id="stepsCard"></div>
   <div class="card" id="waterCard"></div>
-  <div class="card" id="macroSplitCard"></div>
   <div id="checklistContainer" style="padding:0 16px"></div>
 </div>
 
@@ -224,6 +223,7 @@ button,input,textarea,select{font-family:inherit}
   <div class="day-strip" id="dayStripFood"></div>
   <div id="cycleBanner"></div>
   <div class="card-dark" id="yolkCard"></div>
+  <div class="card" id="macroSplitCard" style="margin:16px 16px 0"></div>
   <div id="macroCard"></div>
   <div id="mealHistoryCard" style="padding:0 16px"></div>
   <div id="foodLoggerCard"></div>
@@ -1344,6 +1344,20 @@ const FOOD_DB=[
   ["Lindahls Quark Natural",68,11,4.5,0.3,0,60,150,"150g pot"],
   ["Lindahls Quark Vanilla",80,10.5,7.5,0.3,0,55,150,"150g pot"],
   ["Lindahls Quark Strawberry",78,10.5,7,0.3,0,55,150,"150g pot"],
+  // ── FROZEN FRUIT & VEG ──
+  ["Frozen Raspberries",52,1.2,12,0.7,6.7,1,80,"80g"],
+  ["Frozen Raspberries",52,1.2,12,0.7,6.7,1,150,"150g"],
+  ["Morrisons Frozen Raspberries",52,1.2,12,0.7,6.7,1,80,"80g"],
+  ["Frozen Blueberries",57,0.7,14,0.3,2.4,1,80,"80g"],
+  ["Frozen Blueberries",57,0.7,14,0.3,2.4,1,150,"150g"],
+  ["Morrisons Frozen Blueberries",57,0.7,14,0.3,2.4,1,80,"80g"],
+  ["Frozen Mango",60,0.5,15,0.2,1.8,3,80,"80g"],
+  ["Frozen Mango",60,0.5,15,0.2,1.8,3,150,"150g"],
+  ["Morrisons Frozen Mango",60,0.5,15,0.2,1.8,3,80,"80g"],
+  ["Frozen Peas",81,5.4,14,0.4,5.1,3,80,"80g"],
+  ["Frozen Sweetcorn",86,2.9,18,1.2,2.7,1,80,"80g"],
+  ["Frozen Edamame Beans",122,11,8.9,5.2,5.2,6,80,"80g"],
+  ["Morrisons Frozen Edamame Beans",122,11,8.9,5.2,5.2,6,80,"80g"],
   ["Dark chocolate 100%",533,12.5,34,56,16,14,15,"2 squares (15g)"],
   ["Cacao powder raw",229,19.6,57.9,13.7,33,21,10,"1 tbsp (10g)"],
   ["Bone broth miso soup",40,4,3.5,1,1,1200,250,"1 mug combined"],
@@ -1589,7 +1603,7 @@ function buildFoodResultHTML(f,idx,prefix){
       <input type="number" inputmode="decimal" value="${servG}" id="${prefix}_srv_${idx}"
         style="width:60px;padding:5px 8px;border:1px solid var(--border);background:var(--white);font-size:13px;color:var(--text);border-radius:2px;text-align:center"
         oninput="updateSearchMacros('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})">
-      <button onclick="addSearchFoodToLog('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})"
+      <button onclick="addSearchFoodToLog('${prefix}',${idx},${fKcal},${fP},${fC},${fF},${fFi},${fSalt||0})"
         style="flex:1;min-width:100px;padding:7px 12px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">
         + Add to Log
       </button>
@@ -1750,19 +1764,92 @@ function saveMealCartPrompt(){
 
 
 
+function openFoodEdit(idx){
+  const el=document.getElementById(`foodEdit_${idx}`);
+  if(!el)return;
+  if(el.style.display!=='none'){el.style.display='none';return;}
+  const f=FOOD_DB[idx];
+  const overrides=(state.foodOverrides||{})[idx]||{};
+  const vals={kcal:overrides.kcal??f[1],p:overrides.p??f[2],c:overrides.c??f[3],f:overrides.f??f[4],fi:overrides.fi??f[5],salt:overrides.salt??f[6]};
+  el.style.display='block';
+  el.innerHTML=`<div style="background:var(--bg);border:1px solid var(--border);padding:10px;margin-top:6px;border-radius:2px">
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Edit per 100g</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px">
+      <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Kcal</div><input id="fe_kcal_${idx}" type="number" value="${vals.kcal}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--white);font-size:12px;border-radius:2px;box-sizing:border-box"></div>
+      <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Protein</div><input id="fe_p_${idx}" type="number" value="${vals.p}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--white);font-size:12px;border-radius:2px;box-sizing:border-box"></div>
+      <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Fat</div><input id="fe_f_${idx}" type="number" value="${vals.f}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--white);font-size:12px;border-radius:2px;box-sizing:border-box"></div>
+      <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Carbs</div><input id="fe_c_${idx}" type="number" value="${vals.c}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--white);font-size:12px;border-radius:2px;box-sizing:border-box"></div>
+      <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Fibre</div><input id="fe_fi_${idx}" type="number" value="${vals.fi}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--white);font-size:12px;border-radius:2px;box-sizing:border-box"></div>
+      <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Salt mg</div><input id="fe_salt_${idx}" type="number" value="${vals.salt}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--white);font-size:12px;border-radius:2px;box-sizing:border-box"></div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button onclick="saveFoodEdit(${idx})" style="flex:1;padding:7px;background:var(--ink);color:white;border:none;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">Save</button>
+      <button onclick="resetFoodEdit(${idx})" style="padding:7px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-size:10px;cursor:pointer;border-radius:2px;font-family:inherit">Reset</button>
+    </div>
+  </div>`;
+}
+
+function saveFoodEdit(idx){
+  if(!state.foodOverrides)state.foodOverrides={};
+  state.foodOverrides[idx]={
+    kcal:parseFloat(document.getElementById(`fe_kcal_${idx}`)?.value)||FOOD_DB[idx][1],
+    p:parseFloat(document.getElementById(`fe_p_${idx}`)?.value)||FOOD_DB[idx][2],
+    c:parseFloat(document.getElementById(`fe_c_${idx}`)?.value)||FOOD_DB[idx][3],
+    f:parseFloat(document.getElementById(`fe_f_${idx}`)?.value)||FOOD_DB[idx][4],
+    fi:parseFloat(document.getElementById(`fe_fi_${idx}`)?.value)||FOOD_DB[idx][5],
+    salt:parseFloat(document.getElementById(`fe_salt_${idx}`)?.value)||FOOD_DB[idx][6],
+  };
+  persist();
+  const el=document.getElementById(`foodEdit_${idx}`);
+  if(el)el.style.display='none';
+  const inp=document.getElementById("foodSearchInput");
+  if(inp)searchFood(inp.value);
+}
+
+function resetFoodEdit(idx){
+  if(state.foodOverrides)delete state.foodOverrides[idx];
+  persist();
+  const el=document.getElementById(`foodEdit_${idx}`);
+  if(el)el.style.display='none';
+  const inp=document.getElementById("foodSearchInput");
+  if(inp)searchFood(inp.value);
+}
+
+function toggleFavFood(idx){
+  if(!state.favouriteFoods)state.favouriteFoods=[];
+  const pos=state.favouriteFoods.indexOf(idx);
+  if(pos>=0)state.favouriteFoods.splice(pos,1);
+  else state.favouriteFoods.unshift(idx);
+  persist();
+  // Re-render search results
+  const inp=document.getElementById("foodSearchInput");
+  if(inp&&inp.value.length>=2)searchFood(inp.value);
+}
+
 function searchFood(q){
   const res=document.getElementById("foodSearchResults");if(!res)return;
   const query=q.trim().toLowerCase();
   const aliases={"evoo":"olive oil","evo":"olive oil","pb":"peanut butter","greek yogurt":"greek yogurt","greek":"fage","arla":"arla","oatly":"oatly"};
   const mapped=aliases[query]||query;
-  if(!mapped||mapped.length<2){res.innerHTML="";return;}
-  // Split query into words — match items containing ALL words (any order)
+  const favs=state.favouriteFoods||[];
+  // Show favourites when search is empty or short
+  if(!mapped||mapped.length<2){
+    if(favs.length){
+      res.innerHTML=`<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">⭐ Favourites</div>`+
+        favs.slice(0,6).filter(i=>FOOD_DB[i]).map(i=>buildFoodResultHTML(FOOD_DB[i],i,"fdb")).join("");
+    } else {res.innerHTML="";}
+    return;
+  }
   const words=mapped.split(/\s+/).filter(w=>w.length>1);
-  const matches=FOOD_DB_INDEX.filter(f=>words.every(w=>f.lower.includes(w))).slice(0,6);
-  // Fallback: any word match if no full matches
-  const results=matches.length?matches:FOOD_DB_INDEX.filter(f=>words.some(w=>f.lower.includes(w))).slice(0,6);
-  if(!results.length){res.innerHTML=`<div style="font-size:12px;color:var(--muted);padding:8px 0">No results for "${q}" — try fewer words</div>`;return;}
-  res.innerHTML=results.map(m=>buildFoodResultHTML(FOOD_DB[m.idx],m.idx,"fdb")).join("");
+  const matches=FOOD_DB_INDEX.filter(f=>words.every(w=>f.lower.includes(w))).slice(0,8);
+  const results=matches.length?matches:FOOD_DB_INDEX.filter(f=>words.some(w=>f.lower.includes(w))).slice(0,8);
+  if(!results.length){res.innerHTML=`<div style="font-size:12px;color:var(--muted);padding:8px 0">No results for "${q}"</div>`;return;}
+  // Sort: favourites first
+  const sorted=[...results].sort((a,b)=>{
+    const af=favs.includes(a.idx)?0:1, bf=favs.includes(b.idx)?0:1;
+    return af-bf;
+  });
+  res.innerHTML=sorted.map(m=>buildFoodResultHTML(FOOD_DB[m.idx],m.idx,"fdb")).join("");
 }
 
 async function scanLabel(input){
@@ -2015,7 +2102,7 @@ function renderFood(){
             <div style="flex:1">
               <div style="font-size:13px;color:var(--text)">${m.name}</div>
               <div class="meal-entry-macros">${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F${m.fibre?" · "+(+m.fibre||0).toFixed(1)+"g fibre":""}${m.salt?" · "+Math.round(+m.salt||0)+"mg salt":""} · ${m.time}</div>
-              <button onclick="saveLoggedMealToLibrary(${mIdx})" style="margin-top:4px;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">💾 Save to Meals</button>
+              <button onclick="saveLoggedMealToLibrary(${mIdx},${foodDayIdx})" style="margin-top:4px;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">💾 Save to Meals</button>
             </div>
             <button onclick="removeLoggedMeal(${mIdx})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1;margin-top:2px">×</button>
           </div>`).join("")}
@@ -2382,7 +2469,7 @@ Suggest 2-3 specific meal ideas for her next meal (${meal}). Be brief and practi
     state._lastAISuggest=text;
     persist();
   }catch(e){
-    state._lastAISuggest="Suggestions unavailable — the AI requires the app to be hosted on Netlify. Works at katarinahealth.netlify.app";
+    state._lastAISuggest="AI suggestions need an API key to work. To enable, the app needs to be served over HTTPS (GitHub Pages works). If you see this message, tap Get Ideas again after a moment.";
   }
   aiSuggestLoading=false;
   renderAIMealSuggestions();
@@ -2533,6 +2620,7 @@ const ATIS_MEALS={
 const SALAD_PROJECT_MEALS={
   proteins:[
     {name:"Cajun Chicken Thigh (120g)",kcal:248,p:28,c:1,f:14,fi:1,salt:1},
+    {name:"Black Pepper Chicken Breast (120g)",kcal:224,p:29.4,c:2.8,f:4.9,fi:0,salt:0.5},
     {name:"Honey Mustard Chicken (120g)",kcal:198,p:23,c:2,f:11,fi:0,salt:1},
     {name:"Roasted Salmon (120g)",kcal:280,p:28,c:0,f:18,fi:0,salt:0},
     {name:"Black Pepper Prawns (120g)",kcal:124,p:22,c:1,f:4,fi:0,salt:1},
@@ -2568,6 +2656,7 @@ const SALAD_PROJECT_MEALS={
     {name:"Hot Honey Potatoes",kcal:110,p:1,c:19,f:3,fi:2,salt:1},
   ],
   ingredients:[
+    {name:"Pesto Butter Beans",kcal:104,p:4.8,c:9,f:4.4,fi:4.9,salt:0.6},
     {name:"Avocado",kcal:136,p:1,c:7,f:12,fi:4,salt:0},
     {name:"Goats Cheese",kcal:137,p:7,c:1,f:11,fi:0,salt:1},
     {name:"Crumbled Feta",kcal:147,p:8,c:0,f:12,fi:0,salt:1},
@@ -2752,10 +2841,39 @@ function renderRestaurantCalc(container, which){
       </div>
       <div style="display:flex;gap:8px;margin-top:10px">
         <button onclick="logRestOrder('${cartKey}','${name}')" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
-        <button onclick="clearRestCart('${cartKey}')" style="padding:9px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
+        <button onclick="saveRestOrder('${cartKey}','${name}')" style="padding:9px 12px;background:none;border:1px solid rgba(184,147,74,.4);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">💾 Save Order</button>
+        <button onclick="clearRestCart('${cartKey}')" style="padding:9px 12px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
       </div>
     </div>`:
     `<div style="font-size:12px;color:var(--muted);padding:10px 0 14px;font-style:italic">Tap + Add on any item to build your order</div>`}
+
+    <!-- Saved Orders -->
+    ${(()=>{
+      const savedOrders=((state._savedRestOrders||{})[cartKey])||[];
+      const open=(state._savedOrdersOpen||{})[cartKey]||false;
+      if(!savedOrders.length)return'';
+      return `<div style="margin-bottom:14px;border:1px solid var(--border);border-radius:2px">
+        <div onclick="toggleSavedOrders('${cartKey}')" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;cursor:pointer;background:var(--white)">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">⭐ Saved Orders (${savedOrders.length})</div>
+          <span style="font-size:11px;color:var(--gold)">${open?'▲':'▼'}</span>
+        </div>
+        ${open?`<div style="border-top:1px solid var(--border)">
+          ${savedOrders.map((order,oi)=>`
+            <div style="padding:10px 14px;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
+                <div style="font-size:12.5px;color:var(--text);font-weight:400">${order.name}</div>
+                <div style="display:flex;gap:6px;flex-shrink:0">
+                  <button onclick="loadSavedOrder('${cartKey}',${oi})" style="padding:4px 10px;background:var(--ink);color:white;border:none;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">Load</button>
+                  <button onclick="logSavedOrder('${cartKey}',${oi},'${name}')" style="padding:4px 10px;background:var(--gold);color:var(--ink);border:none;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">Log</button>
+                  <button onclick="deleteSavedOrder('${cartKey}',${oi})" style="padding:4px 8px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-size:11px;cursor:pointer;border-radius:2px">×</button>
+                </div>
+              </div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:3px">${order.items.map(i=>i.name).join(' · ')}</div>
+              <div style="font-size:10px;color:var(--muted)">${order.kcal} kcal · ${order.p}g P · ${order.c}g C · ${order.f}g F</div>
+            </div>`).join('')}
+        </div>`:''}
+      </div>`;
+    })()}
 
     ${sections.map(sec=>`
       <div style="margin-bottom:16px">
@@ -2775,6 +2893,57 @@ function renderRestaurantCalc(container, which){
           </div>`;
         }).join("")}
       </div>`).join("")}`;
+}
+
+function saveRestOrder(cartKey, restName){
+  const items=(state._restCart||{})[cartKey]||[];
+  if(!items.length)return;
+  // Prompt for a name
+  const defaultName=items.slice(0,2).map(i=>i.name.replace(/\s*\(.*\)/,'').split(' ').slice(0,2).join(' ')).join(' + ');
+  const orderName=prompt(`Name this saved order:`,defaultName);
+  if(!orderName)return;
+  const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f}),{kcal:0,p:0,c:0,f:0});
+  if(!state._savedRestOrders)state._savedRestOrders={};
+  if(!state._savedRestOrders[cartKey])state._savedRestOrders[cartKey]=[];
+  state._savedRestOrders[cartKey].push({
+    name:orderName,
+    items:items.map(i=>({name:i.name,kcal:i.kcal,p:i.p,c:i.c,f:i.f,fi:i.fi||0,salt:i.salt||0})),
+    kcal:Math.round(t.kcal),p:Math.round(t.p*10)/10,c:Math.round(t.c*10)/10,f:Math.round(t.f*10)/10,
+  });
+  // Auto-open saved orders panel
+  if(!state._savedOrdersOpen)state._savedOrdersOpen={};
+  state._savedOrdersOpen[cartKey]=true;
+  persist();renderMeals();
+}
+
+function toggleSavedOrders(cartKey){
+  if(!state._savedOrdersOpen)state._savedOrdersOpen={};
+  state._savedOrdersOpen[cartKey]=!state._savedOrdersOpen[cartKey];
+  renderMeals();
+}
+
+function loadSavedOrder(cartKey, idx){
+  // Load a saved order into the cart to modify before logging
+  const order=((state._savedRestOrders||{})[cartKey]||[])[idx];
+  if(!order)return;
+  if(!state._restCart)state._restCart={};
+  state._restCart[cartKey]=order.items.map(i=>({...i}));
+  persist();renderMeals();
+}
+
+function logSavedOrder(cartKey, idx, restName){
+  // Log directly without loading into cart
+  const order=((state._savedRestOrders||{})[cartKey]||[])[idx];
+  if(!order)return;
+  const t=order.items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f,fi:s.fi+(i.fi||0),salt:s.salt+(i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
+  const name=`${restName}: ${order.name}`;
+  copyMealToLog(name,Math.round(t.p*10)/10,Math.round(t.f*10)/10,Math.round(t.c*10)/10,Math.round(t.fi*10)/10,Math.round(t.kcal),Math.round(t.salt));
+}
+
+function deleteSavedOrder(cartKey, idx){
+  if(!state._savedRestOrders||!state._savedRestOrders[cartKey])return;
+  state._savedRestOrders[cartKey].splice(idx,1);
+  persist();renderMeals();
 }
 
 function addRestItemByKey(cartKey, sectionKey, itemIdx){
@@ -2833,7 +3002,7 @@ She is ordering from ${restName}. Based on the available ingredients (proteins, 
     persist();
     if(el)el.innerHTML=text.replace(/\n/g,'<br>');
   }catch(e){
-    if(el)el.textContent="Works at katarinahealth.netlify.app";
+    if(el)el.innerHTML='<span style="color:var(--muted);font-style:italic">AI suggestions unavailable — requires HTTPS hosting. Try again if you are on GitHub Pages.</span>';
   }
 }
 
@@ -2987,6 +3156,8 @@ function addSmIng(foodIdx){
   const r=g/100;
   const ing={
     name:`${f[0]} (${g}g)`,
+    _grams:g,
+    _per100:{kcal:f[1],p:f[2],c:f[3],f:f[4],fi:f[5]||0,salt:f[6]||0},
     kcal:Math.round(f[1]*r),
     p:Math.round(f[2]*r*10)/10,
     c:Math.round(f[3]*r*10)/10,
@@ -3303,7 +3474,7 @@ const GUT_KEYWORD_MAP={
   "butter bean":"g_kidney","cannellini":"g_kidney",
   "salmon":"g_salmon","trout":"g_salmon","mackerel":"g_salmon",
   "sardine":"g_salmon",// sardines count toward salmon/fish omega-3 booster
-  "miso":"g_miso",
+  "miso":"g_miso","clearspring":"g_miso","white miso":"g_miso","miso soup":"g_miso","miso paste":"g_miso",
   "green tea":"g_greentea","matcha":"g_greentea","white tea":"g_greentea",
   "black tea":"g_blacktea",
   "garlic":"g_garlic",
@@ -3598,10 +3769,25 @@ function renderExerciseTab(){
 
     <!-- Arm walk exercises dropdown -->
     <div style="margin-bottom:20px">
+      <!-- Arm walk weekly checklist -->
+      <div style="margin-bottom:6px">
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">🚶 Arm Exercises on Walk · 3× This Week</div>
+        <div style="display:flex;gap:0;margin-bottom:8px">
+          ${['arm_walk_1','arm_walk_2','arm_walk_3'].map((id,i)=>{
+            const armWkKey=`exercise-${wk}`;
+            const armChecked=!!((state.exerciseChecks||{})[armWkKey]||{})[id];
+            return `<div onclick="toggleExerciseCheck('${id}')" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:1px solid ${armChecked?'#4a6a8a':'var(--border)'};${i>0?'border-left:none':''}background:${armChecked?'rgba(74,106,138,.12)':'var(--white)'};cursor:pointer;transition:all .15s">
+              <div style="width:28px;height:28px;border-radius:50%;border:1.5px solid ${armChecked?'#4a6a8a':'var(--border)'};background:${armChecked?'#4a6a8a':'none'};display:flex;align-items:center;justify-content:center;color:${armChecked?'#fff':'var(--muted)'};font-size:12px">${armChecked?'✓':i+1}</div>
+              <div style="font-size:9px;color:${armChecked?'#4a6a8a':'var(--muted)'}">Session ${i+1}</div>
+            </div>`;
+          }).join("")}
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:12px">3× per week · resets Monday</div>
+      </div>
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;cursor:pointer" onclick="toggleArmGuide()">
         <div>
-          <div style="font-size:13px;color:var(--text)">🚶 Arm Exercises on Walk</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px">Alternate days · 1–2kg walking · 2–3kg at end</div>
+          <div style="font-size:13px;color:var(--text)">🚶 Arm Exercises Guide</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">1–2kg walking · 2–3kg at end</div>
         </div>
         <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">${armOpen?'▲':'▼'}</span>
       </div>
@@ -3888,6 +4074,37 @@ function saveMealEdit(idx){
   s.salt=Math.max(0,Math.round((+s.salt||0)-(+old.salt||0)+newSl));
   s.meals[idx]={...old,protein:newP,fat:newF,carbs:newC,fibre:newFi,kcal:newK,salt:newSl};
   persist();renderFood();
+}
+
+function saveLoggedMealToLibrary(mealIdx,dayI){
+  const mk=`macros-${getWeekKey()}-${dayI!==undefined?dayI:foodDayIdx}`;
+  const ms=(state.macros||{})[mk];
+  if(!ms||!ms.meals||!ms.meals[mealIdx])return;
+  const m=ms.meals[mealIdx];
+  if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+  // Pick best category based on time and calories
+  const hour=parseInt((m.time||"12:00").split(":")[0])||12;
+  const cat=hour<10?'breakfast':hour<15?'lunch':m.kcal<300?'snacks':'dinner';
+  // Check not already saved
+  const already=(state.savedMeals[cat]||[]).some(s=>s.name===m.name);
+  if(already){
+    showMealStatus(`"${m.name}" is already saved in ${cat}`,false);
+    return;
+  }
+  state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),{
+    name:m.name,
+    ingredients:"",
+    ingredientItems:[],
+    protein:m.protein||0,
+    fat:m.fat||0,
+    carbs:m.carbs||0,
+    fibre:m.fibre||0,
+    kcal:m.kcal||0,
+    salt:m.salt||0,
+  }];
+  persist();
+  showMealStatus(`💾 "${m.name}" saved to ${cat}`,true);
+  renderFood();
 }
 
 function toggleMealHistory(dayIdx){
