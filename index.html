@@ -178,6 +178,9 @@ button,input,textarea,select{font-family:inherit}
 .cycle-date-input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 8px;font-size:12px;border-radius:2px;font-family:inherit}
 .chip.cycle-highlight{box-shadow:0 0 0 2px currentColor;font-weight:500}
 .chip.cycle-avoid{opacity:.4}
+
+.btn-flash { transition: background 0.15s, color 0.15s, border-color 0.15s !important; }
+.btn-flashed { background: #4a8c6a !important; color: #fff !important; border-color: #4a8c6a !important; }
 </style>
 </head>
 <body>
@@ -1216,7 +1219,7 @@ const FOOD_DB=[
   ["Kimchi",15,1.1,2.4,0.4,1.6,740,60,"60g serving"],
   ["Vadasz Kimchi",15,1.1,2.4,0.4,1.6,740,60,"60g serving"],
   ["Miso paste white",199,11,26,6,5.4,3580,10,"1 tbsp (10g)"],
-  ["Clearspring White Miso",199,11,26,6,5.4,3580,10,"1 tbsp (10g)"],
+  ["Clearspring White Miso",153,8.7,14,4.7,0,3500,15,"1 tbsp (15g) — 23 kcal"],
   ["Bone broth",14,2.6,0.4,0.2,0,440,300,"1 mug (300ml)"],
   ["Waitrose Bone Broth",14,2.6,0.4,0.2,0,440,300,"1 mug (300ml)"],
   // ── HERBS (per tbsp fresh / per tsp dried) ──
@@ -1328,7 +1331,7 @@ const FOOD_DB=[
   ["Waitrose Chicken Bone Broth",14,2.6,0.4,0.2,0,440,300,"1 mug (300ml)"],
   // ── MISO & FERMENTED ──
   ["Clearspring White Miso Soup Sachet",40,2.5,5.5,1.0,0.5,680,1,"1 sachet prepared"],
-  ["Clearspring Organic White Miso Paste",199,11,26,6,5.4,3580,10,"1 tbsp (10g)"],
+  ["Clearspring Organic White Miso Paste",153,8.7,14,4.7,0,3500,15,"1 tbsp (15g) — 23 kcal"],
   ["Tickles Pickle Kimchi",15,1.1,2.4,0.4,1.6,520,60,"60g serving"],
   ["Tickles Pickle Kimchi",15,1.1,2.4,0.4,1.6,520,30,"2 tbsp (30g)"],
   ["Morgiel Sauerkraut",19,0.9,4.3,0.1,2.9,440,40,"2 tbsp (40g)"],
@@ -1806,7 +1809,7 @@ function buildFoodResultHTML(f,idx,prefix){
       <input type="number" inputmode="decimal" value="${servG}" id="${prefix}_srv_${idx}"
         style="width:60px;padding:5px 8px;border:1px solid var(--border);background:var(--white);font-size:13px;color:var(--text);border-radius:2px;text-align:center"
         oninput="updateSearchMacros('${prefix}',${idx},${dKcal},${dP},${dC},${dF},${dFi},${dSalt||0})">
-      <button onclick="addSearchFoodToLog('${prefix}',${idx},${dKcal},${dP},${dC},${dF},${dFi},${dSalt||0})"
+      <button onclick="addSearchFoodToLog('${prefix}',${idx},${dKcal},${dP},${dC},${dF},${dFi},${dSalt||0});flashBtn(this)"
         style="flex:1;min-width:100px;padding:7px 12px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">
         + Add to Log
       </button>
@@ -1915,7 +1918,7 @@ function renderMealCart(){
       <span style="color:#6a9898">${t.f.toFixed(1)}g F</span>
     </div>
     <div style="display:flex;gap:6px;margin-top:10px">
-      <button onclick="logMealCart()" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">Log to Today</button>
+      <button onclick="logMealCart();flashBtn(this)" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">Log to Today</button>
       <button onclick="saveMealCartPrompt()" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
       <button onclick="clearMealCart()" style="padding:8px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
     </div>
@@ -2020,6 +2023,12 @@ function resetFoodEdit(idx){
   if(el)el.style.display='none';
   const inp=document.getElementById("foodSearchInput");
   if(inp)searchFood(inp.value);
+}
+
+function flashBtn(btn, durationMs){
+  if(!btn)return;
+  btn.classList.add('btn-flashed');
+  setTimeout(()=>btn.classList.remove('btn-flashed'), durationMs||1200);
 }
 
 function toggleFavFood(idx){
@@ -2312,7 +2321,7 @@ function renderFood(){
             <div style="flex:1">
               <div style="font-size:13px;color:var(--text)">${m.name}</div>
               <div class="meal-entry-macros">${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F${m.fibre?" · "+(+m.fibre||0).toFixed(1)+"g fibre":""}${m.salt?" · "+Math.round(+m.salt||0)+"mg salt":""} · ${m.time}</div>
-              <button onclick="saveLoggedMealToLibrary(${mIdx},${foodDayIdx})" style="margin-top:4px;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">💾 Save to Meals</button>
+              <button onclick="saveLoggedMealToLibrary(${mIdx},${foodDayIdx});flashBtn(this)" style="margin-top:4px;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">💾 Save to Meals</button>
             </div>
             <button onclick="removeLoggedMeal(${mIdx})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1;margin-top:2px">×</button>
           </div>`).join("")}
@@ -2407,7 +2416,7 @@ function renderFood(){
     ${groups.map(g=>`<div style="margin-bottom:16px"><div class="gut-section-hdr">${g.lbl}</div>${g.items.map(item=>{
       const wc=gutWeekCount(item.id),ticked=!!foods[item.id],met=wc>=item.t;
       const pct=Math.min(wc/item.t,1)*100;
-      return `<div class="gut-item${met?" met":""}" onclick="quickGutTick('${item.id}')" style="cursor:pointer;transition:background .1s;active:opacity:.8">
+      return `<div class="gut-item${met?" met":""}" onclick="quickGutTick('${item.id}');flashBtn(this)" style="cursor:pointer;transition:background .1s;active:opacity:.8">
         <div class="gut-item-top">
           <div style="flex:1">
             <div class="gut-item-name">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted)">/ ${item.alts.join(' / ')}</span>`:''} ${ticked?'<span style="color:var(--green);font-size:11px">✓ today</span>':''}</div>
@@ -3050,8 +3059,8 @@ function renderRestaurantCalc(container, which){
         <span style="font-size:12px;color:#6a9898">${totals.f}g F</span>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px">
-        <button onclick="logRestOrder('${cartKey}','${name}')" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
-        <button onclick="saveRestOrder('${cartKey}','${name}')" style="padding:9px 12px;background:none;border:1px solid rgba(184,147,74,.4);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">💾 Save Order</button>
+        <button onclick="logRestOrder('${cartKey}','${name}');flashBtn(this)" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
+        <button onclick="saveRestOrder('${cartKey}','${name}');flashBtn(this)" style="padding:9px 12px;background:none;border:1px solid rgba(184,147,74,.4);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">💾 Save Order</button>
         <button onclick="clearRestCart('${cartKey}')" style="padding:9px 12px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
       </div>
     </div>`:
@@ -3248,10 +3257,10 @@ function renderSavedMeals(container){
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
-              <button onclick="openEditAndLog('${cat.id}',${i})" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">Edit & Log</button>
-              <button onclick="quickLogSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">Log As-Is</button>
-              <button onclick="editSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit Recipe</button>
-              <button onclick="copySavedMealToClipboard('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">📋 Copy</button>
+              <button onclick="openEditAndLog('${cat.id}',${i});flashBtn(this)" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">Edit & Log</button>
+              <button onclick="quickLogSavedMeal('${cat.id}',${i});flashBtn(this)" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">Log As-Is</button>
+              <button onclick="editSavedMeal('${cat.id}',${i});flashBtn(this)" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit Recipe</button>
+              <button onclick="copySavedMealToClipboard('${cat.id}',${i});flashBtn(this)" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">📋 Copy</button>
               <button onclick="deleteSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Del</button>
             </div>
           </div>
@@ -3704,7 +3713,7 @@ function renderLogEditor(){
     </div>
 
     <div style="display:flex;gap:8px">
-      <button onclick="confirmEditAndLog()" style="flex:1;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
+      <button onclick="confirmEditAndLog();flashBtn(this)" style="flex:1;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
       <button onclick="cancelEditAndLog()" style="padding:11px 16px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:11px;cursor:pointer;border-radius:2px">Cancel</button>
     </div>`;
 }
