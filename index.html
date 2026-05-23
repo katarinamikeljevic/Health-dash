@@ -1196,8 +1196,14 @@ const FOOD_DB=[
   // ── FRUIT ──
   ["Strawberries",32,0.7,7.7,0.3,2,1,100,"100g"],
   ["Strawberries",32,0.7,7.7,0.3,2,1,12,"1 strawberry (12g)"],
+  ["Strawberries",32,0.7,7.7,0.3,2,1,60,"5 strawberries (60g)"],
+  ["Strawberries",32,0.7,7.7,0.3,2,1,120,"10 strawberries (120g)"],
   ["Blueberries",57,0.7,14,0.3,2.4,1,80,"80g"],
+  ["Blueberries",57,0.7,14,0.3,2.4,1,10,"10 blueberries (10g)"],
+  ["Blueberries",57,0.7,14,0.3,2.4,1,20,"20 blueberries (20g)"],
   ["Raspberries",52,1.2,12,0.7,6.7,1,80,"80g"],
+  ["Raspberries",52,1.2,12,0.7,6.7,1,10,"5 raspberries (10g)"],
+  ["Raspberries",52,1.2,12,0.7,6.7,1,20,"10 raspberries (20g)"],
   ["Grapefruit",42,0.8,10,0.1,1.6,0,200,"half grapefruit (200g)"],
   ["Orange",47,0.9,12,0.1,2.4,0,150,"1 medium orange"],
   ["Kiwi",61,1.1,15,0.5,3,3,80,"1 large kiwi"],
@@ -1357,7 +1363,93 @@ const FOOD_DB=[
   ["Frozen Peas",81,5.4,14,0.4,5.1,3,80,"80g"],
   ["Frozen Sweetcorn",86,2.9,18,1.2,2.7,1,80,"80g"],
   ["Frozen Edamame Beans",122,11,8.9,5.2,5.2,6,80,"80g"],
-  ["Morrisons Frozen Edamame Beans",122,11,8.9,5.2,5.2,6,80,"80g"],
+  ["Sun365 Mango Sorbet Bar",114,1,0.5,15.1,7.5,1,70,"1 bar (70g)"],
+  ["Sun365 Mango Sorbet Bar",114,1,0.5,15.1,7.5,1,100,"100g"],
+  // ── FORM PROTEIN BARS ──
+  ["Form Protein Bar Chocolate Peanut",185,15,8.5,8,12,120,50,"1 bar (50g)"],
+  ["Form Protein Bar Chocolate Salted Caramel",182,15,8.5,8,12,130,50,"1 bar (50g)"],
+  ["Form Protein Bar Double Chocolate",183,15,8,8.5,12,110,50,"1 bar (50g)"],
+  ["Form Protein Bar Vanilla",180,15,7.5,8,12,100,50,"1 bar (50g)"],
+  // ── BREAD — per slice ──
+  ["White bread",235,8,44,2,2,480,38,"1 slice (38g)"],
+  ["White bread thick slice",247,8.5,47,2.2,2.1,510,40,"1 thick slice (40g)"],
+  ["Wholemeal bread",216,9.5,37,2.5,5.8,420,38,"1 slice (38g)"],
+  ["Wholemeal bread",216,9.5,37,2.5,5.8,420,40,"1 medium slice (40g)"],
+  ["Brown bread",209,8.5,38,1.9,3.5,450,38,"1 slice (38g)"],
+  ["Granary bread",228,9,39,3,3.8,430,40,"1 slice (40g)"],
+  ["Seeded bread",268,9,38,6,5.5,460,40,"1 slice (40g)"],
+  ["Seeded batch bread",290,9.5,41,6.5,5.8,480,46,"1 large slice (46g)"],
+  ["Sourdough white bread",130,5,26,0.8,1.5,300,45,"1 slice (45g)"],
+  ["Sourdough white bread",160,6,32,1,2,370,55,"1 thick slice (55g)"],
+  ["Sourdough wholemeal bread",140,6,25,1.2,4.5,350,50,"1 slice (50g)"],
+  ["Sourdough rye bread",106,4,21,0.8,4.5,280,40,"1 slice (40g)"],
+  ["Rye bread",93,3.5,19,0.7,3.8,320,35,"1 slice (35g)"],
+  ["Dark rye bread",85,3,18,0.6,4.5,300,32,"1 slice (32g)"],
+  ["Pumpernickel",92,3.5,18,0.8,5,400,35,"1 slice (35g)"],
+  ["Spelt bread",134,5.5,24,1.2,3,360,45,"1 slice (45g)"],
+  ["Gluten free white bread",158,2.5,32,1.8,1.5,480,40,"1 slice (40g)"],
+  ["Gluten free brown bread",150,3,30,2,2.5,460,40,"1 slice (40g)"],
+  ["Brioche slice",205,6,32,6.5,1,350,45,"1 slice (45g)"],
+  ["Ciabatta",267,9.5,52,2,2,520,60,"1 slice (60g)"],
+  ["Focaccia",280,7,40,10,2,500,70,"1 piece (70g)"],
+  ["Bagel",245,9.5,48,1.5,2,500,98,"1 bagel (98g)"],
+  ["Bagel thin",165,6.5,32,1,1.5,340,66,"1 thin bagel (66g)"],
+  ["Pita bread",165,5.5,33,0.8,1.5,380,60,"1 mini pita (60g)"],
+  ["Pita bread large",231,8,47,1.2,2,530,84,"1 large pita (84g)"],
+  ["Corn tortilla",54,1.4,11,0.8,1.5,40,26,"1 small (26g)"],
+  ["Flour tortilla small",146,3.8,25,3.2,1.5,360,45,"1 small (45g)"],
+  ["Flour tortilla large",218,5.7,37,4.8,2.2,540,67,"1 large (67g)"],
+  ["Crumpet",93,3.5,18,0.6,1.2,500,40,"1 crumpet (40g)"],
+  ["English muffin",134,5,25,1.4,2,580,57,"1 muffin (57g)"],
+  ["Rice cake plain",35,0.7,7.5,0.3,0.2,2,9,"1 rice cake (9g)"],
+  ["Rice cake corn",38,0.8,8,0.3,0.2,2,9,"1 corn rice cake (9g)"],
+  ["Oatcake",44,1.2,6,1.8,0.8,90,13,"1 oatcake (13g)"],
+  // ── KOMBUCHA ──
+  ["Remedy Kombucha Ginger Lemon",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Raspberry Lemonade",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Wild Berry",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Peach",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Mango Passion",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Cherry Plum",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Apple Crisp",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Watermelon",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha",3,0,0.5,0,0,4,330,"1 can (330ml)"],
+  // ── PLANT MILKS — ALMOND ──
+  ["Alpro Almond Milk Unsweetened",13,0.5,1.1,0.3,0.3,10,200,"200ml"],
+  ["Alpro Almond Milk Unsweetened",13,0.5,1.1,0.3,0.3,10,100,"100ml"],
+  ["Alpro Almond Milk Original",24,0.5,1.1,2.8,0.4,10,200,"200ml"],
+  ["Alpro Barista Almond Milk",25,1,1.2,3,0.4,10,200,"200ml"],
+  ["Alpro Barista Almond Milk",25,1,1.2,3,0.4,10,50,"50ml (1 shot)"],
+  ["Plenish Almond Milk Unsweetened",24,0.7,2.1,0.8,0.5,20,200,"200ml"],
+  ["Plenish Almond Milk Unsweetened",24,0.7,2.1,0.8,0.5,20,100,"100ml"],
+  ["Rude Health Almond Milk",32,1,2.5,1.5,0.5,15,200,"200ml"],
+  ["Rude Health Almond Milk Barista",38,1.2,2.8,2.2,0.5,15,200,"200ml"],
+  // ── PLANT MILKS — SOY ──
+  ["Alpro Soy Milk Original",42,3.3,1.8,1.6,0,5,200,"200ml"],
+  ["Alpro Soy Milk Unsweetened",33,3.3,1.8,0.5,0.5,5,200,"200ml"],
+  ["Alpro Barista Soy Milk",42,3.3,1.8,1.6,0.5,5,200,"200ml"],
+  ["Alpro Barista Soy Milk",42,3.3,1.8,1.6,0.5,5,50,"50ml (1 shot)"],
+  ["Alpro Protein Soy Milk",46,3.8,1.8,0.7,0.5,5,200,"200ml"],
+  ["Plenish Soy Milk",46,3.6,2,1.6,0.5,5,200,"200ml"],
+  ["Rude Health Soy Milk",44,3.5,1.9,1.5,0.5,5,200,"200ml"],
+  // ── COFFEE WITH PLANT MILK ──
+  ["Flat white almond milk",55,1.5,2.5,5.5,0.5,50,200,"200ml"],
+  ["Latte almond milk",40,1,1.8,4.5,0.4,40,250,"250ml"],
+  ["Latte soy milk",68,3.5,2.2,5.5,0.5,40,250,"250ml"],
+  ["Cappuccino almond milk",30,0.8,1.4,3,0.3,30,180,"180ml"],
+  ["Cappuccino soy milk",50,2.5,1.5,3.5,0.3,30,180,"180ml"],
+  ["Americano with almond milk",15,0.3,0.8,1.5,0.1,10,250,"250ml + splash"],
+  // ── MATCHA ──
+  ["Matcha latte almond milk",65,1.2,2.5,8,0.5,50,250,"250ml"],
+  ["Matcha latte soy milk",90,3.5,2.5,9.5,0.5,50,250,"250ml"],
+  ["Matcha latte oat milk",110,2,3,14,0.8,55,250,"250ml"],
+  ["Matcha powder",324,20,4.5,31,35,30,2,"1 tsp (2g)"],
+  // ── SALAD LEAVES ──
+  ["Mixed salad leaves",18,1.5,1.5,0.5,1.5,50,50,"50g"],
+  ["Mixed salad leaves",18,1.5,1.5,0.5,1.5,50,80,"80g"],
+  ["Rocket leaves",25,2.6,0.7,2,1.6,77,40,"40g"],
+  ["Baby spinach",23,2.9,0.4,1.4,2.2,79,50,"50g"],
+  ["Watercress",32,3,0.7,0.4,1.5,49,40,"40g"],
   ["Dark chocolate 100%",533,12.5,34,56,16,14,15,"2 squares (15g)"],
   ["Cacao powder raw",229,19.6,57.9,13.7,33,21,10,"1 tbsp (10g)"],
   ["Bone broth miso soup",40,4,3.5,1,1,1200,250,"1 mug combined"],
@@ -1366,6 +1458,9 @@ const FOOD_DB=[
   ["Clementines",47,0.9,12,0.1,2.4,0,60,"1 clementine (60g)"],
   ["Tangerines",53,0.8,13.3,0.3,1.8,0,75,"1 tangerine (75g)"],
   ["Blackberries",43,1.4,10,0.5,5.3,0,80,"80g"],
+  ["Blackberries",43,1.4,10,0.5,5.3,0,8,"1 blackberry (8g)"],
+  ["Blackberries",43,1.4,10,0.5,5.3,0,40,"5 blackberries (40g)"],
+  ["Blackberries",43,1.4,10,0.5,5.3,0,80,"10 blackberries (80g)"],
   ["Black beans cooked",132,8.9,24,0.5,8.7,2,80,"80g"],
   ["Butter beans canned",103,7.7,18,0.5,5.1,290,80,"80g drained"],
   ["Cannellini beans",109,7.9,20,0.6,5.4,310,80,"80g drained"],
@@ -1381,6 +1476,22 @@ const FOOD_DB=[
   ["Arla Protein Plain Skyr",68,14,5,0.3,0,48,150,"150g pot"],
   ["Live yogurt plain",61,5,4.7,1.5,0,82,150,"150g serving"],
   ["Kiwi",61,1.1,15,0.5,3,3,80,"1 large kiwi (80g)"],
+  ["Kiwi",61,1.1,15,0.5,3,3,160,"2 kiwis (160g)"],
+  ["Apple",52,0.3,14,0.2,2.4,0,182,"1 medium apple (182g)"],
+  ["Apple",52,0.3,14,0.2,2.4,0,91,"half apple (91g)"],
+  ["Pear",57,0.4,15,0.1,3.1,0,178,"1 medium pear (178g)"],
+  ["Pear",57,0.4,15,0.1,3.1,0,89,"half pear (89g)"],
+  ["Mango fresh",60,0.8,15,0.4,1.6,3,200,"1 medium mango (200g)"],
+  ["Mango fresh",60,0.8,15,0.4,1.6,3,100,"half mango (100g)"],
+  ["Grapes",69,0.7,18,0.2,0.9,2,80,"small bunch (80g)"],
+  ["Grapes",69,0.7,18,0.2,0.9,2,10,"10 grapes (~80g)"],
+  ["Melon",28,0.6,6.6,0.1,0.4,1,200,"1 slice (200g)"],
+  ["Clementines",47,0.9,12,0.1,2.4,0,60,"1 clementine (60g)"],
+  ["Clementines",47,0.9,12,0.1,2.4,0,120,"2 clementines (120g)"],
+  ["Clementines",47,0.9,12,0.1,2.4,0,180,"3 clementines (180g)"],
+  ["Banana",89,1.1,23,0.3,2.6,1,60,"half banana (60g)"],
+  ["Orange",47,0.9,12,0.1,2.4,0,300,"2 oranges (300g)"],
+  ["Lime",30,0.7,10,0.2,2.8,2,44,"1 lime (44g)"],
 ];
 
 const FOOD_DB_INDEX=FOOD_DB.map((f,i)=>({name:f[0],idx:i,lower:f[0].toLowerCase()}));
@@ -2093,7 +2204,10 @@ function renderFood(){
   document.getElementById("macroCard").innerHTML=`<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <div class="card-label" style="margin-bottom:0">Today's Macros</div>
-      <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
+      <div style="display:flex;gap:6px">
+        <button onclick="copyMacroBlueprintForChat()" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 8px;background:none;border:1px solid rgba(184,147,74,.3);color:var(--gold);cursor:pointer;font-family:inherit;border-radius:2px">📋 Copy for Claude</button>
+        <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
+      </div>
     </div>
     ${bars}
   </div>`;
@@ -2196,7 +2310,10 @@ function renderFood(){
     <div class="gut-intro">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
         <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green)">🌿 Zoe Gut Boosters · Weekly Tracker</div>
-        <button onclick="openManualGutTick()" style="padding:4px 10px;background:rgba(74,140,106,.2);border:1px solid rgba(74,140,106,.4);color:#4a8c6a;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">+ Tick Manually</button>
+        <div style="display:flex;gap:6px">
+          <button onclick="copyGutBoostersRemaining()" style="padding:4px 10px;background:rgba(74,140,106,.2);border:1px solid rgba(74,140,106,.4);color:#4a8c6a;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">📋 Copy remaining</button>
+          <button onclick="openManualGutTick()" style="padding:4px 10px;background:rgba(74,140,106,.2);border:1px solid rgba(74,140,106,.4);color:#4a8c6a;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">+ Tick</button>
+        </div>
       </div>
       <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Alternatives shown in each box — they count toward the same target</div>
       <div class="gut-stats">
@@ -3052,6 +3169,7 @@ function renderSavedMeals(container){
               <button onclick="openEditAndLog('${cat.id}',${i})" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">Edit & Log</button>
               <button onclick="quickLogSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">Log As-Is</button>
               <button onclick="editSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit Recipe</button>
+              <button onclick="copySavedMealToClipboard('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">📋 Copy</button>
               <button onclick="deleteSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Del</button>
             </div>
           </div>
@@ -3254,6 +3372,64 @@ function saveMealEntry(catId,idx){
   renderMeals();
 }
 
+function copySavedMealToClipboard(catId,idx){
+  const meal=(state.savedMeals||{})[catId]?.[idx];
+  if(!meal)return;
+  const ings=meal.ingredientItems?.length
+    ?meal.ingredientItems.map(i=>i.name).join('\n')
+    :(meal.ingredients||'No ingredients saved');
+  const text=`🍽️ ${meal.name}
+${meal.kcal} kcal · ${meal.protein}g protein · ${meal.carbs}g carbs · ${meal.fat}g fat · ${meal.fibre||0}g fibre
+${meal.tags?'\n'+meal.tags:''}
+Ingredients:
+${ings}`;
+  navigator.clipboard.writeText(text).then(()=>showMealStatus('📋 Meal copied — paste into Claude chat',true));
+}
+
+function copyGutBoostersRemaining(){
+  const wk=getWeekKey();
+  const remaining=GUT_BOOSTERS.filter(g=>{
+    let count=0;
+    for(let d=0;d<7;d++){const fk=`foods-${wk}-${d}`;if((state.foods||{})[fk]?.[g.id])count++;}
+    return count<g.t;
+  });
+  if(!remaining.length){
+    navigator.clipboard.writeText('🌿 All Zoe gut boosters completed this week! ✅');
+    showMealStatus('All boosters done this week!',true);
+    return;
+  }
+  const text=`🌿 Zoe Gut Boosters still needed this week:
+${remaining.map(g=>{
+    let count=0;
+    for(let d=0;d<7;d++){const fk=`foods-${wk}-${d}`;if((state.foods||{})[fk]?.[g.id])count++;}
+    return `${g.e} ${g.l} — ${count}/${g.t} done (need ${g.t-count} more)`;
+  }).join('\n')}`;
+  navigator.clipboard.writeText(text).then(()=>showMealStatus('📋 Copied gut boosters — paste into Claude',true));
+}
+
+function copyMacroBlueprintForChat(){
+  const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
+  const ms=(state.macros||{})[mk]||{protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0};
+  const phase=getCyclePhase();
+  const phaseLabel=phase?`${phase.phase.name} phase (day ${phase.cycleDay})`:'Unknown phase';
+  const text=`📊 My Daily Macro Blueprint — ${phaseLabel}
+
+Targets: 115g protein · 1550 kcal · 50g fat max · 130g carbs · 32g fibre
+
+Logged today so far:
+• ${ms.protein}g / 115g protein (${115-(ms.protein||0)}g remaining)
+• ${ms.kcal} / 1550 kcal (${1550-(ms.kcal||0)} remaining)
+• ${ms.fat}g / 50g fat (${50-(ms.fat||0)}g remaining)
+• ${ms.carbs}g / 130g carbs (${130-(ms.carbs||0)}g remaining)
+• ${ms.fibre}g / 32g fibre (${32-(ms.fibre||0)}g remaining)
+
+Meals today:
+${(ms.meals||[]).map(m=>`• ${m.name} — ${m.kcal} kcal, ${m.protein}g P`).join('\n')||'None logged yet'}
+
+Rules: no carbs after lunch · keep fat low in morning · last meal 3h before bed`;
+  navigator.clipboard.writeText(text).then(()=>showMealStatus('📋 Blueprint copied — paste into Claude',true));
+}
+
 function deleteSavedMeal(catId,idx){
   if(!confirm("Delete this saved meal?"))return;
   state.savedMeals[catId].splice(idx,1);
@@ -3416,10 +3592,59 @@ function confirmEditAndLog(){
   const ings=state._editIngredients||[];
   const name=document.getElementById("logEditName")?.value.trim()||state._logEditMealName||"Meal";
   const t=ings.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+(+i.p||0),c:s.c+(+i.c||0),f:s.f+(+i.f||0),fi:s.fi+(+i.fi||0),salt:s.salt+(+i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
-  // Log to today WITHOUT changing saved meal
-  copyMealToLog(name,Math.round(t.p*10)/10,Math.round(t.f*10)/10,Math.round(t.c*10)/10,Math.round(t.fi*10)/10,Math.round(t.kcal),Math.round(t.salt));
+  const meal={name,ingredients:ings.map(i=>i.name).join(", "),ingredientItems:JSON.parse(JSON.stringify(ings)),kcal:Math.round(t.kcal),protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,salt:Math.round(t.salt)};
+  // Log to today
+  copyMealToLog(meal.name,meal.protein,meal.fat,meal.carbs,meal.fibre,meal.kcal,meal.salt);
+  // Show save prompt
+  showEditAndLogPrompt(meal);
+}
+
+function showEditAndLogPrompt(meal){
+  document.querySelectorAll('.edit-log-prompt').forEach(e=>e.remove());
+  state._pendingEditMeal=meal;
+  const div=document.createElement('div');
+  div.className='edit-log-prompt';
+  div.style.cssText='position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:2px solid rgba(184,147,74,.4);padding:16px;z-index:400;box-shadow:0 -4px 24px rgba(0,0,0,.5)';
+  div.innerHTML=`
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">✓ Logged to today</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:14px">Do you want to update your saved recipe?</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button onclick="editLogChoice('replace',this.closest('.edit-log-prompt'))" style="width:100%;padding:12px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500;text-align:left">
+        🔄 Replace saved recipe with these changes
+      </button>
+      <button onclick="editLogChoice('new',this.closest('.edit-log-prompt'))" style="width:100%;padding:12px;background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;text-align:left">
+        ➕ Save as a new meal
+      </button>
+      <button onclick="editLogChoice('discard',this.closest('.edit-log-prompt'))" style="width:100%;padding:12px;background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;text-align:left">
+        ✕ Discard — keep original saved recipe
+      </button>
+    </div>`;
+  document.body.appendChild(div);
+}
+
+function editLogChoice(action, el){
+  if(el)el.remove();
+  const meal=state._pendingEditMeal;
+  const src=state._logEditSource;
+  if(action==='replace'&&src&&meal){
+    if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+    const arr=state.savedMeals[src.catId];
+    if(arr&&arr[src.idx]!==undefined){
+      arr[src.idx]={...arr[src.idx],...meal};
+      persist();
+      showMealStatus('✓ Recipe updated',true);
+    }
+  } else if(action==='new'&&meal){
+    if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+    const cat=src?.catId||'lunch';
+    state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
+    persist();
+    showMealStatus('✓ Saved as new meal',true);
+  }
+  state._pendingEditMeal=null;
   cancelEditAndLog();
 }
+
 
 function cancelEditAndLog(){
   state._logEditMode=false;
