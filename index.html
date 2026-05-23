@@ -1630,7 +1630,7 @@ function renderFoodSearch(){
 let currentFoodSearchTab='search';
 function setFoodSearchTab(tab){
   currentFoodSearchTab=tab;
-  ['search','manual','paste','label','barcode'].forEach(t=>{
+  ['search','manual','paste','recipe','label','barcode'].forEach(t=>{
     const p=document.getElementById(`fsPanel_${t}`),b=document.getElementById(`fsTab_${t}`);
     if(p)p.style.display=t===tab?'':'none';
     if(b){b.style.background=t===tab?'var(--ink)':'var(--bg)';b.style.color=t===tab?'var(--gold)':'var(--muted)';}
