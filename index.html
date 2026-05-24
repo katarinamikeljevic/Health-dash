@@ -3507,154 +3507,167 @@ function renderExerciseTab(){
     <div style="margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;cursor:pointer" onclick="toggleStrengthGuide()">
         <div>
-          <div style="font-size:13px;color:var(--text)">💪 Own Strength Session Guide</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px">Mat + free weights · tap any exercise to expand</div>
+          <div style="font-size:13px;color:var(--text)">💪 Solo Strength Session</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Mat + free weights · ⭐ = not in PT programme — prioritise these</div>
         </div>
         <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">${strengthOpen?'▲':'▼'}</span>
       </div>
       ${strengthOpen?`<div style="border:1px solid var(--border);border-top:none">
 
+        <div style="padding:10px 14px;background:var(--gold-pale);border-bottom:1px solid rgba(184,147,74,.2)">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">⭐ = Your PT never programmes these.</strong> These are the exercises most important to do on your own — they target your specific goals (shoulder definition, deep core, waist preservation) that are missing from PT sessions.</div>
+        </div>
+
         <!-- UPPER BODY -->
         <div style="padding:10px 14px 4px;background:rgba(184,147,74,.06)">
-          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#b8934a">Upper Body · Every Session</div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#b8934a">Upper Body · Every Solo Session</div>
         </div>
         ${[
           {
-            name:"Lateral Raises",
+            name:"Lateral Raises",priority:true,
             weight:"3–4kg",sets:"3 sets × 15 reps",
             img:"dumbbell lateral raise exercise",
             feel:"Outer shoulder (medial deltoid) — NOT traps or neck",
-            breathe:"Exhale as you lift up · Inhale on the slow 3-sec lower",
-            form:["Stand with slight forward lean — stops traps taking over","Lead with your elbows, not your hands","Stop at shoulder height — no higher","Thumbs slightly lower than pinkies (slight internal rotation)","Shoulders DOWN — if they creep up, weight is too heavy"],
-            fix:"Shrugging? Drop the weight by 0.5kg and focus on the outer shoulder only"
+            breathe:"Exhale as you lift · Inhale on the slow 3-sec lower",
+            form:["Stand with slight forward lean — stops traps taking over","Lead with your elbows, not your hands","Stop at shoulder height — no higher","Thumbs slightly lower than pinkies","Shoulders DOWN — if they creep up, weight is too heavy"],
+            fix:"Shrugging? Drop 0.5kg and focus on outer shoulder only"
           },
           {
-            name:"Bent Over Rows",
+            name:"Bent Over Rows",priority:true,
             weight:"5–6kg each hand",sets:"3 sets × 12 reps",
             img:"dumbbell bent over row exercise form",
             feel:"Mid-back (rhomboids, mid traps) — NOT lower back or biceps",
             breathe:"Exhale as you row up · Inhale as you lower",
-            form:["Hinge at hips — back flat, parallel to floor","Pull elbows straight back past your hip","Squeeze shoulder blades together hard at the top — hold 1 sec","Keep neck neutral — don't crane up","Core braced throughout — no rounding"],
-            fix:"Feel it in your lower back? You're rounding — lighten the weight and hinge deeper"
+            form:["Hinge at hips — back flat, parallel to floor","Pull elbows straight back past your hip","Squeeze shoulder blades together hard at top — hold 1 sec","Keep neck neutral — don't crane up","Core braced throughout — no rounding"],
+            fix:"Feel it in your lower back? Rounding — lighten weight and hinge deeper"
           },
           {
-            name:"Shoulder Press",
+            name:"Shoulder Press",priority:true,
             weight:"4–5kg each hand",sets:"3 sets × 12 reps",
             img:"dumbbell overhead shoulder press form",
             feel:"Front and top of shoulder — NOT lower back",
             breathe:"Exhale as you press up · Inhale as you lower",
-            form:["Start with elbows at 90° at shoulder height","Press directly overhead — not forward","Core braced — no lower back arch at the top","Lower slowly — 2 sec down","Seated version on floor: sit cross-legged for stability"],
-            fix:"Arching lower back? Brace your core harder before pressing — arch means core has switched off"
+            form:["Start with elbows at 90° at shoulder height","Press directly overhead — not forward","Core braced — no lower back arch at the top","Lower slowly — 2 sec down","Sit cross-legged on floor for stability if needed"],
+            fix:"Arching lower back? Core has switched off — brace harder before pressing"
           },
           {
-            name:"Tricep Overhead Extension",
+            name:"Tricep Overhead Extension",priority:true,
             weight:"3–4kg single dumbbell, both hands",sets:"3 sets × 15 reps",
             img:"overhead tricep extension dumbbell exercise",
-            feel:"Back of upper arm (tricep) — long head specifically",
+            feel:"Back of upper arm (tricep long head)",
             breathe:"Exhale as you extend up · Inhale as you lower behind head",
-            form:["Hold one dumbbell with both hands — thumbs wrapped","Upper arms stay close to ears, vertical — don't let elbows flare","Lower until forearms touch biceps · full range","Keep core braced — don't sway"],
-            fix:"Elbows flaring out? Too heavy — drop to 2.5kg and focus on keeping upper arms totally still"
+            form:["Hold one dumbbell with both hands — thumbs wrapped","Upper arms stay close to ears, vertical — no elbow flare","Lower until forearms touch biceps · full range","Keep core braced — don't sway"],
+            fix:"Elbows flaring? Too heavy — drop to 2.5kg, keep upper arms totally still"
           },
           {
-            name:"Band Pull-Aparts",
+            name:"Band Pull-Aparts",priority:true,
             weight:"Light resistance band",sets:"3 sets × 20 reps",
             img:"resistance band pull apart exercise posture",
-            feel:"Rear deltoid and mid-back — opens chest",
+            feel:"Rear deltoid and mid-back — opens chest, fixes posture",
             breathe:"Exhale as you pull apart · Inhale as you return",
-            form:["Hold band shoulder-width, arms straight in front","Pull band apart to your chest, squeezing shoulder blades","Keep arms straight throughout — don't bend elbows","Slow and controlled — 2 sec pull, 2 sec return","Do this after any pressing exercise to balance"],
-            fix:"Feeling it in your forearms? Your grip is too wide — bring hands closer together"
+            form:["Hold band shoulder-width, arms straight in front","Pull band apart to chest, squeezing shoulder blades","Keep arms straight — don't bend elbows","2 sec pull, 2 sec return","Do after any pressing exercise to balance"],
+            fix:"Feeling it in forearms? Grip too wide — bring hands closer"
           },
         ].map(e=>renderExCard(e)).join("")}
 
         <!-- CORE -->
         <div style="padding:10px 14px 4px;background:rgba(74,140,106,.06);margin-top:8px">
-          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Core · Every Session</div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Core · Every Solo Session</div>
         </div>
         ${[
           {
-            name:"Dead Bug",
+            name:"Dead Bug",priority:true,
             weight:"Bodyweight",sets:"3 sets × 10 each side",
             img:"dead bug exercise core form",
             feel:"Deep core (transverse abdominis) — NOT hip flexors or neck",
-            breathe:"Exhale fully before you move · hold breath out as you extend · inhale to reset",
-            form:["Lie on back · arms straight up · hips and knees at 90°","Brace core — press lower back INTO the mat (no gap)","Slowly extend opposite arm and leg toward floor","Return and switch — opposite arm/leg is one rep","The lower back must NOT lift off the mat at any point"],
-            fix:"Lower back lifting? You're going too far — reduce the range of motion until strength catches up"
+            breathe:"Exhale fully before you move · hold out as you extend · inhale to reset",
+            form:["Lie on back · arms straight up · hips and knees at 90°","Brace core — press lower back INTO the mat (no gap)","Slowly extend opposite arm and leg toward floor","Return and switch — opposite arm/leg is one rep","Lower back must NOT lift off mat at any point"],
+            fix:"Lower back lifting? Reduce range of motion until strength catches up"
           },
           {
-            name:"Hollow Body Hold",
+            name:"Hollow Body Hold",priority:true,
             weight:"Bodyweight",sets:"3 sets × 20–30 sec",
             img:"hollow body hold exercise gymnastics core",
             feel:"Entire front of core — deep abs, lower abs especially",
-            breathe:"Exhale to create the hollow · breathe shallowly throughout the hold",
-            form:["Lie on back · press lower back flat","Arms straight overhead by ears · legs straight · toes pointed","Lift shoulders and legs just off floor — create a 'dish' shape","The lower back stays pressed down — non-negotiable","Harder: lower legs; Easier: bend knees or keep arms by sides"],
-            fix:"Lower back arching off floor? Raise your legs higher until you can maintain the press"
+            breathe:"Exhale to create the hollow · breathe shallowly throughout",
+            form:["Lie on back · press lower back flat","Arms straight overhead by ears · legs straight · toes pointed","Lift shoulders and legs just off floor — create a dish shape","Lower back stays pressed down — non-negotiable","Harder: lower legs. Easier: bend knees or arms by sides"],
+            fix:"Lower back arching? Raise your legs higher until you can maintain the press"
           },
           {
-            name:"Side Plank",
+            name:"Side Plank",priority:true,
             weight:"Bodyweight",sets:"3 sets × 30–40 sec each side",
             img:"side plank exercise oblique form",
-            feel:"Obliques (side waist) and glute medius — NOT shoulder pain",
-            breathe:"Breathe steadily — don't hold breath",
-            form:["Elbow directly under shoulder — not forward","Stack feet or stagger (bottom foot in front is easier)","Lift hip off floor — body in a straight line hip to head","Don't let hip sag or pike — one straight line","For more: raise top leg or add hip dips"],
-            fix:"Hip sagging? Lower to knee version until obliques are stronger — form beats duration every time"
+            feel:"Obliques (side waist) — NOT shoulder pain. Builds without widening.",
+            breathe:"Breathe steadily throughout",
+            form:["Elbow directly under shoulder — not forward","Stack feet or stagger front foot for easier version","Lift hip — body in straight line hip to head","Don't let hip sag or pike","Progress: raise top leg or add hip dips"],
+            fix:"Hip sagging? Drop to knee version — form beats duration every time"
           },
           {
-            name:"Glute Bridge Hold",
-            weight:"Bodyweight or 5–8kg plate/dumbbell on hips",sets:"3 sets × 40–45 sec hold",
-            img:"glute bridge hold exercise mat",
-            feel:"Top of glutes (gluteus maximus) — NOT lower back or hamstrings",
-            breathe:"Exhale as you drive up · breathe steadily during hold",
-            form:["Lie on back · feet flat · hip-width · heels close to glutes","Drive through HEELS — not toes","Squeeze glutes hard at the top — actively contract","Hips fully extended — don't let them drop","Tuck pelvis slightly — no lower back hyperextension"],
-            fix:"Feeling hamstrings? Walk feet slightly further from body — closer feet = more quad, further = more glute"
+            name:"Plank + Reach",priority:false,
+            weight:"Bodyweight",sets:"3 sets × 16 reps",
+            img:"plank reach forward exercise core stability",
+            feel:"Deep core and shoulder — anti-rotation stability",
+            breathe:"Exhale as you reach · Inhale as you return",
+            form:["High plank — hands flat, wrists under shoulders","Reach one arm straight forward — keep hips still","No rotation — pelvis stays square to the floor","Return and alternate sides","Slow and controlled — the slower the harder"],
+            fix:"Hips rotating? Widen your feet slightly until core is strong enough to hold"
           },
         ].map(e=>renderExCard(e)).join("")}
 
         <!-- LOWER BODY -->
         <div style="padding:10px 14px 4px;background:rgba(106,90,138,.06);margin-top:8px">
-          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Lower Body · 1× per week · light + controlled</div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Lower Body · Solo Day (skip if PT session same day)</div>
         </div>
-        <div style="padding:6px 14px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Glute isolation only — if quads are firing, stop and reset. Mind-muscle over weight.</div>
+        <div style="padding:6px 14px 8px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Only do lower body if you haven't had PT that day. Glute isolation only — if quads fire, stop and reset.</div>
         ${[
           {
-            name:"Single Leg Glute Bridge",
-            weight:"Bodyweight",sets:"3 sets × 15 each leg",
-            img:"single leg glute bridge exercise mat",
-            feel:"Working glute only — NOT lower back or quad of supporting leg",
-            breathe:"Exhale as you drive up · inhale as you lower",
-            form:["One foot flat on mat · other leg straight up or bent over knee","Drive through the planted heel","Full hip extension at top — squeeze glute hard","Hips level — don't let one side drop","Lower slowly — 3 sec down"],
-            fix:"Hips rotating? Your glute medius is weak — do extra fire hydrants before this"
-          },
-          {
-            name:"Donkey Kicks",
-            weight:"Bodyweight or 0.5–1kg ankle weight",sets:"3 sets × 20 each leg",
-            img:"donkey kick exercise glute mat",
-            feel:"Gluteus maximus of the kicking leg — the very top of the glute",
-            breathe:"Exhale as you kick up · inhale as you lower",
-            form:["On all fours · wrists under shoulders · knees under hips","Knee stays bent at 90° throughout","Kick heel toward ceiling — not out to the side","Squeeze at the top before lowering","Keep back flat — no rotation in the hips"],
-            fix:"Feeling lower back? You're hyperextending — lower your kick height and keep core braced"
-          },
-          {
-            name:"Fire Hydrants",
-            weight:"Bodyweight",sets:"3 sets × 15 each leg",
-            img:"fire hydrant exercise glute hip mat",
-            feel:"Outer glute (gluteus medius) — the side of the glute, NOT hip flexor",
-            breathe:"Exhale as you lift · inhale as you lower",
-            form:["On all fours · stable neutral spine","Lift knee out to the side — like a dog at a hydrant","Keep knee at 90° · foot flexed","Only lift as high as you can without rotating your hip","Slow and controlled — 2 sec up, 2 sec down"],
-            fix:"Hips rocking? You're going too high — reduce range and squeeze the glute at the top"
-          },
-          {
-            name:"Romanian Deadlift",
+            name:"Romanian Deadlift",priority:false,
             weight:"5–6kg each hand",sets:"3 sets × 12 reps",
             img:"romanian deadlift dumbbell exercise form",
-            feel:"Hamstrings and glutes — a deep stretch and squeeze · NOT lower back",
+            feel:"Hamstrings and glutes — deep stretch and squeeze · NOT lower back",
             breathe:"Inhale before you hinge · exhale as you drive back up",
-            form:["Stand hip-width · soft bend in knees · hold dumbbells in front","Hinge at hips — push them back as weights travel down shins","Back stays flat — not rounded — the whole way","Lower until you feel a deep hamstring stretch (mid-shin)","Drive hips forward to stand — squeeze glutes at top"],
-            fix:"Rounding your back? You're going too low — only go as far as you can keep a flat back"
+            form:["Stand hip-width · soft bend in knees · dumbbells in front","Hinge at hips — push hips back as weights travel down shins","Back stays flat the whole way","Lower until deep hamstring stretch (mid-shin)","Drive hips forward to stand — squeeze glutes at top"],
+            fix:"Rounding your back? Only go as far as you can keep back flat"
+          },
+          {
+            name:"Donkey Kick + Fire Hydrant",priority:false,
+            weight:"6kg behind knee",sets:"3 sets × 16 reps each leg",
+            img:"donkey kick fire hydrant glute exercise",
+            feel:"Donkey kick: top of glute. Fire hydrant: outer glute.",
+            breathe:"Exhale on lift · inhale to return",
+            form:["On all fours · wrists under shoulders · pelvis slightly tucked","Donkey kick: kick heel to ceiling, knee stays bent 90°","Fire hydrant: open knee to side, keep 90°","Squeeze hard at top of each rep","Keep back flat — no rotation or sagging"],
+            fix:"Lower back feeling it? You're hyperextending on the kick — reduce height and brace core"
+          },
+          {
+            name:"Supine Leg Open/Close",priority:false,
+            weight:"Ankle weights",sets:"3 sets × 20 reps",
+            img:"supine leg raise open close inner thigh exercise",
+            feel:"Inner thigh (adductors) — NOT hip flexors",
+            breathe:"Exhale as legs close · inhale as they open",
+            form:["Lie on back · legs straight up · lower back pressed flat","Open legs wide — feel the inner thigh stretch","Close legs together with control — squeeze inner thighs","Keep lower back pressed down throughout","Option: 90° bent knee version is easier"],
+            fix:"Lower back lifting? Press it harder into the mat or reduce the range you open your legs"
+          },
+          {
+            name:"Glute Bridge Hold",priority:false,
+            weight:"5–8kg on hips",sets:"3 sets × 40–45 sec hold",
+            img:"glute bridge hold exercise mat",
+            feel:"Top of glutes — NOT lower back or hamstrings",
+            breathe:"Exhale as you drive up · breathe steadily during hold",
+            form:["Lie on back · feet flat · hip-width · heels close to glutes","Drive through HEELS — not toes","Squeeze glutes hard — actively contract throughout","Hips fully extended · slight pelvic tuck","No lower back hyperextension"],
+            fix:"Feeling hamstrings? Walk feet slightly further from body"
+          },
+          {
+            name:"Sumo Squat Pulses",priority:false,
+            weight:"Bodyweight or light dumbbell",sets:"3 sets × 30 pulses",
+            img:"sumo squat pulse inner thigh exercise",
+            feel:"Inner thigh and glutes — NOT quads",
+            breathe:"Short exhales on each pulse",
+            form:["Feet wide · toes turned out 45°","Sink into a wide squat — weight in heels","Small pulses up and down from the bottom position","Keep chest up and core braced","The wider the stance the more inner thigh involved"],
+            fix:"Knees caving in? Push them out in line with toes throughout"
           },
         ].map(e=>renderExCard(e)).join("")}
 
         <div style="margin:14px 14px 14px;padding:10px 12px;background:var(--gold-pale);border-left:3px solid var(--gold)">
-          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Rules for your shape:</strong> No squats, lunges, or leg press — these add quad bulk. Upper body can go heavier. Lower body: if quads fire more than glutes, the weight is too heavy or your foot position is wrong.</div>
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Key rule:</strong> ⭐ Upper body + core exercises are the most important to do on your own — PT doesn't programme them. Do all 5 upper + 4 core every solo session. Lower body only if no PT that day.</div>
         </div>
       </div>`:''}
     </div>
@@ -3808,11 +3821,15 @@ function renderExCard(e){
   const cardId=`excard_${e.name.replace(/\s+/g,'_')}`;
   const open=(state._exCardOpen||{})[cardId];
   const imgSrc=(state._exCardImgs||{})[cardId];
-  return `<div style="border-bottom:1px solid var(--border)">
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:${open?'var(--gold-pale)':'var(--white)'}" onclick="toggleExCard('${cardId}')">
+  const priorityBadge=e.priority?`<span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>`:'';
+  return `<div style="border-bottom:1px solid var(--border);${e.priority?'border-left:3px solid var(--gold);':''}">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:${open?'var(--gold-pale)':e.priority?'rgba(184,147,74,.04)':'var(--white)'}" onclick="toggleExCard('${cardId}')">
       ${imgSrc?`<img src="${imgSrc}" style="width:48px;height:38px;object-fit:cover;border-radius:2px;flex-shrink:0">`:`<div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('${cardId}','${e.img.replace(/'/g,"\\'")}',this)">▶</div>`}
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:500;color:var(--text)">${e.name}</div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">${e.name}</span>
+          ${priorityBadge}
+        </div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">${e.sets} · ${e.weight}</div>
       </div>
       <span style="font-size:11px;color:var(--gold);flex-shrink:0">${open?'▲':'▼'}</span>
