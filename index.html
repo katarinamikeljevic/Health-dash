@@ -2373,8 +2373,9 @@ function renderFood(){
           ${ms.meals.map((m,mIdx)=>`
           <div style="display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
             <div style="flex:1">
-              <div style="font-size:13px;color:var(--text)">${m.name}</div>
+              <div style="font-size:13px;color:var(--text);font-weight:500">${m.name}</div>
               <div class="meal-entry-macros">${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F${m.fibre?" · "+(+m.fibre||0).toFixed(1)+"g fibre":""}${m.salt?" · "+Math.round(+m.salt||0)+"mg salt":""} · ${m.time}</div>
+              ${m.ingredients?`<div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5;font-style:italic">${m.ingredients}</div>`:""}
               <button onclick="saveLoggedMealToLibrary(${mIdx},${foodDayIdx});flashBtn(this)" style="margin-top:4px;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">💾 Save to Meals</button>
             </div>
             <button onclick="removeLoggedMeal(${mIdx})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1;margin-top:2px">×</button>
@@ -4485,11 +4486,11 @@ function parsePasteAndAdd(){
     </div>`;
   }
 
-  // Add to log
+  // Add to log — store full raw text as ingredients
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
   const s=state.macros[mk];
-  const meal={name,protein,fat,carbs,fibre,kcal,salt,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+  const meal={name,protein,fat,carbs,fibre,kcal,salt,ingredients:raw.trim(),time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+meal[k]||0)));
   s.meals=[...(s.meals||[]),meal];
   persist();
