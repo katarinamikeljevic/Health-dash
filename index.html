@@ -4489,8 +4489,9 @@ function parsePasteAndAdd(){
   s.meals=[...(s.meals||[]),meal];
   persist();
 
-  // Auto-tick gut boosters from ingredient keywords in the pasted text
-  autoTickGutFromText(raw);
+  // Auto-tick gut boosters from ingredient keywords — show popup for confirmation
+  const matched=findGutBoostersInText(raw);
+  if(matched.length) showGutBoosterConfirm(matched,getWeekKey(),foodDayIdx);
 
   // Clear inputs
   const pasteEl=document.getElementById("mealPasteInput");
