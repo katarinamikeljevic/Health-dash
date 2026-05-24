@@ -4426,35 +4426,29 @@ function parsePasteAndAdd(){
   }
 
   const kcal=extract([
-    /(?:calories?|energy|kcal|cal)\D{0,5}([\d.]+)\s*(?:kcal|cal|k)?/,
-    /([\d.]+)\s*(?:kcal|calories?|cal)\b/,
+    /(\d+)\s*kcal/,                                    // 520 kcal
+    /(?:calories?|energy|cal)\D{0,5}([\d.]+)/,
+    /([\d.]+)\s*(?:calories?|cal)\b/,
   ]);
   const protein=extract([
+    /(\d+(?:\.\d+)?)\s*g\s*p(?:\b|·|\s)/i,            // 38g P
     /protein\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*protein/,
-    /([\d.]+)\s*g\s*p\b/,   // Claude format: 38g P
-    /·\s*([\d.]+)g\s*p\b/,  // Claude format with ·
-    /\b(\d+)\s*p\b/,
   ]);
   const carbs=extract([
+    /(\d+(?:\.\d+)?)\s*g\s*c(?:\b|·|\s)/i,            // 8g C
     /carbo(?:hydrate)?s?\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*carbo/,
-    /([\d.]+)\s*g\s*c\b/,   // Claude format: 8g C
-    /·\s*([\d.]+)g\s*c\b/,
-    /\b(\d+)\s*c\b/,
   ]);
   const fat=extract([
+    /(\d+(?:\.\d+)?)\s*g\s*f(?:\b|·|\s|$)/i,          // 36g F
     /(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*fat/,
-    /([\d.]+)\s*g\s*f\b/,   // Claude format: 36g F
-    /·\s*([\d.]+)g\s*f\b/,
-    /\b(\d+)\s*f\b/,
   ]);
   const fibre=extract([
+    /(\d+(?:\.\d+)?)\s*g\s*fibre/i,                    // 4g fibre
+    /(\d+(?:\.\d+)?)\s*g\s*fiber/i,
     /fib(?:er|re)\D{0,5}([\d.]+)\s*g/,
-    /([\d.]+)\s*g\s*fib/,
-    /([\d.]+)\s*g?\s*fibre/,
-    /·\s*([\d.]+)g?\s*fibre/,
   ]);
 
   // Salt: handles mg inline e.g. "900mg salt" or "salt 900mg" or "salt 0.4g"
@@ -4468,10 +4462,10 @@ function parsePasteAndAdd(){
   else if(sodiumMg) salt=Math.round((parseFloat(sodiumMg[1])||0)*2.5);
   else if(sodiumG) salt=Math.round((parseFloat(sodiumG[1])||0)*2500);
 
-  // Auto-detect name — use text before first · or — or newline
-  const firstLine=raw.split(/[\n]/)[0].trim();
-  const namePart=firstLine.split(/·|—/)[0].trim();
-  const name=nameInput||(namePart.length<80?namePart:"Pasted meal");
+  // Auto-detect name — grab text before — or · on first line
+  const firstLine=raw.split(/\n/)[0].trim();
+  const namePart=firstLine.split(/\s*—\s*|\s*·\s*/)[0].trim();
+  const name=nameInput||(namePart.length>0&&namePart.length<80?namePart:"Pasted meal");
 
   // Show preview
   const preview=document.getElementById("mealPastePreview");
