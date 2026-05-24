@@ -3495,44 +3495,39 @@ function renderExerciseTab(){
       }).join("")}
     </div>
 
-    <!-- Daily walks checklist — linked to routine -->
+    <!-- Daily walks — weekly trackers linked to routine -->
     <div style="margin-bottom:20px">
-      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Daily Walks · Today</div>
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Daily Walks · This Week</div>
       ${[
-        {id:"m4",label:"Morning fasted walk",note:"Before kefir shake · flat 20–30 min or incline on Mon/Wed"},
-        {id:"m4b",label:"Arm exercises during walk",note:"Alternate days · 1–2kg · see guide below ▼"},
-        {id:"e0b",label:"Evening walk 20 min",note:"After dinner · fed · flat · digestion + blood sugar"},
-      ].map(item=>{
-        const ck=`checks-${wk}-${dayIdx}`;
-        const checked=!!((state.checks||{})[ck]||{})[item.id];
-        return `<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleCheck('${item.id}','movement')">
-          <div style="width:22px;height:22px;border:1.5px solid ${checked?'var(--green)':'var(--border)'};background:${checked?'var(--green)':'none'};border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px">${checked?'✓':''}</div>
-          <div>
-            <div style="font-size:13px;color:${checked?'var(--muted)':'var(--text)'};${checked?'text-decoration:line-through':''}">${item.label}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">${item.note}</div>
+        {label:"Morning fasted walk",id:"m4",color:"#4a6a8a",target:7,note:"Fasted · before kefir"},
+        {label:"Evening walk",id:"e0b",color:"#4a8c6a",target:7,note:"After dinner · flat · 20 min"},
+      ].map(w=>{
+        // Count how many days this week the item is ticked
+        let wDone=0;
+        for(let i=0;i<7;i++){
+          const k=`checks-${wk}-${i}`;
+          if((state.checks||{})[k]?.[w.id])wDone++;
+        }
+        const dots=Array.from({length:7},(_,i)=>{
+          // Is this day ticked?
+          const dk=`checks-${wk}-${i}`;
+          const dayTicked=!!((state.checks||{})[dk]||{})[w.id];
+          const dayName=["M","T","W","T","F","S","S"][i];
+          return `<div onclick="toggleCheckDay('${w.id}',${i})"
+            style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${dayTicked?w.color:'var(--border)'};background:${dayTicked?w.color:'none'};color:${dayTicked?'white':'var(--muted)'};font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">${dayName}</div>`;
+        }).join("");
+        return `<div style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div>
+              <div style="font-size:13px;color:var(--text)">${w.label}</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px">${w.note}</div>
+            </div>
+            <span style="font-size:11px;color:${wDone>=5?w.color:'var(--muted)'};flex-shrink:0;margin-left:8px">${wDone}/7</span>
           </div>
+          <div style="display:flex;gap:4px">${dots}</div>
         </div>`;
       }).join("")}
-      <div style="font-size:10px;color:var(--muted);margin-top:6px">Walk items are linked to your Routine tab</div>
-    </div>
-
-    <!-- Incline walk combo guide -->
-    <div style="background:rgba(74,106,138,.06);border:1px solid rgba(74,106,138,.2);padding:12px 14px;margin-bottom:16px">
-      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#4a6a8a;margin-bottom:8px">🚶 Incline Walk · What You Can Combine</div>
-      ${[
-        {day:"Walk + Reformer Pilates",ok:true,note:"✓ Great combo — walk is fasted AM, Pilates later. Full recovery between."},
-        {day:"Walk + Lagree",ok:true,note:"✓ Fine — same logic. Walk first fasted, Lagree later in the day."},
-        {day:"Walk + Own Strength",ok:true,note:"✓ Works well — walk fasted AM, strength session separately."},
-        {day:"Walk + PT",ok:true,note:"✓ Yes — walk fasted AM, PT later. Don't do both fasted."},
-        {day:"Walk + Infrared Sculpt/Strength",ok:false,note:"↔ Swap, don't stack — Infrared replaces the walk on that day."},
-        {day:"Two incline walks same day",ok:false,note:"✗ Never — counterproductive. One per day maximum."},
-      ].map(r=>`<div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(74,106,138,.12)">
-        <span style="font-size:12px;flex-shrink:0">${r.ok?'✓':'✗'}</span>
-        <div>
-          <div style="font-size:12px;color:var(--text);font-weight:500">${r.day}</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:1px">${r.note}</div>
-        </div>
-      </div>`).join("")}
+      <div style="font-size:10px;color:var(--muted);margin-top:8px">Tap a day to tick · linked to your Routine tab</div>
     </div>
 
     <!-- Strength guide dropdown -->
@@ -3922,6 +3917,17 @@ async function loadExImg(cardId,query,btn){
   // Open YouTube search for the exercise demo in a new tab
   const searchUrl=`https://www.youtube.com/results?search_query=${encodeURIComponent(query+' proper form tutorial')}`;
   window.open(searchUrl,'_blank');
+}
+
+function toggleCheckDay(id, dayIndex){
+  const wk=getWeekKey();
+  const ck=`checks-${wk}-${dayIndex}`;
+  if(!state.checks[ck])state.checks[ck]={};
+  state.checks[ck][id]=!state.checks[ck][id];
+  persist();
+  renderExerciseTab();
+  // If viewing same day in routine, refresh that too
+  if(dayIndex===dayIdx)renderRoutine();
 }
 
 function toggleExerciseCheck(id){
