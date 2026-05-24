@@ -2242,7 +2242,7 @@ function renderFoodLogger(){
     <!-- Paste panel -->
     <div id="fsPanel_paste" style="display:none">
       <div style="font-size:12px;color:var(--soft);margin-bottom:8px;line-height:1.6">Paste nutrition text from MyFitnessPal, a label, a website, or freeform.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:90px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="e.g. Calories 320 · Protein 28g · Carbs 12g · Fat 9g&#10;&#10;or: Energy 320kcal Protein 28.0g Carbohydrate 12.3g Fat 9.1g Fibre 2.1g Salt 0.4g"></textarea>
+      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:90px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="e.g. Fresh Aussie — 520 kcal · 38g P · 8g C · 36g F · 4g fibre · 900mg salt&#10;&#10;or: Calories 320 · Protein 28g · Carbs 12g · Fat 9g&#10;&#10;Ingredients in the name auto-tick gut boosters!"></textarea>
       <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Meal name (optional)">
       <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
       <div style="display:flex;gap:8px">
@@ -4415,7 +4415,7 @@ function parsePasteAndAdd(){
 
   const text=raw.toLowerCase();
 
-  // Extract numbers with flexible label matching
+  // Extract numbers with flexible label matching — including Claude format e.g. "38g P"
   function extract(patterns){
     for(const p of patterns){
       const m=text.match(p);
@@ -4431,42 +4431,52 @@ function parsePasteAndAdd(){
   const protein=extract([
     /protein\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*protein/,
+    /([\d.]+)\s*g\s*p\b/,   // Claude format: 38g P
+    /·\s*([\d.]+)g\s*p\b/,  // Claude format with ·
     /\b(\d+)\s*p\b/,
   ]);
   const carbs=extract([
     /carbo(?:hydrate)?s?\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*carbo/,
+    /([\d.]+)\s*g\s*c\b/,   // Claude format: 8g C
+    /·\s*([\d.]+)g\s*c\b/,
     /\b(\d+)\s*c\b/,
   ]);
   const fat=extract([
     /(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*fat/,
+    /([\d.]+)\s*g\s*f\b/,   // Claude format: 36g F
+    /·\s*([\d.]+)g\s*f\b/,
     /\b(\d+)\s*f\b/,
   ]);
   const fibre=extract([
     /fib(?:er|re)\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*fib/,
+    /([\d.]+)\s*g?\s*fibre/,
+    /·\s*([\d.]+)g?\s*fibre/,
   ]);
-  // Salt: label may show as "salt 0.4g" (convert to mg) or "sodium 160mg"
+
+  // Salt: handles mg inline e.g. "900mg salt" or "salt 900mg" or "salt 0.4g"
   let salt=0;
+  const saltMg=text.match(/(\d+)\s*mg\s*salt|salt\D{0,5}(\d+)\s*mg/);
   const saltG=text.match(/salt\D{0,5}([\d.]+)\s*g/);
-  const saltMg=text.match(/salt\D{0,5}([\d.]+)\s*mg/);
   const sodiumMg=text.match(/sodium\D{0,5}([\d.]+)\s*mg/);
   const sodiumG=text.match(/sodium\D{0,5}([\d.]+)\s*g/);
-  if(saltMg) salt=parseFloat(saltMg[1])||0;
+  if(saltMg) salt=parseFloat(saltMg[1]||saltMg[2])||0;
   else if(saltG) salt=Math.round((parseFloat(saltG[1])||0)*1000);
   else if(sodiumMg) salt=Math.round((parseFloat(sodiumMg[1])||0)*2.5);
   else if(sodiumG) salt=Math.round((parseFloat(sodiumG[1])||0)*2500);
 
-  // Auto-detect name from first line if not provided
-  const firstLine=raw.split(/[\n,·]/)[0].trim();
-  const name=nameInput||(firstLine.length<60&&!/\d/.test(firstLine)?firstLine:"Pasted meal");
+  // Auto-detect name — use text before first · or — or newline
+  const firstLine=raw.split(/[\n]/)[0].trim();
+  const namePart=firstLine.split(/·|—/)[0].trim();
+  const name=nameInput||(namePart.length<80?namePart:"Pasted meal");
 
   // Show preview
   const preview=document.getElementById("mealPastePreview");
   if(preview){
     if(!kcal&&!protein){
-      preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Couldn't find any numbers — try including "Calories: 320" or "Protein 28g"</div>`;
+      preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Couldn't find numbers — try format: "520 kcal · 38g P · 8g C · 36g F · 4g fibre · 900mg salt"</div>`;
       return;
     }
     preview.innerHTML=`<div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);font-size:12px;color:var(--soft);border-radius:2px">
@@ -4484,7 +4494,10 @@ function parsePasteAndAdd(){
   s.meals=[...(s.meals||[]),meal];
   persist();
 
-  // Clear
+  // Auto-tick gut boosters from ingredient keywords in the pasted text
+  autoTickGutFromText(raw);
+
+  // Clear inputs
   const pasteEl=document.getElementById("mealPasteInput");
   const nameEl=document.getElementById("mealPasteName");
   if(pasteEl)pasteEl.value="";
