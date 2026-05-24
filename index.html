@@ -2470,10 +2470,10 @@ function renderFood(){
     ${groups.map(g=>`<div style="margin-bottom:16px"><div class="gut-section-hdr">${g.lbl}</div>${g.items.map(item=>{
       const wc=gutWeekCount(item.id),ticked=!!foods[item.id],met=wc>=item.t;
       const pct=Math.min(wc/item.t,1)*100;
-      return `<div class="gut-item${met?" met":""}" onclick="quickGutTick('${item.id}');flashBtn(this)" style="cursor:pointer;transition:background .1s;active:opacity:.8">
+      return `<div class="gut-item${met?" met":""}" onclick="quickGutTick('${item.id}');flashBtn(this)" style="cursor:pointer;transition:background .1s;active:opacity:.8;${met?'opacity:0.45':''}">
         <div class="gut-item-top">
           <div style="flex:1">
-            <div class="gut-item-name">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted)">/ ${item.alts.join(' / ')}</span>`:''} ${ticked?'<span style="color:var(--green);font-size:11px">✓ today</span>':''}</div>
+            <div class="gut-item-name" style="${met?'color:var(--muted);font-weight:300':'font-weight:600;color:var(--ink)'}">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:300">/ ${item.alts.join(' / ')}</span>`:''} ${ticked?'<span style="color:var(--green);font-size:11px;font-weight:400">✓ today</span>':''}</div>
             <div class="gut-item-note">${item.n}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
