@@ -5,11 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Katarina">
-<meta name="application-name" content="Katarina">
 <title>Katarina · Health Tracker</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzFhMTQxMCIgcng9IjMyIi8+PHRleHQgeD0iOTAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iNzIiIGZpbGw9IiNiODkzNGEiPks8L3RleHQ+PC9zdmc+">
-<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzFhMTQxMCIgcng9IjMyIi8+PHRleHQgeD0iOTAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iNzIiIGZpbGw9IiNiODkzNGEiPks8L3RleHQ+PC9zdmc+">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f0eb;--white:#fff;--ink:#1a1410;--border:#e0d8d0;--gold:#b8934a;--gold-pale:#f5ead8;--gold-dim:rgba(184,147,74,.15);--green:#4a8c6a;--green-pale:#e8f4ee;--green-dim:rgba(74,140,106,.12);--muted:#9a8878;--soft:#6a5a4a;--text:#2c1e10;--amber:#e8a44a;--red:#e07070}
@@ -299,7 +295,8 @@ const ROUTINE_SECTIONS=[
   {id:"morning",title:"Morning Protocol",items:[
     {id:"m1",label:"1 litre electrolytes (LMNT) on waking",note:"Before anything else — first thing",tag:"info"},
     {id:"sup1",label:"💊 Iron supplement",note:"On empty stomach with electrolyte water — separate from other supplements",tag:"supp"},
-    {id:"sk_iceroll",label:"🧊 Ice roll",note:"Daily · face & neck · reduces puffiness & inflammation",tag:""},
+    {id:"m2",label:"Ice face 60 sec",note:"Face & neck — reduces puffiness",tag:"info"},
+    {id:"sk_guasha",label:"Gua sha",note:"Daily · 7 min · incl. neck drainage",tag:"skingroup",count:7,color:"#b8934a"},
     {id:"ph1",label:"Physio: release left glute + left lower back",note:"Ball against wall · 30 sec each · before walk",tag:""},
     {id:"ph3",label:"Physio: marching drill weight left (30s) then right (45s)",note:"Pelvis stable · 5kg weight",tag:""},
     {id:"m4",label:"Fasted morning walk",note:"Mon/Wed: incline 30–55 min (12%, 4.8km/h) · Other days: flat 20–30 min · FASTED",tag:""},
@@ -320,7 +317,7 @@ const ROUTINE_SECTIONS=[
     {id:"sk_drybrush",label:"Dry brush",note:"4×/wk · 3 min · on dry skin before shower · upward strokes toward heart",tag:"skingroup",count:4,color:"#9a7060"},
     {id:"e2",label:"Red light therapy 30 min",note:"Clean dry skin",tag:"info"},
     {id:"e3",label:"Legs up the wall 10–15 min + stretches",note:"Point/flex feet, ankle circles — reduces lower body water retention",tag:"info"},
-    {id:"sk_refa",label:"Evening lymph brush massage",note:"5×/wk · 3–4 min · immediately after red light",tag:"skingroup",count:5,color:"#6a7898"},
+    {id:"sk_refa",label:"REFA",note:"5×/wk · 3–4 min · immediately after red light",tag:"skingroup",count:5,color:"#6a7898"},
     {id:"e5",label:"Skincare: serum → moisturiser",note:"Clean skin",tag:"info"},
     {id:"sk_mask",label:"Sheet mask",note:"2–3×/wk · not consecutive nights · store in fridge",tag:"skingroup",count:3,color:"#4a8c6a"},
     {id:"e6",label:"In bed by 10:30pm — 8h sleep",note:"Non-negotiable for cortisol and fat loss",tag:"info"},
@@ -415,33 +412,6 @@ const SEEDED_MEALS={
       kcal:314,protein:42.4,fat:12.3,carbs:7.8,fibre:3.2,salt:280,
       note:"Luteal phase dinner — rinsed sauerkraut keeps sodium low · sardines = omega-3 + iron · sauerkraut = live cultures · asparagus = natural diuretic for bloat"
     },
-  ],
-  snacks:[
-    {id:"fruit_peach",name:"🍑 Peach (1 medium)",ingredients:"1 medium peach, 150g",tags:"🍑 Fresh fruit",kcal:57,protein:1.4,fat:0.4,carbs:14,fibre:2.1,salt:0},
-    {id:"fruit_cherry",name:"🍒 Cherries (100g)",ingredients:"100g fresh cherries",tags:"🍒 Fresh fruit",kcal:63,protein:1.1,fat:0.2,carbs:16,fibre:2.1,salt:0},
-    {id:"fruit_lychee",name:"🍈 Lychee (100g)",ingredients:"100g fresh lychee",tags:"🍈 Fresh fruit",kcal:66,protein:0.8,fat:0.4,carbs:17,fibre:1.3,salt:0},
-    {id:"fruit_apricot",name:"🍊 Apricot (2 medium)",ingredients:"2 medium apricots, 70g",tags:"🍊 Fresh fruit",kcal:34,protein:1.0,fat:0.3,carbs:8,fibre:1.4,salt:0},
-    {id:"fruit_purple_grapes",name:"🍇 Purple Grapes (100g)",ingredients:"100g purple grapes",tags:"🍇 Fresh fruit",kcal:67,protein:0.6,fat:0.4,carbs:17,fibre:0.9,salt:0},
-    {id:"fruit_green_grapes",name:"🍏 Green Grapes (100g)",ingredients:"100g green grapes",tags:"🍏 Fresh fruit",kcal:67,protein:0.6,fat:0.2,carbs:17,fibre:0.9,salt:0},
-    {id:"fruit_nectarine",name:"🍑 Nectarine (1 medium)",ingredients:"1 medium nectarine, 140g",tags:"🍑 Fresh fruit",kcal:60,protein:1.5,fat:0.5,carbs:14,fibre:2.3,salt:0},
-    {id:"fruit_pineapple",name:"🍍 Pineapple (100g)",ingredients:"100g fresh pineapple",tags:"🍍 Fresh fruit",kcal:48,protein:0.5,fat:0.1,carbs:13,fibre:1.4,salt:0},
-    {id:"fruit_plum",name:"🫐 Plum (1 medium)",ingredients:"1 medium plum, 80g",tags:"🫐 Fresh fruit",kcal:38,protein:0.6,fat:0.2,carbs:10,fibre:1.1,salt:0},
-    {id:"fruit_watermelon",name:"🍉 Watermelon (200g)",ingredients:"200g fresh watermelon",tags:"🍉 Fresh fruit",kcal:60,protein:1.2,fat:0.2,carbs:15,fibre:0.6,salt:0},
-    {id:"fruit_melon",name:"🍈 Melon (200g)",ingredients:"200g fresh cantaloupe melon",tags:"🍈 Fresh fruit",kcal:68,protein:1.7,fat:0.4,carbs:16,fibre:1.8,salt:0},
-    {id:"fruit_dragonfruit",name:"🐉 Dragonfruit (100g)",ingredients:"100g fresh dragonfruit",tags:"🐉 Fresh fruit",kcal:60,protein:1.2,fat:0.4,carbs:13,fibre:3.0,salt:0},
-    {id:"fruit_mango",name:"🥭 Mango (100g)",ingredients:"100g fresh mango",tags:"🥭 Fresh fruit",kcal:60,protein:0.8,fat:0.4,carbs:15,fibre:1.6,salt:0},
-    {id:"fruit_papaya",name:"🍈 Papaya (100g)",ingredients:"100g fresh papaya",tags:"🍈 Fresh fruit",kcal:32,protein:0.6,fat:0.1,carbs:8,fibre:1.8,salt:0},
-    {id:"fruit_passionfruit",name:"💛 Passionfruit (2 fruit)",ingredients:"2 passionfruit, 36g edible",tags:"💛 Fresh fruit",kcal:35,protein:0.8,fat:0.4,carbs:8,fibre:3.3,salt:0},
-    {id:"fruit_guava",name:"🍐 Guava (1 medium)",ingredients:"1 medium guava, 90g",tags:"🍐 Fresh fruit",kcal:60,protein:2.2,fat:0.9,carbs:14,fibre:5.4,salt:0},
-    {id:"fruit_fig",name:"🫐 Fresh Fig (2 medium)",ingredients:"2 fresh figs, 100g",tags:"🫐 Fresh fruit",kcal:74,protein:0.8,fat:0.3,carbs:19,fibre:2.9,salt:0},
-    {id:"fruit_starfruit",name:"⭐ Starfruit (1 medium)",ingredients:"1 medium starfruit, 90g",tags:"⭐ Fresh fruit",kcal:28,protein:0.9,fat:0.3,carbs:6,fibre:2.5,salt:0},
-    {id:"fruit_kiwi",name:"🥝 Kiwi (1 medium)",ingredients:"1 medium kiwi, 70g",tags:"🥝 Fresh fruit",kcal:42,protein:0.8,fat:0.4,carbs:10,fibre:2.1,salt:0},
-    {id:"fruit_pomegranate",name:"❤️ Pomegranate seeds (80g)",ingredients:"80g pomegranate arils",tags:"❤️ Fresh fruit",kcal:58,protein:0.9,fat:0.8,carbs:13,fibre:2.8,salt:0},
-    {id:"fruit_lemon",name:"🍋 Lemon juice (1 lemon)",ingredients:"juice of 1 lemon, 30ml",tags:"🍋 Fresh fruit",kcal:8,protein:0.1,fat:0.1,carbs:2,fibre:0.1,salt:0},
-    {id:"fruit_lime",name:"🍋 Lime juice (1 lime)",ingredients:"juice of 1 lime, 25ml",tags:"🍋 Fresh fruit",kcal:6,protein:0.1,fat:0.1,carbs:2,fibre:0.1,salt:0},
-    {id:"fruit_raspberry",name:"🫐 Raspberries (100g)",ingredients:"100g fresh raspberries",tags:"🫐 Fresh fruit",kcal:52,protein:1.2,fat:0.7,carbs:12,fibre:6.5,salt:0},
-    {id:"fruit_strawberry",name:"🍓 Strawberries (100g)",ingredients:"100g fresh strawberries",tags:"🍓 Fresh fruit",kcal:32,protein:0.7,fat:0.3,carbs:8,fibre:2.0,salt:0},
-    {id:"fruit_blueberry",name:"🫐 Blueberries (80g)",ingredients:"80g fresh blueberries",tags:"🫐 Fresh fruit",kcal:46,protein:0.6,fat:0.3,carbs:12,fibre:1.9,salt:0},
   ],
 };
 
@@ -734,7 +704,6 @@ function renderMacroSplit(){
       <div style="font-size:10px;color:var(--muted);line-height:2">
         🟠 <b>Front-load protein</b> — hit 85g by lunch of your 115g target<br>
         🟠 <b>Front-load calories</b> — biggest meal at lunch, not dinner<br>
-        🔁 <b>Calorie cycle</b> — Training days 1,550 kcal · Rest/walk days 1,350 kcal · Protein stays 115g every day<br>
         🥗 <b>Fibre-rich lunch</b> — black beans + edamame + peas = hours of fullness<br>
         🥑 <b>Healthy fat at lunch</b> — avocado slows gastric emptying · no 4pm crash<br>
         🥦 <b>Volume eating</b> — lots of veg = stomach full, low calories<br>
@@ -1435,7 +1404,9 @@ const FOOD_DB=[
   ["Flour tortilla large",218,5.7,37,4.8,2.2,540,67,"1 large (67g)"],
   ["Crumpet",93,3.5,18,0.6,1.2,500,40,"1 crumpet (40g)"],
   ["English muffin",134,5,25,1.4,2,580,57,"1 muffin (57g)"],
-  ["Rice cake plain",35,0.7,7.5,0.3,0.2,2,9,"1 rice cake (9g)"],
+  ["Kallo Organic Lightly Salted Rice Cake",394,8.5,82.3,2.7,5.1,250,7,"1 rice cake (7g) — 27 kcal"],
+  ["Kallo Organic Lightly Salted Rice Cake",394,8.5,82.3,2.7,5.1,250,14,"2 rice cakes (14g)"],
+  ["Kallo Organic Lightly Salted Rice Cake",394,8.5,82.3,2.7,5.1,250,21,"3 rice cakes (21g)"],
   ["Rice cake corn",38,0.8,8,0.3,0.2,2,9,"1 corn rice cake (9g)"],
   ["Oatcake",44,1.2,6,1.8,0.8,90,13,"1 oatcake (13g)"],
   // ── ROASTED VEGETABLES ──
@@ -2269,7 +2240,7 @@ function renderFoodLogger(){
     <!-- Paste panel -->
     <div id="fsPanel_paste" style="display:none">
       <div style="font-size:12px;color:var(--soft);margin-bottom:8px;line-height:1.6">Paste nutrition text from MyFitnessPal, a label, a website, or freeform.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:90px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="e.g. Fresh Aussie — 520 kcal · 38g P · 8g C · 36g F · 4g fibre · 900mg salt&#10;&#10;or: Calories 320 · Protein 28g · Carbs 12g · Fat 9g&#10;&#10;Ingredients in the name auto-tick gut boosters!"></textarea>
+      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:90px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="e.g. Calories 320 · Protein 28g · Carbs 12g · Fat 9g&#10;&#10;or: Energy 320kcal Protein 28.0g Carbohydrate 12.3g Fat 9.1g Fibre 2.1g Salt 0.4g"></textarea>
       <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Meal name (optional)">
       <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
       <div style="display:flex;gap:8px">
@@ -2400,9 +2371,8 @@ function renderFood(){
           ${ms.meals.map((m,mIdx)=>`
           <div style="display:flex;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
             <div style="flex:1">
-              <div style="font-size:13px;color:var(--text);font-weight:500">${m.name}</div>
+              <div style="font-size:13px;color:var(--text)">${m.name}</div>
               <div class="meal-entry-macros">${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F${m.fibre?" · "+(+m.fibre||0).toFixed(1)+"g fibre":""}${m.salt?" · "+Math.round(+m.salt||0)+"mg salt":""} · ${m.time}</div>
-              ${m.ingredients?`<div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5;font-style:italic">${m.ingredients}</div>`:""}
               <button onclick="saveLoggedMealToLibrary(${mIdx},${foodDayIdx});flashBtn(this)" style="margin-top:4px;padding:3px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">💾 Save to Meals</button>
             </div>
             <button onclick="removeLoggedMeal(${mIdx})" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1;margin-top:2px">×</button>
@@ -2498,10 +2468,10 @@ function renderFood(){
     ${groups.map(g=>`<div style="margin-bottom:16px"><div class="gut-section-hdr">${g.lbl}</div>${g.items.map(item=>{
       const wc=gutWeekCount(item.id),ticked=!!foods[item.id],met=wc>=item.t;
       const pct=Math.min(wc/item.t,1)*100;
-      return `<div class="gut-item${met?" met":""}" onclick="quickGutTick('${item.id}');flashBtn(this)" style="cursor:pointer;transition:background .1s;active:opacity:.8;${met?'opacity:0.45':''}">
+      return `<div class="gut-item${met?" met":""}" onclick="quickGutTick('${item.id}');flashBtn(this)" style="cursor:pointer;transition:background .1s;active:opacity:.8">
         <div class="gut-item-top">
           <div style="flex:1">
-            <div class="gut-item-name" style="${met?'color:var(--muted);font-weight:300':'font-weight:600;color:var(--ink)'}">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:300">/ ${item.alts.join(' / ')}</span>`:''} ${ticked?'<span style="color:var(--green);font-size:11px;font-weight:400">✓ today</span>':''}</div>
+            <div class="gut-item-name">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted)">/ ${item.alts.join(' / ')}</span>`:''} ${ticked?'<span style="color:var(--green);font-size:11px">✓ today</span>':''}</div>
             <div class="gut-item-note">${item.n}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
@@ -3566,14 +3536,6 @@ function copyAllForClaude(btn){
   const phaseLabel=phase?`${phase.phase.name} (day ${phase.cycleDay} of 27)`:'Unknown';
   const phaseTips=phase?phase.phase.tips:'';
 
-  // Day of week
-  const DAYNAMES=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-  const todayName=DAYNAMES[getTodayIdx()];
-
-  // Egg yolks
-  const yolksUsed=(state.yolks||{})[getWeekKey()]||0;
-  const yolksLeft=Math.max(0,6-yolksUsed);
-
   // Remaining
   const pLeft=Math.max(0,115-(+ms.protein||0));
   const kLeft=Math.max(0,1550-(+ms.kcal||0));
@@ -3603,9 +3565,6 @@ Building: Glutes, shoulders, arms
 Blood markers to watch: Total cholesterol 6.69 (LDL high), Cortisol 533 (upper limit)
 
 Targets: 1550 kcal · 115g protein · 50g fat max · 130g carbs · 32g fibre · 1500mg salt max
-
-Today: ${todayName}
-🥚 Egg yolks this week: ${yolksUsed}/6 used · ${yolksLeft} remaining
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🌙 MENSTRUAL PHASE
@@ -4167,12 +4126,12 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_strength1",label:"PT Strength Session",type:"strength",color:"#b8934a",alt:"Nothing — keep sacred",note:"🔴 Must · Full body · muscle-building priority"},
-    {id:"ex_strength2",label:"Solo Strength Session",type:"strength",color:"#b8934a",alt:"Gym machines / cables / dumbbells",note:"🔴 Must · Full body · sub with weighted gym session only — NOT TRX"},
-    {id:"ex_lagree",label:"Lagree",type:"pilates",color:"#4a8c6a",alt:"Reformer Pilates",note:"🟡 Important · Slow-twitch muscle endurance · interchangeable with Reformer"},
-    {id:"ex_pilates1",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree",note:"🟡 Important · Lengthening, hips, posture · interchangeable with Lagree"},
-    {id:"ex_incline1",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Flat fasted walk (longer duration)",note:"🟢 Flexible · 30–45 min · 12% · 4.8km/h · FASTED · fat burn without cortisol spike"},
-    {id:"ex_trx",label:"TRX",type:"strength",color:"#7a6aa0",alt:"Infrared Sculpt or extra walk",note:"🟢 Sub for Lagree or Reformer Pilates only — NOT a sub for strength sessions · use on low energy days"},
+    {id:"ex_pilates1",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree Fitness",note:"Inner thigh, waist, glutes, posture"},
+    {id:"ex_pilates2",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree Fitness",note:"Build on first session"},
+    {id:"ex_incline1",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Infrared Sculpt",note:"Mon/Wed · 30–55 min · 12% · 4.8km/h · FASTED"},
+    {id:"ex_incline2",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Infrared Sculpt / TRX",note:"Mon/Wed · 30–55 min · 12% · 4.8km/h · FASTED"},
+    {id:"ex_strength1",label:"PT Strength Session",type:"strength",color:"#b8934a",alt:"TRX",note:"Fri · Upper body + core every session"},
+    {id:"ex_strength2",label:"TRX or Infrared Sculpt",type:"strength",color:"#b8934a",alt:"Infrared Sculpt",note:"Sat · Full body or additional strength"},
   ];
 
   // HIIT guidance based on phase
@@ -4181,7 +4140,7 @@ function renderExerciseTab(){
     if(phase.name==="Follicular"||phase.name==="Ovulatory"){
       hiitBadge=`<div style="background:${phase.bg};border:1px solid ${phase.border};padding:10px 14px;margin-bottom:16px;border-radius:2px">
         <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:${phase.color};margin-bottom:4px">${phase.emoji} ${phase.name} Phase · HIIT Window</div>
-        <div style="font-size:12px;color:var(--soft)">✓ <strong>Add 1 HIIT session this week</strong> — peak oestrogen means fastest recovery and highest output. Replace TRX or incline walk with a HIIT session. Upper body, lower body, full body or glutes/abs all work well.</div>
+        <div style="font-size:12px;color:var(--soft)">✓ <strong>Add 1 HIIT session this week</strong> — peak oestrogen means fastest recovery and highest output. Replace one incline walk or add as a 5th session. Upper body, lower body, full body or glutes/abs all work well.</div>
       </div>`;
     } else if(phase.name==="Luteal"&&cycleDay<=22){
       hiitBadge=`<div style="background:${phase.bg};border:1px solid ${phase.border};padding:10px 14px;margin-bottom:16px;border-radius:2px">
@@ -4212,7 +4171,7 @@ function renderExerciseTab(){
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">This Week's Training</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:16px">${done}/${sessions.length} sessions done this week</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px">${done}/6 sessions done this week</div>
 
     ${hiitBadge}
 
@@ -4443,7 +4402,7 @@ function parsePasteAndAdd(){
 
   const text=raw.toLowerCase();
 
-  // Extract numbers with flexible label matching — including Claude format e.g. "38g P"
+  // Extract numbers with flexible label matching
   function extract(patterns){
     for(const p of patterns){
       const m=text.match(p);
@@ -4453,52 +4412,48 @@ function parsePasteAndAdd(){
   }
 
   const kcal=extract([
-    /(\d+)\s*kcal/,                                    // 520 kcal
-    /(?:calories?|energy|cal)\D{0,5}([\d.]+)/,
-    /([\d.]+)\s*(?:calories?|cal)\b/,
+    /(?:calories?|energy|kcal|cal)\D{0,5}([\d.]+)\s*(?:kcal|cal|k)?/,
+    /([\d.]+)\s*(?:kcal|calories?|cal)\b/,
   ]);
   const protein=extract([
-    /(\d+(?:\.\d+)?)\s*g\s*p(?:\b|·|\s)/i,            // 38g P
     /protein\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*protein/,
+    /\b(\d+)\s*p\b/,
   ]);
   const carbs=extract([
-    /(\d+(?:\.\d+)?)\s*g\s*c(?:\b|·|\s)/i,            // 8g C
     /carbo(?:hydrate)?s?\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*carbo/,
+    /\b(\d+)\s*c\b/,
   ]);
   const fat=extract([
-    /(\d+(?:\.\d+)?)\s*g\s*f(?:\b|·|\s|$)/i,          // 36g F
     /(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/,
     /([\d.]+)\s*g\s*fat/,
+    /\b(\d+)\s*f\b/,
   ]);
   const fibre=extract([
-    /(\d+(?:\.\d+)?)\s*g\s*fibre/i,                    // 4g fibre
-    /(\d+(?:\.\d+)?)\s*g\s*fiber/i,
     /fib(?:er|re)\D{0,5}([\d.]+)\s*g/,
+    /([\d.]+)\s*g\s*fib/,
   ]);
-
-  // Salt: handles mg inline e.g. "900mg salt" or "salt 900mg" or "salt 0.4g"
+  // Salt: label may show as "salt 0.4g" (convert to mg) or "sodium 160mg"
   let salt=0;
-  const saltMg=text.match(/(\d+)\s*mg\s*salt|salt\D{0,5}(\d+)\s*mg/);
   const saltG=text.match(/salt\D{0,5}([\d.]+)\s*g/);
+  const saltMg=text.match(/salt\D{0,5}([\d.]+)\s*mg/);
   const sodiumMg=text.match(/sodium\D{0,5}([\d.]+)\s*mg/);
   const sodiumG=text.match(/sodium\D{0,5}([\d.]+)\s*g/);
-  if(saltMg) salt=parseFloat(saltMg[1]||saltMg[2])||0;
+  if(saltMg) salt=parseFloat(saltMg[1])||0;
   else if(saltG) salt=Math.round((parseFloat(saltG[1])||0)*1000);
   else if(sodiumMg) salt=Math.round((parseFloat(sodiumMg[1])||0)*2.5);
   else if(sodiumG) salt=Math.round((parseFloat(sodiumG[1])||0)*2500);
 
-  // Auto-detect name — grab text before — or · on first line
-  const firstLine=raw.split(/\n/)[0].trim();
-  const namePart=firstLine.split(/\s*—\s*|\s*·\s*/)[0].trim();
-  const name=nameInput||(namePart.length>0&&namePart.length<80?namePart:"Pasted meal");
+  // Auto-detect name from first line if not provided
+  const firstLine=raw.split(/[\n,·]/)[0].trim();
+  const name=nameInput||(firstLine.length<60&&!/\d/.test(firstLine)?firstLine:"Pasted meal");
 
   // Show preview
   const preview=document.getElementById("mealPastePreview");
   if(preview){
     if(!kcal&&!protein){
-      preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Couldn't find numbers — try format: "520 kcal · 38g P · 8g C · 36g F · 4g fibre · 900mg salt"</div>`;
+      preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Couldn't find any numbers — try including "Calories: 320" or "Protein 28g"</div>`;
       return;
     }
     preview.innerHTML=`<div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);font-size:12px;color:var(--soft);border-radius:2px">
@@ -4507,20 +4462,16 @@ function parsePasteAndAdd(){
     </div>`;
   }
 
-  // Add to log — store full raw text as ingredients
+  // Add to log
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
   const s=state.macros[mk];
-  const meal={name,protein,fat,carbs,fibre,kcal,salt,ingredients:raw.trim(),time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+  const meal={name,protein,fat,carbs,fibre,kcal,salt,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+meal[k]||0)));
   s.meals=[...(s.meals||[]),meal];
   persist();
 
-  // Auto-tick gut boosters from ingredient keywords — show popup for confirmation
-  const matched=findGutBoostersInText(raw);
-  if(matched.length) showGutBoosterConfirm(matched,getWeekKey(),foodDayIdx);
-
-  // Clear inputs
+  // Clear
   const pasteEl=document.getElementById("mealPasteInput");
   const nameEl=document.getElementById("mealPasteName");
   if(pasteEl)pasteEl.value="";
