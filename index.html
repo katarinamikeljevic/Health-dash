@@ -292,7 +292,8 @@ const ROUTINE_SECTIONS=[
     {id:"sup1",label:"💊 Iron",note:"Empty stomach",tag:"supp",tick:true},
     {id:"m2",label:"Ice face 60 sec",note:"",tag:"info",tick:false},
     {id:"m_physio",label:"Physio massage & release",note:"Before walk",tag:"physio",tick:true},
-    {id:"m4",label:"Fasted morning walk",note:"Mon/Wed: 6% · 5.5 km/h · 30–35 min · Tue/Thu/Fri/Sat/Sun: flat 20–30 min",tag:"info",tick:false},
+    {id:"m4",label:"Fasted morning walk",note:"",tag:"info",tick:false},
+    {id:"m_walk_w",label:"Incline walks this week",note:"6% · 5.5 km/h · 30–35 min · fasted",tag:"weekly",tick:true,weeklyId:"inchwalk",weeklyTarget:2},
     {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
     {id:"m5",label:"Kefir shake post-walk",note:"Kefir, flax, chia, protein, creatine",tag:"info",tick:false},
     {id:"sup3",label:"💊 Creatine",note:"In kefir shake",tag:"supp",tick:true},
@@ -3398,7 +3399,7 @@ function renderExerciseTab(){
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">This Week's Training</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">${done}/6 sessions done this week</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">${done}/6 sessions · ${Math.round(done/6*100)}% this week</div>
 
     <!-- Training guide -->
     <div style="background:var(--bg);border:1px solid var(--border);padding:12px 14px;margin-bottom:16px">
@@ -3420,9 +3421,32 @@ function renderExerciseTab(){
 
     ${hiitBadge}
 
-    <!-- Weekly checklist -->
+    <!-- Weekly trackers -->
     <div style="margin-bottom:20px">
-      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Weekly Sessions</div>
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">This Week</div>
+
+      ${[
+        {label:"Incline Walks",       target:2, ids:["ex_walk1","ex_walk2"],    color:"#4a6a8a"},
+        {label:"Sculpt (Pilates/Lagree)", target:2, ids:["ex_pilates1","ex_lagree"], color:"#4a8c6a"},
+        {label:"Strength",            target:2, ids:["ex_pt","ex_strength"],    color:"#b8934a"},
+      ].map(group=>{
+        const doneCount=group.ids.filter(id=>exChecks[id]).length;
+        const dots=Array.from({length:group.target},(_,i)=>`<div
+          style="width:28px;height:28px;border-radius:50%;border:1.5px solid ${i<doneCount?group.color:'var(--border)'};background:${i<doneCount?group.color:'none'};color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s"
+          onclick="toggleExerciseCheck('${group.ids[i]||group.ids[0]}')">${i<doneCount?'✓':''}</div>`).join("");
+        return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1;font-size:13px;color:var(--text)">${group.label}</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            ${dots}
+            <span style="font-size:10px;color:${doneCount>=group.target?group.color:'var(--muted)'};margin-left:5px;min-width:28px">${doneCount}/${group.target}</span>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+
+    <!-- Individual session ticks -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Sessions</div>
       ${sessions.map(s=>{
         const checked=!!exChecks[s.id];
         const typeColors={pilates:"#4a8c6a",cardio:"#4a6a8a",strength:"#b8934a"};
