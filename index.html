@@ -3538,6 +3538,14 @@ function copyAllForClaude(btn){
   const phaseLabel=phase?`${phase.phase.name} (day ${phase.cycleDay} of 27)`:'Unknown';
   const phaseTips=phase?phase.phase.tips:'';
 
+  // Day of week
+  const DAYNAMES=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+  const todayName=DAYNAMES[getTodayIdx()];
+
+  // Egg yolks
+  const yolksUsed=(state.yolks||{})[getWeekKey()]||0;
+  const yolksLeft=Math.max(0,6-yolksUsed);
+
   // Remaining
   const pLeft=Math.max(0,115-(+ms.protein||0));
   const kLeft=Math.max(0,1550-(+ms.kcal||0));
@@ -3567,6 +3575,9 @@ Building: Glutes, shoulders, arms
 Blood markers to watch: Total cholesterol 6.69 (LDL high), Cortisol 533 (upper limit)
 
 Targets: 1550 kcal · 115g protein · 50g fat max · 130g carbs · 32g fibre · 1500mg salt max
+
+Today: ${todayName}
+🥚 Egg yolks this week: ${yolksUsed}/6 used · ${yolksLeft} remaining
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🌙 MENSTRUAL PHASE
