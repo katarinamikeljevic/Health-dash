@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Katarina">
+<meta name="application-name" content="Katarina">
 <title>Katarina · Health Tracker</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzFhMTQxMCIgcng9IjMyIi8+PHRleHQgeD0iOTAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iNzIiIGZpbGw9IiNiODkzNGEiPks8L3RleHQ+PC9zdmc+">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgZmlsbD0iIzFhMTQxMCIgcng9IjMyIi8+PHRleHQgeD0iOTAiIHk9IjEwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iNzIiIGZpbGw9IiNiODkzNGEiPks8L3RleHQ+PC9zdmc+">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f0eb;--white:#fff;--ink:#1a1410;--border:#e0d8d0;--gold:#b8934a;--gold-pale:#f5ead8;--gold-dim:rgba(184,147,74,.15);--green:#4a8c6a;--green-pale:#e8f4ee;--green-dim:rgba(74,140,106,.12);--muted:#9a8878;--soft:#6a5a4a;--text:#2c1e10;--amber:#e8a44a;--red:#e07070}
@@ -704,6 +708,7 @@ function renderMacroSplit(){
       <div style="font-size:10px;color:var(--muted);line-height:2">
         🟠 <b>Front-load protein</b> — hit 85g by lunch of your 115g target<br>
         🟠 <b>Front-load calories</b> — biggest meal at lunch, not dinner<br>
+        🔁 <b>Calorie cycle</b> — Training days 1,550 kcal · Rest/walk days 1,350 kcal · Protein stays 115g every day<br>
         🥗 <b>Fibre-rich lunch</b> — black beans + edamame + peas = hours of fullness<br>
         🥑 <b>Healthy fat at lunch</b> — avocado slows gastric emptying · no 4pm crash<br>
         🥦 <b>Volume eating</b> — lots of veg = stomach full, low calories<br>
@@ -4124,12 +4129,12 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_pilates1",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree Fitness",note:"Inner thigh, waist, glutes, posture"},
-    {id:"ex_pilates2",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree Fitness",note:"Build on first session"},
-    {id:"ex_incline1",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Infrared Sculpt",note:"Mon/Wed · 30–55 min · 12% · 4.8km/h · FASTED"},
-    {id:"ex_incline2",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Infrared Sculpt / TRX",note:"Mon/Wed · 30–55 min · 12% · 4.8km/h · FASTED"},
-    {id:"ex_strength1",label:"PT Strength Session",type:"strength",color:"#b8934a",alt:"TRX",note:"Fri · Upper body + core every session"},
-    {id:"ex_strength2",label:"TRX or Infrared Sculpt",type:"strength",color:"#b8934a",alt:"Infrared Sculpt",note:"Sat · Full body or additional strength"},
+    {id:"ex_strength1",label:"PT Strength Session",type:"strength",color:"#b8934a",alt:"Nothing — keep sacred",note:"🔴 Must · Full body · muscle-building priority"},
+    {id:"ex_strength2",label:"Solo Strength Session",type:"strength",color:"#b8934a",alt:"Gym machines / cables / dumbbells",note:"🔴 Must · Full body · sub with weighted gym session only — NOT TRX"},
+    {id:"ex_lagree",label:"Lagree",type:"pilates",color:"#4a8c6a",alt:"Reformer Pilates",note:"🟡 Important · Slow-twitch muscle endurance · interchangeable with Reformer"},
+    {id:"ex_pilates1",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree",note:"🟡 Important · Lengthening, hips, posture · interchangeable with Lagree"},
+    {id:"ex_incline1",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Flat fasted walk (longer duration)",note:"🟢 Flexible · 30–45 min · 12% · 4.8km/h · FASTED · fat burn without cortisol spike"},
+    {id:"ex_trx",label:"TRX",type:"strength",color:"#7a6aa0",alt:"Infrared Sculpt or extra walk",note:"🟢 Optional add-on · sub for Lagree/Reformer on low energy day — NOT for strength"},
   ];
 
   // HIIT guidance based on phase
@@ -4138,7 +4143,7 @@ function renderExerciseTab(){
     if(phase.name==="Follicular"||phase.name==="Ovulatory"){
       hiitBadge=`<div style="background:${phase.bg};border:1px solid ${phase.border};padding:10px 14px;margin-bottom:16px;border-radius:2px">
         <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:${phase.color};margin-bottom:4px">${phase.emoji} ${phase.name} Phase · HIIT Window</div>
-        <div style="font-size:12px;color:var(--soft)">✓ <strong>Add 1 HIIT session this week</strong> — peak oestrogen means fastest recovery and highest output. Replace one incline walk or add as a 5th session. Upper body, lower body, full body or glutes/abs all work well.</div>
+        <div style="font-size:12px;color:var(--soft)">✓ <strong>Add 1 HIIT session this week</strong> — peak oestrogen means fastest recovery and highest output. Replace TRX or incline walk with a HIIT session. Upper body, lower body, full body or glutes/abs all work well.</div>
       </div>`;
     } else if(phase.name==="Luteal"&&cycleDay<=22){
       hiitBadge=`<div style="background:${phase.bg};border:1px solid ${phase.border};padding:10px 14px;margin-bottom:16px;border-radius:2px">
@@ -4169,7 +4174,7 @@ function renderExerciseTab(){
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">This Week's Training</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:16px">${done}/6 sessions done this week</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px">${done}/${sessions.length} sessions done this week</div>
 
     ${hiitBadge}
 
