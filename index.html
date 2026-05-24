@@ -291,7 +291,7 @@ const ROUTINE_SECTIONS=[
     {id:"m1",label:"1L water + LMNT electrolytes",note:"On waking — first thing",tag:"info",tick:false},
     {id:"sup1",label:"💊 Iron",note:"Empty stomach",tag:"supp",tick:true},
     {id:"m2",label:"Ice face 60 sec",note:"",tag:"info",tick:false},
-    {id:"m_physio",label:"Physio massage & release",note:"Before walk",tag:"physio",tick:true},
+    {id:"m_physio",label:"Physio — ball release + marching drill",note:"Left glute · left lower back · then march 5kg",tag:"physio",tick:true},
     {id:"m4",label:"Fasted morning walk",note:"",tag:"info",tick:false},
     {id:"m_walk_w",label:"Incline walks this week",note:"6% · 5.5 km/h · 30–35 min · fasted",tag:"weekly",tick:true,weeklyId:"inchwalk",weeklyTarget:2},
     {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
@@ -3396,6 +3396,7 @@ function renderExerciseTab(){
   // Check if strength guide is open
   const strengthOpen=state._strengthGuideOpen||false;
   const armOpen=state._armGuideOpen||false;
+  const physioOpen=state._physioGuideOpen||false;
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">This Week's Training</div>
@@ -3658,6 +3659,124 @@ function renderExerciseTab(){
       </div>`:''}
     </div>
 
+    <!-- Physio guide dropdown -->
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);cursor:pointer" onclick="togglePhysioGuide()">
+        <div>
+          <div style="font-size:13px;color:var(--text)">🩺 Daily Physio · Marching Drill</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Release + march · 5kg · pelvis stable · daily</div>
+        </div>
+        <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">${physioOpen?'▲':'▼'}</span>
+      </div>
+      ${physioOpen?`<div style="border:1px solid var(--border);border-top:none;padding:14px">
+
+        <!-- Why this exercise -->
+        <div style="background:rgba(74,140,106,.08);border-left:3px solid var(--green);padding:10px 12px;margin-bottom:14px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">Why you're doing this</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.6">Your left glute and lower back are tight and underactivating — this causes your pelvis to rotate or tilt when you walk and train, which puts load into the wrong places and limits glute development on both sides. The marching drill trains pelvic stability under load so your glutes fire correctly during every other exercise and walk.</div>
+        </div>
+
+        <!-- Step 1: Release -->
+        <div style="font-size:10px;font-weight:500;color:var(--green);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Step 1 — Release (before marching)</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Use a massage ball (or tennis ball) pressed between the target area and a wall. Lean into it. Hold each spot 30 seconds — breathe through it, don't tense.</div>
+        ${[
+          {
+            area:"Left glute",
+            how:"Stand facing away from wall · place ball on left glute (centre or the tight spot) · lean your weight into it · find the tender spot and hold · you can do small circles",
+            feel:"Deep pressure, possibly radiating down the back of the thigh — this is the sciatic area releasing",
+            note:"If it's very painful, reduce pressure — you want 6/10 intensity, not 10/10"
+          },
+          {
+            area:"Left lower back",
+            how:"Stand sideways to wall · ball on the left lower back, just beside the spine (not on the spine) · lean into it · shift slightly to find the tight band",
+            feel:"Deep ache releasing in the left lower back and into the glute",
+            note:"Keep breathing — holding your breath causes more tension"
+          }
+        ].map(r=>`<div style="padding:10px 12px;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);margin-bottom:8px">
+          <div style="font-size:12.5px;font-weight:500;color:var(--text);margin-bottom:5px">📍 ${r.area} — 30 seconds</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.6;margin-bottom:4px">${r.how}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+            <div style="background:rgba(184,147,74,.08);padding:6px 8px;border-radius:2px">
+              <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Feel</div>
+              <div style="font-size:10px;color:var(--soft);line-height:1.4">${r.feel}</div>
+            </div>
+            <div style="background:rgba(74,140,106,.08);padding:6px 8px;border-radius:2px">
+              <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:2px">Note</div>
+              <div style="font-size:10px;color:var(--soft);line-height:1.4">${r.note}</div>
+            </div>
+          </div>
+        </div>`).join("")}
+
+        <!-- Step 2: Marching -->
+        <div style="font-size:10px;font-weight:500;color:#b8934a;letter-spacing:2px;text-transform:uppercase;margin:14px 0 10px">Step 2 — Marching Drill</div>
+        <div style="padding:10px 12px;background:var(--gold-pale);border:1px solid rgba(184,147,74,.3);border-radius:2px;margin-bottom:12px">
+          <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:5px">The bucket of water cue</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.7">Imagine your pelvis is a bucket filled with water. As you lift each knee, the bucket must NOT tip forward, tilt sideways, or rotate. Any spill = the pelvis lost stability. This is the whole point of the exercise — pelvic control under single-leg load.</div>
+        </div>
+
+        ${[
+          {
+            hand:"Left hand · 5kg",
+            duration:"30 seconds",
+            side:"Easier side",
+            cues:[
+              "Hold the 5kg weight in your LEFT hand",
+              "Stand tall — feet hip-width, slight knee softness",
+              "March on the spot — lift each knee to hip height, alternating",
+              "Keep your pelvis level — no rotation toward the weighted side",
+              "Don't lean — stay upright, core braced",
+              "Eyes forward, breathe steadily"
+            ],
+            feel:"Left glute working to stabilise — weight challenges the right side of the pelvis",
+            mistake:"Leaning away from the weight — means you're compensating instead of stabilising"
+          },
+          {
+            hand:"Right hand · 5kg",
+            duration:"45 seconds",
+            side:"Harder side — your weak side",
+            cues:[
+              "Hold the 5kg weight in your RIGHT hand",
+              "Same march — lift knees to hip height",
+              "This side is harder because your left glute (the tight one) must now actively stabilise",
+              "You'll feel more tendency to rotate left — resist it",
+              "Slow your march down if you need to maintain control",
+              "Quality over speed — one clean rep beats five sloppy ones"
+            ],
+            feel:"Left glute and left lower back working hard to keep pelvis stable — this is correct",
+            mistake:"Pelvis tilting toward the right (weighted side) — slow down and reduce the march height until stable"
+          }
+        ].map(s=>`<div style="padding:12px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;margin-bottom:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="font-size:12.5px;font-weight:500;color:var(--text)">⚖️ ${s.hand}</div>
+            <div style="text-align:right">
+              <div style="font-size:11px;font-weight:600;color:#b8934a">${s.duration}</div>
+              <div style="font-size:9px;color:var(--muted)">${s.side}</div>
+            </div>
+          </div>
+          <div style="margin-bottom:8px">
+            ${s.cues.map(c=>`<div style="display:flex;gap:6px;padding:3px 0;border-bottom:1px solid var(--border)">
+              <span style="color:var(--green);font-size:11px;flex-shrink:0">✓</span>
+              <span style="font-size:11px;color:var(--soft);line-height:1.4">${c}</span>
+            </div>`).join("")}
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+            <div style="background:rgba(184,147,74,.08);padding:6px 8px;border-radius:2px">
+              <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px">Feel it here</div>
+              <div style="font-size:10px;color:var(--soft);line-height:1.4">${s.feel}</div>
+            </div>
+            <div style="background:rgba(224,112,112,.08);padding:6px 8px;border-radius:2px">
+              <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:2px">⚠ Watch for</div>
+              <div style="font-size:10px;color:var(--soft);line-height:1.4">${s.mistake}</div>
+            </div>
+          </div>
+        </div>`).join("")}
+
+        <div style="padding:10px 12px;background:rgba(74,140,106,.06);border-left:3px solid var(--green);border-radius:0 2px 2px 0;margin-top:4px">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Frequency:</strong> Daily — before your morning walk. As the left glute strengthens and releases, you'll notice your gait becoming more even and your glute activating better in Pilates and strength sessions.</div>
+        </div>
+      </div>`:''}
+    </div>
+
     <!-- Arm walk exercises dropdown -->
     <div style="margin-bottom:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;cursor:pointer" onclick="toggleArmGuide()">
@@ -3748,6 +3867,7 @@ function toggleExerciseCheck(id){
 }
 function toggleStrengthGuide(){state._strengthGuideOpen=!state._strengthGuideOpen;persist();renderExerciseTab();}
 function toggleArmGuide(){state._armGuideOpen=!state._armGuideOpen;persist();renderExerciseTab();}
+function togglePhysioGuide(){state._physioGuideOpen=!state._physioGuideOpen;persist();renderExerciseTab();}
 
 function gutWeekCount(id){
   let n=0;for(let i=0;i<7;i++){const k=`foods-${getWeekKey()}-${i}`;if((state.foods||{})[k]?.[id])n++;}return n;
