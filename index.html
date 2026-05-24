@@ -1576,8 +1576,9 @@ function renderFoodSearch(){
         <input id="foodSearchInput" class="meal-name-input" style="margin:0;flex:1" placeholder="Search e.g. kefir, EVOO, salmon…" oninput="searchFood(this.value)" value="${prevSearchVal.replace(/"/g,'&quot;')}">
         <button onclick="clearFoodSearch()" style="padding:8px 12px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px;border-radius:2px;white-space:nowrap">Clear</button>
       </div>
+      <div id="favFoodsSection"></div>
       <div id="foodSearchResults"></div>
-      <div class="hint">Includes brands, herbs, sauces, oils · adjust serving · tap + Add to Log</div>
+      <div class="hint">☆ star any food to save it to favourites · tap + Add to Log</div>
     </div>
     <div id="fsPanel_label" style="display:none">
       <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Take a photo of any nutrition label — Claude reads the macros and adds to your log.</div>
@@ -1741,19 +1742,49 @@ function addBarcodeToLog(name,kcal,protein,carbs,fat,fibre,salt){
 
 
 
+function toggleFavFood(idx){
+  if(!state.favFoods)state.favFoods=[];
+  const i=state.favFoods.indexOf(idx);
+  if(i>=0)state.favFoods.splice(i,1);
+  else state.favFoods.unshift(idx);
+  persist();
+  // Re-render search results to update stars
+  const q=document.getElementById("foodSearchInput")?.value||"";
+  if(q.length>=2)searchFood(q);
+  renderFavouritesSection();
+}
+
+function renderFavouritesSection(){
+  const el=document.getElementById("favFoodsSection");
+  if(!el)return;
+  const favs=state.favFoods||[];
+  if(!favs.length){el.innerHTML="";return;}
+  el.innerHTML=`<div style="margin-bottom:10px">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">★ Favourites</div>
+    ${favs.slice(0,8).map(idx=>{
+      const f=FOOD_DB[idx];if(!f)return"";
+      return buildFoodResultHTML(f,idx,"fav");
+    }).join("")}
+  </div>`;
+}
+
 function clearFoodSearch(){
   const i=document.getElementById("foodSearchInput");if(i)i.value="";
   const r=document.getElementById("foodSearchResults");if(r)r.innerHTML="";
 }
 function buildFoodResultHTML(f,idx,prefix){
   const [name,kcal,protein,carbs,fat,fibre,salt,servG,servLabel]=f;
-  // Determine if this is a liquid/spoon food for unit hints
   const isTbsp=servLabel.toLowerCase().includes('tbsp');
   const isTsp=servLabel.toLowerCase().includes('tsp');
   const isSpoon=isTbsp||isTsp;
-  return `<div style="background:var(--bg);border:1px solid var(--border);padding:10px 12px;margin-bottom:6px;border-radius:2px" id="${prefix}_${idx}" data-name="${name.replace(/"/g,'&quot;')}">
+  const favs=state.favFoods||[];
+  const isFav=favs.includes(idx);
+  return `<div style="background:var(--bg);border:1px solid var(--border);${isFav?'border-left:3px solid var(--gold);':''}padding:10px 12px;margin-bottom:6px;border-radius:2px" id="${prefix}_${idx}" data-name="${name.replace(/"/g,'&quot;')}">
     <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
-      <div style="font-size:13px;font-weight:400;color:var(--text)">${name}</div>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">
+        <button onclick="toggleFavFood(${idx})" style="background:none;border:none;cursor:pointer;font-size:16px;padding:0;flex-shrink:0;line-height:1">${isFav?'★':'☆'}</button>
+        <div style="font-size:13px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+      </div>
       <div style="font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${servLabel}</div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap" id="${prefix}_macros_${idx}">
@@ -2215,6 +2246,7 @@ function saveAIParsed(name,kcal,protein,fat,carbs,fibre,salt){
 function renderFood(){
   renderDayStrip("dayStripFood",foodDayIdx,"foods","selectFoodDay");
   renderFoodLogger();
+  renderFavouritesSection();
   const wk=getWeekKey();
   const fk=`foods-${wk}-${foodDayIdx}`;
   const mk=`macros-${wk}-${foodDayIdx}`;
@@ -3525,8 +3557,9 @@ function renderExerciseTab(){
         ${[
           {
             name:"Lateral Raises",priority:true,
-            weight:"3–4kg",sets:"3 sets × 15 reps",
+            weight:"3–4kg",sets:"1 set × 15 reps",
             img:"dumbbell lateral raise exercise",
+            position:"Stand feet hip-width, soft knees, slight forward lean from hips. Hold dumbbells at sides, palms facing inward. Shoulders relaxed down.",,
             feel:"Outer shoulder (medial deltoid) — NOT traps or neck",
             breathe:"Exhale as you lift · Inhale on the slow 3-sec lower",
             form:["Stand with slight forward lean — stops traps taking over","Lead with your elbows, not your hands","Stop at shoulder height — no higher","Thumbs slightly lower than pinkies","Shoulders DOWN — if they creep up, weight is too heavy"],
@@ -3534,8 +3567,9 @@ function renderExerciseTab(){
           },
           {
             name:"Bent Over Rows",priority:true,
-            weight:"5–6kg each hand",sets:"3 sets × 12 reps",
+            weight:"5–6kg each hand",sets:"1 set × 12 reps",
             img:"dumbbell bent over row exercise form",
+            position:"Feet hip-width, hinge at hips until torso is parallel to floor. Knees soft, back flat, core braced. Dumbbells hanging straight down, palms facing in.",,
             feel:"Mid-back (rhomboids, mid traps) — NOT lower back or biceps",
             breathe:"Exhale as you row up · Inhale as you lower",
             form:["Hinge at hips — back flat, parallel to floor","Pull elbows straight back past your hip","Squeeze shoulder blades together hard at top — hold 1 sec","Keep neck neutral — don't crane up","Core braced throughout — no rounding"],
@@ -3543,8 +3577,9 @@ function renderExerciseTab(){
           },
           {
             name:"Shoulder Press",priority:true,
-            weight:"4–5kg each hand",sets:"3 sets × 12 reps",
+            weight:"4–5kg each hand",sets:"1 set × 12 reps",
             img:"dumbbell overhead shoulder press form",
+            position:"Sit cross-legged on the floor or stand feet hip-width. Hold dumbbells at shoulder height, elbows at 90°, palms facing forward. Core braced.",,
             feel:"Front and top of shoulder — NOT lower back",
             breathe:"Exhale as you press up · Inhale as you lower",
             form:["Start with elbows at 90° at shoulder height","Press directly overhead — not forward","Core braced — no lower back arch at the top","Lower slowly — 2 sec down","Sit cross-legged on floor for stability if needed"],
@@ -3552,8 +3587,9 @@ function renderExerciseTab(){
           },
           {
             name:"Tricep Overhead Extension",priority:true,
-            weight:"3–4kg single dumbbell, both hands",sets:"3 sets × 15 reps",
+            weight:"3–4kg single dumbbell, both hands",sets:"1 set × 15 reps",
             img:"overhead tricep extension dumbbell exercise",
+            position:"Stand or sit upright. Hold one dumbbell with both hands, grip the top plate. Raise above head, upper arms close to ears, elbows pointing forward.",,
             feel:"Back of upper arm (tricep long head)",
             breathe:"Exhale as you extend up · Inhale as you lower behind head",
             form:["Hold one dumbbell with both hands — thumbs wrapped","Upper arms stay close to ears, vertical — no elbow flare","Lower until forearms touch biceps · full range","Keep core braced — don't sway"],
@@ -3561,8 +3597,9 @@ function renderExerciseTab(){
           },
           {
             name:"Band Pull-Aparts",priority:true,
-            weight:"Light resistance band",sets:"3 sets × 20 reps",
+            weight:"Light resistance band",sets:"1 set × 20 reps",
             img:"resistance band pull apart exercise posture",
+            position:"Stand tall. Hold band with both hands shoulder-width apart, arms straight out in front at shoulder height, palms facing down.",,
             feel:"Rear deltoid and mid-back — opens chest, fixes posture",
             breathe:"Exhale as you pull apart · Inhale as you return",
             form:["Hold band shoulder-width, arms straight in front","Pull band apart to chest, squeezing shoulder blades","Keep arms straight — don't bend elbows","2 sec pull, 2 sec return","Do after any pressing exercise to balance"],
@@ -3577,8 +3614,9 @@ function renderExerciseTab(){
         ${[
           {
             name:"Dead Bug",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 10 each side",
+            weight:"Bodyweight",sets:"1 set × 10 each side",
             img:"dead bug exercise core form",
+            position:"Lie on your back. Arms pointing straight up to ceiling. Hips and knees both at 90°, shins parallel to floor. Lower back pressed firmly into mat.",,
             feel:"Deep core (transverse abdominis) — NOT hip flexors or neck",
             breathe:"Exhale fully before you move · hold out as you extend · inhale to reset",
             form:["Lie on back · arms straight up · hips and knees at 90°","Brace core — press lower back INTO the mat (no gap)","Slowly extend opposite arm and leg toward floor","Return and switch — opposite arm/leg is one rep","Lower back must NOT lift off mat at any point"],
@@ -3586,8 +3624,9 @@ function renderExerciseTab(){
           },
           {
             name:"Hollow Body Hold",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 20–30 sec",
+            weight:"Bodyweight",sets:"1 set × 20–30 sec",
             img:"hollow body hold exercise gymnastics core",
+            position:"Lie on your back. Press lower back flat into mat. Arms straight overhead by ears. Legs straight, feet together, toes pointed.",,
             feel:"Entire front of core — deep abs, lower abs especially",
             breathe:"Exhale to create the hollow · breathe shallowly throughout",
             form:["Lie on back · press lower back flat","Arms straight overhead by ears · legs straight · toes pointed","Lift shoulders and legs just off floor — create a dish shape","Lower back stays pressed down — non-negotiable","Harder: lower legs. Easier: bend knees or arms by sides"],
@@ -3595,8 +3634,9 @@ function renderExerciseTab(){
           },
           {
             name:"Side Plank",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 30–40 sec each side",
+            weight:"Bodyweight",sets:"1 set × 30–40 sec each side",
             img:"side plank exercise oblique form",
+            position:"Lie on your side. Prop up on your elbow — elbow directly under shoulder. Stack feet or stagger front foot forward. Hip on the floor to start.",,
             feel:"Obliques (side waist) — NOT shoulder pain. Builds without widening.",
             breathe:"Breathe steadily throughout",
             form:["Elbow directly under shoulder — not forward","Stack feet or stagger front foot for easier version","Lift hip — body in straight line hip to head","Don't let hip sag or pike","Progress: raise top leg or add hip dips"],
@@ -3604,8 +3644,9 @@ function renderExerciseTab(){
           },
           {
             name:"Plank + Reach",priority:false,
-            weight:"Bodyweight",sets:"3 sets × 16 reps",
+            weight:"Bodyweight",sets:"1 set × 16 reps",
             img:"plank reach forward exercise core stability",
+            position:"High plank position — hands flat on floor, wrists under shoulders, arms straight. Feet hip-width apart. Body in one straight line from head to heels.",,
             feel:"Deep core and shoulder — anti-rotation stability",
             breathe:"Exhale as you reach · Inhale as you return",
             form:["High plank — hands flat, wrists under shoulders","Reach one arm straight forward — keep hips still","No rotation — pelvis stays square to the floor","Return and alternate sides","Slow and controlled — the slower the harder"],
@@ -3621,8 +3662,9 @@ function renderExerciseTab(){
         ${[
           {
             name:"Romanian Deadlift",priority:false,
-            weight:"5–6kg each hand",sets:"3 sets × 12 reps",
+            weight:"5–6kg each hand",sets:"1 set × 12 reps",
             img:"romanian deadlift dumbbell exercise form",
+            position:"Stand feet hip-width. Hold dumbbells in front of thighs, palms facing body. Soft bend in knees. Shoulders back, core braced.",,
             feel:"Hamstrings and glutes — deep stretch and squeeze · NOT lower back",
             breathe:"Inhale before you hinge · exhale as you drive back up",
             form:["Stand hip-width · soft bend in knees · dumbbells in front","Hinge at hips — push hips back as weights travel down shins","Back stays flat the whole way","Lower until deep hamstring stretch (mid-shin)","Drive hips forward to stand — squeeze glutes at top"],
@@ -3630,8 +3672,9 @@ function renderExerciseTab(){
           },
           {
             name:"Donkey Kick + Fire Hydrant",priority:false,
-            weight:"6kg behind knee",sets:"3 sets × 16 reps each leg",
+            weight:"6kg behind knee",sets:"1 set × 16 reps each leg",
             img:"donkey kick fire hydrant glute exercise",
+            position:"On all fours — wrists directly under shoulders, knees under hips. Pelvis slightly tucked under. Place 6kg dumbbell behind the working knee and hold it by bending the knee.",,
             feel:"Donkey kick: top of glute. Fire hydrant: outer glute.",
             breathe:"Exhale on lift · inhale to return",
             form:["On all fours · wrists under shoulders · pelvis slightly tucked","Donkey kick: kick heel to ceiling, knee stays bent 90°","Fire hydrant: open knee to side, keep 90°","Squeeze hard at top of each rep","Keep back flat — no rotation or sagging"],
@@ -3639,8 +3682,9 @@ function renderExerciseTab(){
           },
           {
             name:"Supine Leg Open/Close",priority:false,
-            weight:"Ankle weights",sets:"3 sets × 20 reps",
+            weight:"Ankle weights",sets:"1 set × 20 reps",
             img:"supine leg raise open close inner thigh exercise",
+            position:"Lie on your back. Both legs raised straight up to the ceiling, feet together. Lower back pressed firmly into the mat. Ankle weights on if available.",,
             feel:"Inner thigh (adductors) — NOT hip flexors",
             breathe:"Exhale as legs close · inhale as they open",
             form:["Lie on back · legs straight up · lower back pressed flat","Open legs wide — feel the inner thigh stretch","Close legs together with control — squeeze inner thighs","Keep lower back pressed down throughout","Option: 90° bent knee version is easier"],
@@ -3648,8 +3692,9 @@ function renderExerciseTab(){
           },
           {
             name:"Glute Bridge Hold",priority:false,
-            weight:"5–8kg on hips",sets:"3 sets × 40–45 sec hold",
+            weight:"5–8kg on hips",sets:"1 set × 40–45 sec hold",
             img:"glute bridge hold exercise mat",
+            position:"Lie on your back. Feet flat on mat, hip-width apart, heels 20–25cm from glutes. Arms flat by sides, palms down. Weight (5–8kg) resting on hip bones.",,
             feel:"Top of glutes — NOT lower back or hamstrings",
             breathe:"Exhale as you drive up · breathe steadily during hold",
             form:["Lie on back · feet flat · hip-width · heels close to glutes","Drive through HEELS — not toes","Squeeze glutes hard — actively contract throughout","Hips fully extended · slight pelvic tuck","No lower back hyperextension"],
@@ -3657,8 +3702,9 @@ function renderExerciseTab(){
           },
           {
             name:"Sumo Squat Pulses",priority:false,
-            weight:"Bodyweight or light dumbbell",sets:"3 sets × 30 pulses",
+            weight:"Bodyweight or light dumbbell",sets:"1 set × 30 pulses",
             img:"sumo squat pulse inner thigh exercise",
+            position:"Stand with feet wider than shoulder-width, toes turned out 45°. Sink into a squat — thighs parallel to floor or just above. Weight in heels, chest up.",,
             feel:"Inner thigh and glutes — NOT quads",
             breathe:"Short exhales on each pulse",
             form:["Feet wide · toes turned out 45°","Sink into a wide squat — weight in heels","Small pulses up and down from the bottom position","Keep chest up and core braced","The wider the stance the more inner thigh involved"],
@@ -3836,6 +3882,10 @@ function renderExCard(e){
     </div>
     ${open?`<div style="padding:12px 14px;background:var(--gold-pale);border-top:1px solid rgba(184,147,74,.2)">
       ${!imgSrc?`<button onclick="loadExImg('${cardId}','${e.img.replace(/'/g,"\\'")}',this)" style="width:100%;padding:7px;background:#ff0000;color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:10px">▶ Watch Demo on YouTube</button>`:''}
+      ${e.position?`<div style="background:rgba(74,106,138,.08);padding:8px 10px;border-radius:2px;margin-bottom:8px">
+        <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#4a6a8a;margin-bottom:3px">📍 Starting position</div>
+        <div style="font-size:11px;color:var(--text);line-height:1.5">${e.position}</div>
+      </div>`:''}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
         <div style="background:rgba(184,147,74,.08);padding:8px 10px;border-radius:2px">
           <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:3px">Feel it here</div>
