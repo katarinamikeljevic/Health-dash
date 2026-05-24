@@ -215,7 +215,6 @@ button,input,textarea,select{font-family:inherit}
   <div class="card-dark" id="summaryCard"></div>
   <div class="card" id="stepsCard"></div>
   <div class="card" id="waterCard"></div>
-  <div class="card" id="macroSplitCard"></div>
   <div id="checklistContainer" style="padding:0 16px"></div>
 </div>
 
@@ -289,46 +288,33 @@ button,input,textarea,select{font-family:inherit}
 // ── DATA ─────────────────────────────────────────────────────────
 const ROUTINE_SECTIONS=[
   {id:"morning",title:"Morning Protocol",items:[
-    {id:"m1",label:"500ml electrolytes (LMNT) on waking",note:"Before anything else — first thing",tag:"info"},
-    {id:"sup1",label:"💊 Iron supplement",note:"On empty stomach with electrolyte water — separate from other supplements",tag:"supp"},
-    {id:"m2",label:"Ice face 60 sec",note:"Face & neck — reduces puffiness",tag:"info"},
-    {id:"m3",label:"Gua Sha 7 min incl. neck drainage",note:"5× per week",tag:"info"},
-    {id:"m4",label:"Fasted morning walk (FASTED — before kefir & breakfast)",note:"Mon/Wed: incline walk 30–55 min replaces flat walk · Tue/Thu/Fri/Sat/Sun: flat 20–30 min · arm exercises alternate days",tag:"info"},
-    {id:"m4b",label:"Arm exercises during walk (alternate days)",note:"Lateral raises, goalpost press, band pull-aparts, T-holds, bicep curls, serve platter, tricep ext · 1–2kg. End: tricep kickbacks + rows 2–3kg ×2",tag:"info"},
-    {id:"m5",label:"Kefir shake post-walk",note:"150ml kefir, 1 tbsp flax, 0.5 tsp chia, protein powder, creatine · ~250 kcal, 28–30g P",tag:"info"},
-    {id:"sup3",label:"💊 Creatine in kefir shake",note:"Supports muscle recomposition",tag:"supp"},
-    {id:"m6",label:"Coffee after 45 min (not on empty stomach)",note:"After kefir shake — not before",tag:"info"},
-    {id:"m7",label:"Breakfast — target 50–58g protein",note:"A: 3 egg whites+1 egg, 2 rice cakes, nut butter · B: 2 eggs+50g smoked salmon, spinach · C: 40g oats+blueberries+protein powder",tag:"info"},
-    {id:"sup2",label:"💊 Omega-3 + Ubiquinol + Vitamin D3+K2 with breakfast",note:"Take with fat-containing breakfast · Ubiquinol needs 5–10g fat · Vitamin D3+K2 needs 15g+ fat to absorb",tag:"supp"},
-  ]},
-  {id:"movement",title:"Movement & Training",items:[
-    {id:"mv1",label:"10,000–20,000 steps today",note:"Check phone count",tag:"priority"},
-    {id:"mv2a",label:"Mon/Wed · Fasted incline walk — Full (55 min)",note:"5–8% incline · 5.5–6.5km/h · replaces flat morning walk · FASTED",tag:""},
-    {id:"mv2b",label:"Mon/Wed · Fasted incline walk — Short (30–35 min)",note:"7–8% incline · 6.5km/h · minimum effective dose · FASTED",tag:""},
-    {id:"mv2c",label:"Tue/Thu/Fri/Sat/Sun · Fasted flat walk (20–30 min)",note:"3.5–4.5mph · gentle cortisol management · FASTED before kefir shake",tag:""},
-    {id:"mv3",label:"Today's training session",note:"Tue/Thu: Reformer Pilates · Fri: PT (have kefir shake first on PT days) · Sat: TRX or Infrared Sculpt · Wed option: Infrared Sculpt instead of incline walk",tag:""},
-    {id:"mv4",label:"Evening walk 20 min flat (FED — after dinner)",note:"After dinner · digestion + blood sugar · separate from morning walk",tag:""},
+    {id:"m1",label:"1L water + LMNT electrolytes",note:"On waking — first thing",tag:"info",tick:false},
+    {id:"sup1",label:"💊 Iron",note:"Empty stomach",tag:"supp",tick:true},
+    {id:"m2",label:"Ice face 60 sec",note:"",tag:"info",tick:false},
+    {id:"m_physio",label:"Physio massage & release",note:"Before walk",tag:"physio",tick:true},
+    {id:"m4",label:"Fasted morning walk",note:"Mon/Wed: 6% · 5.5 km/h · 30–35 min · Tue/Thu/Fri/Sat/Sun: flat 20–30 min",tag:"info",tick:false},
+    {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
+    {id:"m5",label:"Kefir shake post-walk",note:"Kefir, flax, chia, protein, creatine",tag:"info",tick:false},
+    {id:"sup3",label:"💊 Creatine",note:"In kefir shake",tag:"supp",tick:true},
+    {id:"m6",label:"Coffee after 45 min",note:"After kefir — not before",tag:"info",tick:false},
+    {id:"sup2",label:"💊 Omega-3 + Ubiquinol + Vitamin D3+K2",note:"With first meal",tag:"supp",tick:true},
   ]},
   {id:"midday",title:"Midday",items:[
-    {id:"sup4",label:"💊 Berberine 10–20 min before lunch",note:"Blood sugar management · LDL reduction",tag:"supp"},
-    {id:"sup5",label:"💊 Omega-3 second dose with lunch",note:"Optional if splitting dose — improves absorption vs single large dose",tag:"supp"},
+    {id:"sup4",label:"💊 Berberine",note:"10–20 min before lunch",tag:"supp",tick:true},
+    {id:"sup5",label:"💊 Omega-3 second dose",note:"With lunch",tag:"supp",tick:true},
   ]},
   {id:"evening",title:"Evening Protocol",items:[
-    {id:"e0",label:"Dinner 3h before bed · no carbs · no cruciferous veg",note:"A: 150g sea bass/cod/bream, asparagus, courgette · B: 120g chicken, pak choi, beansprouts, ginger · C: 200g prawns, courgette noodles, garlic, tomato",tag:"info"},
-    {id:"sup6",label:"💊 Berberine 10–20 min before dinner",note:"Blood sugar management",tag:"supp"},
-    {id:"e0b",label:"Evening walk 20 min flat (FED — after dinner)",note:"After dinner · gentle · digestion + blood sugar",tag:"info"},
-    {id:"e1",label:"Shower: dry brush on dry skin (3 min)",note:"Upward strokes toward heart · 60 min before bed",tag:"info"},
-    {id:"e2",label:"Red light therapy (30 min before bed)",note:"Clean dry skin",tag:"info"},
-    {id:"e3",label:"Legs up the wall 10–15 min + stretches",note:"Point/flex feet, ankle circles — reduces lower body water retention",tag:"info"},
-    {id:"e4",label:"REFA tool (5× per week)",note:"3–4 min · immediately after red light",tag:"info"},
-    {id:"e5",label:"Skincare: serum → moisturiser",note:"Sheet mask 2–3× week (not consecutive nights) · store in fridge",tag:"info"},
-    {id:"e6",label:"In bed by 10:30pm — 8h sleep",note:"Non-negotiable for cortisol and fat loss",tag:"info"},
-    {id:"sup7",label:"💊 Zinc + Collagen + Magnesium glycinate 300mg",note:"Before sleep · magnesium lowers cortisol & improves sleep",tag:"supp"},
-  ]},
-  {id:"skin",title:"Skin (5 days on, 2 off)",items:[
-    {id:"s1",label:"Gua sha ✓",note:"Morning — 7 min",tag:""},
-    {id:"s2",label:"REFA ✓",note:"Evening — 3–4 min",tag:""},
-    {id:"s3",label:"Sheet mask (2–3× week)",note:"Optional today",tag:""},
+    {id:"e0",label:"Dinner 3h before bed · no carbs · no cruciferous veg",note:"",tag:"info",tick:false},
+    {id:"sup6",label:"💊 Berberine",note:"10–20 min before dinner",tag:"supp",tick:true},
+    {id:"e0b",label:"Evening walk 20 min",note:"After dinner",tag:"info",tick:false},
+    {id:"e1",label:"Dry brush",note:"3 min on dry skin",tag:"weekly",tick:true,weeklyId:"drybr",weeklyTarget:4},
+    {id:"e2",label:"Red light therapy",note:"30 min before bed · clean skin",tag:"info",tick:false},
+    {id:"e3",label:"Legs up wall 10–15 min",note:"",tag:"info",tick:false},
+    {id:"e4",label:"Facial lymphatic brush",note:"3–4 min · after red light",tag:"weekly",tick:true,weeklyId:"lymph",weeklyTarget:5},
+    {id:"e5",label:"Skincare: serum → moisturiser",note:"",tag:"info",tick:false},
+    {id:"e6",label:"Sheet mask",note:"Not consecutive nights",tag:"weekly",tick:true,weeklyId:"mask",weeklyTarget:3},
+    {id:"e7",label:"In bed by 10:30pm",note:"",tag:"info",tick:false},
+    {id:"sup7",label:"💊 Zinc + Collagen + Magnesium glycinate 300mg",note:"Before sleep",tag:"supp",tick:true},
   ]},
 ];
 
@@ -618,53 +604,90 @@ function renderQuote(){
   </div>`;
 }
 
-// ── MACRO SPLIT GUIDE ─────────────────────────────────────────────
+// ── MACRO SPLIT GUIDE (DAILY DISTRIBUTION BARS) ──────────────────
 function renderMacroSplit(){
   const el=document.getElementById("macroSplitCard");
   if(!el)return;
+
+  // How to distribute macros across the day — fixed guide, not live tracking
   const meals=[
-    {time:"On Waking",label:"Kefir Shake",kcal:"250",p:"28–30g",c:"10g",f:"6g",note:"Post-walk — kefir, flax, chia, protein powder, creatine"},
-    {time:"Breakfast",label:"Solid Breakfast",kcal:"280–300",p:"22–28g",c:"20–30g",f:"8–12g",note:"Eggs/salmon/oats — front-load carbs here"},
-    {time:"Lunch",label:"Main Meal",kcal:"420–500",p:"35–42g",c:"50–70g",f:"12–16g",note:"Last carbs of the day — biggest meal"},
-    {time:"Snack",label:"If hungry only",kcal:"70–130",p:"6–15g",c:"5–10g",f:"2–5g",note:"Yogurt / boiled egg / edamame — skip if not hungry"},
-    {time:"Dinner",label:"Light Protein Meal",kcal:"250–320",p:"28–34g",c:"0–10g",f:"8–12g",note:"No carbs — protein + veg + small fat only"},
+    {time:"On waking",label:"Kefir shake",kcal:250,p:28,c:10,f:6,note:"Kefir · flax · chia · protein · creatine"},
+    {time:"Breakfast",label:"Solid breakfast",kcal:290,p:25,c:25,f:10,note:"Front-load carbs here · eggs / salmon / oats"},
+    {time:"Lunch",label:"Main meal",kcal:460,p:38,c:60,f:14,note:"Last carbs of the day · biggest meal"},
+    {time:"Snack",label:"If hungry",kcal:100,p:10,c:8,f:3,note:"Skip if not hungry · yogurt / edamame"},
+    {time:"Dinner",label:"Light protein",kcal:290,p:28,c:5,f:12,note:"No carbs · no cruciferous · protein + veg + small fat"},
   ];
-  const totals={kcal:"1,500–1,600",p:"110–120g",c:"120–140g",f:"45–55g"};
+  const maxKcal=460;
+
   el.innerHTML=`
-    <div class="card-label">Today's Macro Guide</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">How to distribute your macros through the day for best fat loss and muscle retention</div>
-    ${meals.map(m=>`
-      <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+    <div class="card-label" style="margin-bottom:10px">How to Split Your Daily Macros</div>
+    ${meals.map(m=>{
+      const barW=Math.round(m.kcal/maxKcal*100);
+      const pW=Math.round(m.p*4/m.kcal*100);
+      const cW=Math.round(m.c*4/m.kcal*100);
+      const fW=Math.round(m.f*9/m.kcal*100);
+      return `<div style="margin-bottom:10px">
         <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:3px">
           <div>
             <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)">${m.time}</span>
-            <span style="font-size:13px;color:var(--text);margin-left:8px;font-weight:400">${m.label}</span>
+            <span style="font-size:12.5px;color:var(--text);margin-left:7px">${m.label}</span>
           </div>
-          <span style="font-size:12px;font-weight:500;color:var(--ink)">${m.kcal} kcal</span>
+          <span style="font-size:11px;color:var(--muted)">${m.kcal} kcal</span>
         </div>
-        <div style="display:flex;gap:12px;margin-bottom:3px">
-          <span style="font-size:11px;color:#b8934a">P: ${m.p}</span>
-          <span style="font-size:11px;color:#4a8c6a">C: ${m.c}</span>
-          <span style="font-size:11px;color:#6a9898">F: ${m.f}</span>
+        <div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:3px;width:${barW}%;min-width:20%">
+          <div style="display:flex;height:100%">
+            <div style="width:${pW}%;background:#b8934a"></div>
+            <div style="width:${cW}%;background:#4a8c6a"></div>
+            <div style="width:${fW}%;background:#6a9898"></div>
+          </div>
         </div>
-        <div style="font-size:10px;color:var(--muted)">${m.note}</div>
-      </div>`).join("")}
-    <div style="margin-top:10px;padding:10px;background:var(--bg);border-radius:2px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
-      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)">Daily Total</div>
-      <div style="display:flex;gap:14px">
-        <span style="font-size:11px;color:var(--ink);font-weight:500">${totals.kcal} kcal</span>
-        <span style="font-size:11px;color:#b8934a">P ${totals.p}</span>
-        <span style="font-size:11px;color:#4a8c6a">C ${totals.c}</span>
-        <span style="font-size:11px;color:#6a9898">F ${totals.f}</span>
+        <div style="display:flex;gap:10px;margin-bottom:2px">
+          <span style="font-size:10px;color:#b8934a">${m.p}g P</span>
+          <span style="font-size:10px;color:#4a8c6a">${m.c}g C</span>
+          <span style="font-size:10px;color:#6a9898">${m.f}g F</span>
+        </div>
+        <div style="font-size:9px;color:var(--muted);line-height:1.4">${m.note}</div>
+      </div>`;
+    }).join("")}
+    <div style="display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--border);margin-top:4px">
+      <span style="font-size:9px;padding:2px 6px;background:rgba(184,147,74,.1);color:#b8934a;border-radius:10px">■ Protein</span>
+      <span style="font-size:9px;padding:2px 6px;background:rgba(74,140,106,.1);color:#4a8c6a;border-radius:10px">■ Carbs</span>
+      <span style="font-size:9px;padding:2px 6px;background:rgba(106,152,152,.1);color:#6a9898;border-radius:10px">■ Fat</span>
+    </div>`;
+}
+
+// ── MEAL STRUCTURE KEY TIPS ───────────────────────────────────────
+function renderMealStructure(){
+  const el=document.getElementById("mealStructureCard");
+  if(!el)return;
+  const tips=[
+    {icon:"⬆️",label:"Front-load P+C",note:"More at breakfast & lunch"},
+    {icon:"🚫",label:"No carbs after lunch",note:"Dinner = protein + veg only"},
+    {icon:"🥑",label:"One fat per meal",note:"Don't stack avocado + oil + nuts"},
+    {icon:"🛡️",label:"Protect fat for dinner",note:"Cook earlier meals lean"},
+    {icon:"⏰",label:"Last meal 3h before bed",note:""},
+    {icon:"🥦",label:"No cruciferous at dinner",note:"Broccoli/cauli → lunch only"},
+    {icon:"🍶",label:"ACV before main meal",note:"Blood sugar management"},
+    {icon:"💧",label:"2.5L water daily",note:"Teas count · not coffee"},
+  ];
+  el.innerHTML=`
+    <div style="margin:10px 0 4px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">📋 Meal Structure Rules</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        ${tips.map(t=>`<div style="display:flex;align-items:flex-start;gap:6px;padding:6px 8px;background:var(--white);border:1px solid var(--border)">
+          <span style="font-size:13px;flex-shrink:0">${t.icon}</span>
+          <div>
+            <div style="font-size:11px;color:var(--text);font-weight:500;line-height:1.3">${t.label}</div>
+            ${t.note?`<div style="font-size:9px;color:var(--muted);margin-top:1px;line-height:1.3">${t.note}</div>`:''}
+          </div>
+        </div>`).join("")}
       </div>
-    </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:8px">Key rules: no carbs after lunch · don't combine multiple fats in one meal · ACV before largest meal · last meal 3h before bed</div>`;
+    </div>`;
 }
 
 // ── ROUTINE ──────────────────────────────────────────────────────
 function renderRoutine(){
   renderQuote();
-  renderMacroSplit();
   renderDayStrip("dayStrip",dayIdx,"checks","selectDay");
   const wk=getWeekKey();
   const ck=`checks-${wk}-${dayIdx}`;
@@ -723,26 +746,74 @@ function renderRoutine(){
       <button class="yolk-undo" onclick="removeYolk()">− Undo</button>
     </div>
     <div style="font-size:10px;color:${over?"var(--red)":atLimit?"var(--amber)":"rgba(255,255,255,.3)"}">${yolkMsg}</div>`);
+  // Weekly counts helper (uses current week checks)
+  function weeklyCount(weeklyId){
+    let n=0;
+    for(let i=0;i<7;i++){
+      const k=`checks-${wk}-${i}`;
+      const dc=(state.checks||{})[k]||{};
+      // Count any item with matching weeklyId that is ticked
+      ROUTINE_SECTIONS.forEach(s=>s.items.forEach(item=>{
+        if(item.weeklyId===weeklyId&&dc[item.id])n++;
+      }));
+    }
+    return n;
+  }
+
   // Checklist
   document.getElementById("checklistContainer").innerHTML=ROUTINE_SECTIONS.map(sec=>{
-    const doneC=sec.items.filter(i=>checks[i.id]).length;
+    const tickableItems=sec.items.filter(i=>i.tick);
+    const doneC=tickableItems.filter(i=>checks[i.id]).length;
+    const totalC=tickableItems.length;
+
     return `<div style="margin-top:12px">
       <div class="sec-hdr" onclick="toggleSec(this)">
         <div class="sec-title">${sec.title}</div>
-        <div class="sec-count">${doneC}/${sec.items.length}</div>
+        <div class="sec-count">${totalC>0?doneC+"/"+totalC:""}</div>
         <div class="sec-chev">▼</div>
       </div>
-      <div class="checklist">${sec.items.map(item=>{
-        const chk=!!checks[item.id];
-        const isSupp=item.tag==="supp";
-        const cls=isSupp?"supp":"";
-        const tag=item.tag==="priority"?'<span class="tag tag-key">Key</span>':"";
-        return `<div class="check-item ${cls}${chk?" checked":""}" onclick="toggleCheck('${item.id}','${sec.id}')">
-          <div class="check-box">${chk?"✓":""}</div>
-          <div style="flex:1"><div class="check-lbl">${item.label}</div>${item.note?`<div class="check-note">${item.note}</div>`:""}</div>
-          ${tag}
-        </div>`;
-      }).join("")}</div>
+      <div class="checklist">
+        ${sec.items.map(item=>{
+          const chk=!!checks[item.id];
+
+          // ── WEEKLY ITEM: horizontal compact dots ──
+          if(item.tag==="weekly"){
+            const wc=weeklyCount(item.weeklyId);
+            const target=item.weeklyTarget;
+            const dots=Array.from({length:target},(_,i)=>`<button onclick="event.stopPropagation();toggleWeeklyDot('${item.weeklyId}',${i},'${sec.id}')"
+              style="width:22px;height:22px;border-radius:50%;border:1.5px solid ${i<wc?'var(--green)':'var(--border)'};background:${i<wc?'var(--green)':'none'};color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s">${i<wc?'✓':''}</button>`).join("");
+            return `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text)">${item.label}</div>
+                ${item.note?`<div style="font-size:10px;color:var(--muted);margin-top:1px">${item.note}</div>`:''}
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+                ${dots}
+                <span style="font-size:10px;color:${wc>=target?'var(--green)':'var(--muted)'};margin-left:4px;min-width:28px">${wc}/${target}</span>
+              </div>
+            </div>`;
+          }
+
+          // ── TICKABLE ITEM (supp / physio) ──
+          if(item.tick){
+            const isSupp=item.tag==="supp";
+            return `<div class="check-item${isSupp?" supp":""}${chk?" checked":""}" onclick="toggleCheck('${item.id}','${sec.id}')">
+              <div class="check-box">${chk?"✓":""}</div>
+              <div style="flex:1"><div class="check-lbl">${item.label}</div>${item.note?`<div class="check-note">${item.note}</div>`:""}</div>
+            </div>`;
+          }
+
+          // ── INFO ITEM: plain text row, no checkbox ──
+          return `<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">${item.label}</div>
+              ${item.note?`<div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">${item.note}</div>`:''}
+            </div>
+          </div>`;
+
+        }).join("")}
+      </div>
     </div>`;
   }).join("");
 }
@@ -752,6 +823,36 @@ function toggleSec(hdr){
   const chev=hdr.querySelector(".sec-chev");
   list.style.display=list.style.display==="none"?"":"none";
   chev.classList.toggle("closed",list.style.display==="none");
+}
+
+function toggleWeeklyDot(weeklyId, dotIndex, secId){
+  // Find which days already have this weeklyId ticked across the week
+  const wk=getWeekKey();
+  // Count current ticks this week across all days
+  let ticks=[];
+  for(let i=0;i<7;i++){
+    const k=`checks-${wk}-${i}`;
+    const dc=(state.checks||{})[k]||{};
+    ROUTINE_SECTIONS.forEach(s=>s.items.forEach(item=>{
+      if(item.weeklyId===weeklyId&&dc[item.id])ticks.push({day:i,id:item.id,k});
+    }));
+  }
+  // If tapping a filled dot (dotIndex < ticks.length), remove the last tick
+  // If tapping empty dot, add a tick on today
+  if(dotIndex<ticks.length){
+    // Remove last tick
+    const last=ticks[ticks.length-1];
+    if(!state.checks[last.k])state.checks[last.k]={};
+    state.checks[last.k][last.id]=false;
+  } else {
+    // Add tick today
+    const ck=`checks-${wk}-${dayIdx}`;
+    if(!state.checks[ck])state.checks[ck]={};
+    // Find the item for this weeklyId
+    const item=ROUTINE_SECTIONS.flatMap(s=>s.items).find(i=>i.weeklyId===weeklyId);
+    if(item)state.checks[ck][item.id]=true;
+  }
+  persist();renderRoutine();
 }
 
 function toggleCheck(id,secId){
@@ -1807,8 +1908,11 @@ function logMealCart(){
   const meal={name,protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,kcal:Math.round(t.kcal),salt:Math.round(t.salt),time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+meal[k]||0)));
   s.meals=[...(s.meals||[]),meal];
+  const allItemNames=cart.map(i=>i.name).join(" ");
   clearMealCart();
   persist();renderFood();
+  showSavePrompt(name,meal.protein,meal.fat,meal.carbs,meal.fibre,meal.kcal,meal.salt);
+  setTimeout(()=>showZoePopup(name,detectZoeBoosters(name+" "+allItemNames)),400);
 }
 
 function saveMealCartPrompt(){
@@ -1923,7 +2027,7 @@ function renderFoodLogger(){
     <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:2px;overflow:hidden">
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;cursor:pointer;font-family:inherit">🔍 Search</button>
       <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">✏️ Manual</button>
-      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📋 Paste</button>
+      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">🍳 Recipe</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📸 Label</button>
       <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📦 Barcode</button>
     </div>
@@ -1961,15 +2065,16 @@ function renderFoodLogger(){
 
     <!-- Paste panel -->
     <div id="fsPanel_paste" style="display:none">
-      <div style="font-size:12px;color:var(--soft);margin-bottom:8px;line-height:1.6">Paste nutrition text from MyFitnessPal, a label, a website, or freeform.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:90px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="e.g. Calories 320 · Protein 28g · Carbs 12g · Fat 9g&#10;&#10;or: Energy 320kcal Protein 28.0g Carbohydrate 12.3g Fat 9.1g Fibre 2.1g Salt 0.4g"></textarea>
-      <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Meal name (optional)">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste any recipe Claude gave you — ingredients list, meal description, or nutrition text. Claude will calculate macros and detect all Zoe gut boosters.</div>
+      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste your recipe here e.g.&#10;&#10;150g king prawns&#10;80g green beans&#10;60g spinach&#10;2 garlic cloves&#10;1 tbsp olive oil&#10;1 tbsp tamari&#10;juice of ½ lime&#10;&#10;Or paste any nutrition label / MyFitnessPal text"></textarea>
+      <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Recipe name (optional — Claude will name it if blank)">
       <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
+      <button style="width:100%;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:6px" onclick="aiParsePasteWithBoosters()">✨ Read Recipe · Calculate Macros + Zoe Boosters</button>
       <div style="display:flex;gap:8px">
-        <button class="btn-primary" style="flex:1" onclick="parsePasteAndAdd()">Parse & Log</button>
-        <button style="flex:1;padding:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px" onclick="parsePasteAndSave()">💾 Save Meal</button>
+        <button class="btn-primary" style="flex:1;background:var(--bg);color:var(--muted);border:1px solid var(--border)" onclick="parsePasteAndAdd()">⚡ Quick Parse (numbers only)</button>
+        <button style="flex:1;padding:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px" onclick="parsePasteAndSave()">💾 Save</button>
       </div>
-      <div class="hint">Works with MyFitnessPal, label text, or any format with numbers</div>
+      <div class="hint">✨ = AI reads full recipes · ⚡ = instant extraction if numbers are already there</div>
     </div>
 
     <!-- Label scanner panel -->
@@ -2049,6 +2154,62 @@ function parsePasteAndSave(){
   showMealStatus(`💾 Saved "${meal.name}" to ${cat}`,true);
 }
 
+async function aiParsePaste(){
+  const raw=document.getElementById("mealPasteInput")?.value||"";
+  const nameInput=document.getElementById("mealPasteName")?.value.trim()||"";
+  const preview=document.getElementById("mealPastePreview");
+  if(!raw.trim()){if(preview)preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Paste a recipe or ingredients list first.</div>`;return;}
+  if(preview)preview.innerHTML=`<div style="font-size:12px;color:var(--muted)">✨ AI interpreting ingredients… </div>`;
+  try{
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,messages:[{role:"user",content:`You are a nutrition analyser. The user has pasted a recipe, ingredient list, or meal description. Calculate the total macros for the whole meal.
+
+Input:
+${raw}
+
+Return ONLY a JSON object with no markdown fences:
+{"name":"short meal name","kcal":NUMBER,"protein":NUMBER,"carbs":NUMBER,"fat":NUMBER,"fibre":NUMBER,"salt":NUMBER}
+
+All numbers must be integers (rounded). salt is in mg. If you cannot determine a value, use 0. Name should be concise (max 40 chars). Return ONLY the JSON object.`}]})});
+    const data=await resp.json();
+    const raw2=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    const parsed=JSON.parse(raw2.replace(/```json|```/g,"").trim());
+    const name=nameInput||parsed.name||"Pasted meal";
+    const kcal=parsed.kcal||0,protein=parsed.protein||0,carbs=parsed.carbs||0,fat=parsed.fat||0,fibre=parsed.fibre||0,salt=parsed.salt||0;
+    if(preview)preview.innerHTML=`<div style="padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:2px">
+      <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px">✨ ${name}</div>
+      <div style="font-size:11px;color:var(--soft)">${kcal} kcal · ${protein}g P · ${carbs}g C · ${fat}g F${fibre?' · '+fibre+'g fibre':''}${salt?' · '+salt+'mg salt':''}</div>
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button onclick="logAIParsed('${name.replace(/'/g,"\\'")}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="flex:1;padding:7px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">+ Log Today</button>
+        <button onclick="saveAIParsed('${name.replace(/'/g,"\\'")}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="flex:1;padding:7px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save</button>
+      </div>
+    </div>`;
+  }catch(e){
+    if(preview)preview.innerHTML=`<div style="font-size:12px;color:var(--red)">AI couldn't interpret this — try the ⚡ Parse button instead.</div>`;
+  }
+}
+
+function logAIParsed(name,kcal,protein,fat,carbs,fibre,salt){
+  const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
+  const s=state.macros[mk];
+  const meal={name,protein,fat,carbs,fibre,kcal,salt,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+  ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+meal[k]||0)));
+  s.meals=[...(s.meals||[]),meal];
+  const el=document.getElementById("mealPasteInput");if(el)el.value="";
+  const nel=document.getElementById("mealPasteName");if(nel)nel.value="";
+  const prev=document.getElementById("mealPastePreview");if(prev)prev.innerHTML="";
+  persist();renderFood();
+  showMealStatus(`✓ ${name} — ${kcal} kcal · ${protein}g protein`,true);
+}
+
+function saveAIParsed(name,kcal,protein,fat,carbs,fibre,salt){
+  if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+  const cat=kcal<350?"breakfast":kcal<200?"snacks":kcal<500?"lunch":"dinner";
+  state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),{name,kcal,protein,fat,carbs,fibre,salt,ingredients:""}];
+  persist();
+  showMealStatus(`💾 Saved "${name}" to ${cat}`,true);
+}
+
 
 function renderFood(){
   renderDayStrip("dayStripFood",foodDayIdx,"foods","selectFoodDay");
@@ -2105,7 +2266,10 @@ function renderFood(){
   document.getElementById("macroCard").innerHTML=`<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <div class="card-label" style="margin-bottom:0">Today's Macros</div>
-      <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
+      <div style="display:flex;gap:6px">
+        <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
+        <button onclick="copyToClaudeClipboard()" id="copyToClaudeBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:rgba(184,147,74,.1);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">✉️ Claude</button>
+      </div>
     </div>
     ${bars}${mealLog}
   </div>`;
@@ -2181,7 +2345,7 @@ function renderFood(){
   document.getElementById("gutSection").innerHTML=`
     <div class="gut-intro">
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:4px">🌿 Zoe Gut Boosters · Weekly Tracker</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Alternatives shown in each box — they count toward the same target</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit</div>
       <div class="gut-stats">
         <div><div class="gut-stat-val">${todayDone}</div><div class="gut-stat-lbl">Today</div></div>
         <div><div class="gut-stat-val">${done}</div><div class="gut-stat-lbl">This week</div></div>
@@ -2191,19 +2355,25 @@ function renderFood(){
     ${groups.map(g=>`<div style="margin-bottom:16px"><div class="gut-section-hdr">${g.lbl}</div>${g.items.map(item=>{
       const wc=gutWeekCount(item.id),ticked=!!foods[item.id],met=wc>=item.t;
       const pct=Math.min(wc/item.t,1)*100;
-      return `<div class="gut-item${met?" met":""}">
-        <div class="gut-item-top">
+      const nameStyle=met?'color:var(--muted);font-weight:400;':'font-weight:700;color:var(--text);';
+      const itemStyle=met?'opacity:0.55;background:#f7f5f2;':'';
+      return `<div class="gut-item${met?" met":""}" style="cursor:pointer;${itemStyle}">
+        <div class="gut-item-top" onclick="toggleGut('${item.id}')">
+          <div class="gut-tick${ticked?" ticked":""}">${ticked?"✓":""}</div>
           <div style="flex:1">
-            <div class="gut-item-name">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted)">/ ${item.alts.join(' / ')}</span>`:''} ${ticked?'<span style="color:var(--green);font-size:11px">✓ today</span>':''}</div>
+            <div class="gut-item-name" style="${nameStyle}">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:400">/ ${item.alts.join(' / ')}</span>`:''}</div>
             <div class="gut-item-note">${item.n}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
             <div style="font-size:18px;font-weight:500;color:${met?'var(--green)':'var(--text)'};line-height:1">${wc}<span style="font-size:11px;color:var(--muted)">/${item.t}</span></div>
-            <div style="font-size:9px;color:${met?'var(--green)':'var(--muted)'};">${met?'✓ done':'this wk'}</div>
+            <div style="font-size:9px;color:${met?'var(--green)':'var(--muted)'};">${met?'✓ done':ticked?'✓ today':'this wk'}</div>
           </div>
         </div>
-        <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px">
-          <div style="height:100%;width:${pct}%;background:${met?'var(--green)':'#4a8c6a80'};border-radius:2px;transition:width .3s"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${met?'var(--green)':'#4a8c6a80'};border-radius:2px;transition:width .3s"></div>
+          </div>
+          ${ticked?`<button onclick="event.stopPropagation();undoGut('${item.id}')" style="padding:2px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;cursor:pointer;border-radius:2px;white-space:nowrap;line-height:1.5">↩ Undo</button>`:''}
         </div>
       </div>`;
     }).join("")}</div>`).join("")}`;
@@ -2857,6 +3027,7 @@ function renderSavedMeals(container){
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
               <button onclick="logSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">+ Log</button>
+              <button onclick="copySavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid rgba(74,140,106,.4);color:var(--green);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Copy</button>
               <button onclick="editSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit</button>
               <button onclick="deleteSavedMeal('${cat.id}',${i})" style="padding:5px 10px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Del</button>
             </div>
@@ -2878,7 +3049,9 @@ function renderMealEditForm(cat,m,idx){
   return `<div style="background:var(--gold-pale);border:1px solid rgba(184,147,74,.3);border-left:3px solid ${cat.color};padding:14px;margin-bottom:6px">
     <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:${cat.color};margin-bottom:10px">${isNew?"New Meal":"Edit Meal"}</div>
     <input id="smName" class="meal-name-input" placeholder="Meal name e.g. Tuna cucumber boats" value="${(m.name||"").replace(/"/g,"&quot;")}">
-    <textarea id="smIngredients" style="width:100%;padding:8px 10px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:12px;color:var(--text);resize:none;height:60px;line-height:1.5;box-sizing:border-box;border-radius:2px;margin-bottom:8px" placeholder="Ingredients (optional) e.g. 130g tuna, cucumber, ½ avocado, lemon">${m.ingredients||""}</textarea>
+    <textarea id="smIngredients" style="width:100%;padding:8px 10px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:12px;color:var(--text);resize:none;height:70px;line-height:1.5;box-sizing:border-box;border-radius:2px;margin-bottom:6px" placeholder="Ingredients e.g. 150g cod, 80g asparagus, 1 tsp olive oil, garlic">${m.ingredients||""}</textarea>
+    <button onclick="aiRecalcMealFromIngredients()" style="width:100%;padding:7px;background:rgba(184,147,74,.08);border:1px solid rgba(184,147,74,.3);color:var(--gold);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:10px">✨ Recalculate Macros from Ingredients</button>
+    <div id="smAIStatus" style="font-size:11px;color:var(--muted);min-height:16px;margin-bottom:6px"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
       <div><div class="meal-field-lbl">Calories</div><input id="smKcal" class="meal-input" type="number" inputmode="decimal" value="${m.kcal||""}"></div>
       <div><div class="meal-field-lbl">Protein (g)</div><input id="smProtein" class="meal-input" type="number" inputmode="decimal" value="${(+m.protein||0)||""}"></div>
@@ -2895,6 +3068,40 @@ function renderMealEditForm(cat,m,idx){
     </div>
     ${!isNew?`<div style="margin-top:8px"><button onclick="logAndClose('${cat.id}',${idx})" style="width:100%;padding:9px;background:${cat.color};color:white;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Save Changes & Log to Today</button></div>`:""}
   </div>`;
+}
+
+async function aiRecalcMealFromIngredients(){
+  const ingredients=document.getElementById("smIngredients")?.value.trim();
+  const statusEl=document.getElementById("smAIStatus");
+  if(!ingredients){if(statusEl)statusEl.textContent="Enter ingredients above first.";return;}
+  if(statusEl)statusEl.textContent="✨ Calculating…";
+  try{
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:200,messages:[{role:"user",content:`Calculate total macros for this meal. Return ONLY JSON, no markdown: {"kcal":N,"protein":N,"fat":N,"carbs":N,"fibre":N,"salt":N} All integers, salt in mg.\n\n${ingredients}`}]})});
+    const data=await resp.json();
+    const txt=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    const r=JSON.parse(txt.replace(/```json|```/g,"").trim());
+    if(document.getElementById("smKcal"))document.getElementById("smKcal").value=r.kcal||0;
+    if(document.getElementById("smProtein"))document.getElementById("smProtein").value=r.protein||0;
+    if(document.getElementById("smFat"))document.getElementById("smFat").value=r.fat||0;
+    if(document.getElementById("smCarbs"))document.getElementById("smCarbs").value=r.carbs||0;
+    if(document.getElementById("smFibre"))document.getElementById("smFibre").value=r.fibre||0;
+    if(document.getElementById("smSalt"))document.getElementById("smSalt").value=r.salt||0;
+    if(statusEl)statusEl.textContent=`✓ Updated: ${r.kcal} kcal · ${r.protein}g P · ${r.carbs}g C · ${r.fat}g F`;
+    statusEl.style.color="var(--green)";
+  }catch(e){
+    if(statusEl){statusEl.textContent="Couldn't calculate — check ingredients format.";statusEl.style.color="var(--red)";}
+  }
+}
+
+function copySavedMeal(catId, idx){
+  const saved=getSavedMeals();
+  const m=saved[catId]?.[idx];
+  if(!m)return;
+  const copy={...m,name:m.name+" (copy)"};
+  if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+  state.savedMeals[catId]=[...(state.savedMeals[catId]||[]),copy];
+  persist();renderMeals();
+  showMealStatus(`Copied "${m.name}"`,true);
 }
 
 function startNewMeal(catId){
@@ -3146,12 +3353,12 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_pilates1",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree Fitness",note:"Inner thigh, waist, glutes, posture"},
-    {id:"ex_pilates2",label:"Reformer Pilates",type:"pilates",color:"#4a8c6a",alt:"Lagree Fitness",note:"Build on first session"},
-    {id:"ex_incline1",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Infrared Sculpt",note:"Mon/Wed · 30–55 min · 12% · 4.8km/h · FASTED"},
-    {id:"ex_incline2",label:"Fasted Incline Walk",type:"cardio",color:"#4a6a8a",alt:"Infrared Sculpt / TRX",note:"Mon/Wed · 30–55 min · 12% · 4.8km/h · FASTED"},
-    {id:"ex_strength1",label:"PT Strength Session",type:"strength",color:"#b8934a",alt:"TRX",note:"Fri · Upper body + core every session"},
-    {id:"ex_strength2",label:"TRX or Infrared Sculpt",type:"strength",color:"#b8934a",alt:"Infrared Sculpt",note:"Sat · Full body or additional strength"},
+    {id:"ex_walk1",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · fasted · fat burn zone"},
+    {id:"ex_walk2",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · fasted · fat burn zone"},
+    {id:"ex_pilates1", label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",                                    note:"Inner thigh · waist · glutes · posture"},
+    {id:"ex_lagree",   label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates",                    note:"High intensity · lean muscle · glutes"},
+    {id:"ex_pt",       label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",                                    note:"Compound lifts · upper body + core · kefir shake first"},
+    {id:"ex_strength", label:"Own Strength Session",  type:"strength", color:"#b8934a", sub:"",                                    note:"Follow PT programme independently"},
   ];
 
   // HIIT guidance based on phase
@@ -3191,7 +3398,25 @@ function renderExerciseTab(){
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">This Week's Training</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:16px">${done}/6 sessions done this week</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">${done}/6 sessions done this week</div>
+
+    <!-- Training guide -->
+    <div style="background:var(--bg);border:1px solid var(--border);padding:12px 14px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">This Week</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Incline Walk ×2<br>Reformer Pilates<br>Lagree<br>PT Strength<br>Own Strength</div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Substitutes</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Walk → Infrared Sculpt/Strength<br>Lagree → Reformer Pilates<br>PT → Own session</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:8px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:3px">Avoid</div>
+        <div style="font-size:11px;color:var(--muted)">HIIT · Heavy squats/leg press · Hip abduction machine · Mat Pilates only</div>
+      </div>
+    </div>
 
     ${hiitBadge}
 
@@ -3202,15 +3427,12 @@ function renderExerciseTab(){
         const checked=!!exChecks[s.id];
         const typeColors={pilates:"#4a8c6a",cardio:"#4a6a8a",strength:"#b8934a"};
         const c=typeColors[s.type]||"#888";
-        return `<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('${s.id}')">
+        return `<div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('${s.id}')">
           <div style="width:22px;height:22px;border:1.5px solid ${checked?c:'var(--border)'};background:${checked?c:'none'};border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s">${checked?'✓':''}</div>
           <div style="flex:1">
-            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-              <span style="font-size:13px;color:${checked?'var(--muted)':'var(--text)'};${checked?'text-decoration:line-through':''}">${s.label}</span>
-              <span style="font-size:9px;padding:2px 7px;border-radius:10px;background:${c}20;color:${c}">${s.type}</span>
-            </div>
+            <span style="font-size:13px;color:${checked?'var(--muted)':'var(--text)'};${checked?'text-decoration:line-through':''}">${s.label}</span>
             <div style="font-size:10px;color:var(--muted);margin-top:2px">${s.note}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px">Alt: ${s.alt}</div>
+            ${s.sub?`<div style="font-size:10px;color:var(--soft);margin-top:2px">↔ Sub: ${s.sub}</div>`:''}
           </div>
         </div>`;
       }).join("")}
@@ -3237,38 +3459,178 @@ function renderExerciseTab(){
       <div style="font-size:10px;color:var(--muted);margin-top:6px">Walk items are linked to your Routine tab</div>
     </div>
 
+    <!-- Incline walk combo guide -->
+    <div style="background:rgba(74,106,138,.06);border:1px solid rgba(74,106,138,.2);padding:12px 14px;margin-bottom:16px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#4a6a8a;margin-bottom:8px">🚶 Incline Walk · What You Can Combine</div>
+      ${[
+        {day:"Walk + Reformer Pilates",ok:true,note:"✓ Great combo — walk is fasted AM, Pilates later. Full recovery between."},
+        {day:"Walk + Lagree",ok:true,note:"✓ Fine — same logic. Walk first fasted, Lagree later in the day."},
+        {day:"Walk + Own Strength",ok:true,note:"✓ Works well — walk fasted AM, strength session separately."},
+        {day:"Walk + PT",ok:true,note:"✓ Yes — walk fasted AM, PT later. Don't do both fasted."},
+        {day:"Walk + Infrared Sculpt/Strength",ok:false,note:"↔ Swap, don't stack — Infrared replaces the walk on that day."},
+        {day:"Two incline walks same day",ok:false,note:"✗ Never — counterproductive. One per day maximum."},
+      ].map(r=>`<div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(74,106,138,.12)">
+        <span style="font-size:12px;flex-shrink:0">${r.ok?'✓':'✗'}</span>
+        <div>
+          <div style="font-size:12px;color:var(--text);font-weight:500">${r.day}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:1px">${r.note}</div>
+        </div>
+      </div>`).join("")}
+    </div>
+
     <!-- Strength guide dropdown -->
     <div style="margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;cursor:pointer" onclick="toggleStrengthGuide()">
         <div>
-          <div style="font-size:13px;color:var(--text)">💪 Strength Session Guide</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px">Upper body · Core · Lower body · PT day exercises</div>
+          <div style="font-size:13px;color:var(--text)">💪 Own Strength Session Guide</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Mat + free weights · tap any exercise to expand</div>
         </div>
         <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">${strengthOpen?'▲':'▼'}</span>
       </div>
-      ${strengthOpen?`<div style="border:1px solid var(--border);border-top:none;padding:14px">
-        <div style="font-size:10px;font-weight:500;color:#b8934a;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Upper Body · 2× per week</div>
-        ${[
-          ["Lateral raises","3–4kg · 3×15 · 3 sec eccentric, shoulders down"],
-          ["Bent over rows","6kg · 3×12 · back flat, squeeze shoulder blades"],
-          ["Band pull-aparts","Light–medium band · 3×20"],
-          ["Shoulder press","4–5kg · 3×12 · brace core, no arch"],
-          ["Tricep kickbacks","3–4kg · 3×15 · upper arm pinned, hold 1 sec at top"],
-        ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:12.5px;color:var(--text)">${ex}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div></div>`).join("")}
+      ${strengthOpen?`<div style="border:1px solid var(--border);border-top:none">
 
-        <div style="font-size:10px;font-weight:500;color:#b8934a;letter-spacing:2px;text-transform:uppercase;margin:14px 0 10px">Core · Every Session</div>
+        <!-- UPPER BODY -->
+        <div style="padding:10px 14px 4px;background:rgba(184,147,74,.06)">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#b8934a">Upper Body · Every Session</div>
+        </div>
         ${[
-          ["Dead bug","3×10 · slow and controlled · lower back pressed to floor"],
-          ["Hollow body hold","3×20 sec"],
-          ["Cable crunches","3×15"],
-          ["Side plank","3×30 sec each side"],
-        ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:12.5px;color:var(--text)">${ex}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div></div>`).join("")}
+          {
+            name:"Lateral Raises",
+            weight:"3–4kg",sets:"3 sets × 15 reps",
+            img:"dumbbell lateral raise exercise",
+            feel:"Outer shoulder (medial deltoid) — NOT traps or neck",
+            breathe:"Exhale as you lift up · Inhale on the slow 3-sec lower",
+            form:["Stand with slight forward lean — stops traps taking over","Lead with your elbows, not your hands","Stop at shoulder height — no higher","Thumbs slightly lower than pinkies (slight internal rotation)","Shoulders DOWN — if they creep up, weight is too heavy"],
+            fix:"Shrugging? Drop the weight by 0.5kg and focus on the outer shoulder only"
+          },
+          {
+            name:"Bent Over Rows",
+            weight:"5–6kg each hand",sets:"3 sets × 12 reps",
+            img:"dumbbell bent over row exercise form",
+            feel:"Mid-back (rhomboids, mid traps) — NOT lower back or biceps",
+            breathe:"Exhale as you row up · Inhale as you lower",
+            form:["Hinge at hips — back flat, parallel to floor","Pull elbows straight back past your hip","Squeeze shoulder blades together hard at the top — hold 1 sec","Keep neck neutral — don't crane up","Core braced throughout — no rounding"],
+            fix:"Feel it in your lower back? You're rounding — lighten the weight and hinge deeper"
+          },
+          {
+            name:"Shoulder Press",
+            weight:"4–5kg each hand",sets:"3 sets × 12 reps",
+            img:"dumbbell overhead shoulder press form",
+            feel:"Front and top of shoulder — NOT lower back",
+            breathe:"Exhale as you press up · Inhale as you lower",
+            form:["Start with elbows at 90° at shoulder height","Press directly overhead — not forward","Core braced — no lower back arch at the top","Lower slowly — 2 sec down","Seated version on floor: sit cross-legged for stability"],
+            fix:"Arching lower back? Brace your core harder before pressing — arch means core has switched off"
+          },
+          {
+            name:"Tricep Overhead Extension",
+            weight:"3–4kg single dumbbell, both hands",sets:"3 sets × 15 reps",
+            img:"overhead tricep extension dumbbell exercise",
+            feel:"Back of upper arm (tricep) — long head specifically",
+            breathe:"Exhale as you extend up · Inhale as you lower behind head",
+            form:["Hold one dumbbell with both hands — thumbs wrapped","Upper arms stay close to ears, vertical — don't let elbows flare","Lower until forearms touch biceps · full range","Keep core braced — don't sway"],
+            fix:"Elbows flaring out? Too heavy — drop to 2.5kg and focus on keeping upper arms totally still"
+          },
+          {
+            name:"Band Pull-Aparts",
+            weight:"Light resistance band",sets:"3 sets × 20 reps",
+            img:"resistance band pull apart exercise posture",
+            feel:"Rear deltoid and mid-back — opens chest",
+            breathe:"Exhale as you pull apart · Inhale as you return",
+            form:["Hold band shoulder-width, arms straight in front","Pull band apart to your chest, squeezing shoulder blades","Keep arms straight throughout — don't bend elbows","Slow and controlled — 2 sec pull, 2 sec return","Do this after any pressing exercise to balance"],
+            fix:"Feeling it in your forearms? Your grip is too wide — bring hands closer together"
+          },
+        ].map(e=>renderExCard(e)).join("")}
 
-        <div style="font-size:10px;font-weight:500;color:#b8934a;letter-spacing:2px;text-transform:uppercase;margin:14px 0 10px">Lower Body · 1× per week (light)</div>
+        <!-- CORE -->
+        <div style="padding:10px 14px 4px;background:rgba(74,140,106,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Core · Every Session</div>
+        </div>
         ${[
-          ["Glute bridges","Bodyweight or light band · 3×20"],
-          ["Reverse lunges","No weight · 3×12 each leg"],
-        ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:12.5px;color:var(--text)">${ex}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div></div>`).join("")}
+          {
+            name:"Dead Bug",
+            weight:"Bodyweight",sets:"3 sets × 10 each side",
+            img:"dead bug exercise core form",
+            feel:"Deep core (transverse abdominis) — NOT hip flexors or neck",
+            breathe:"Exhale fully before you move · hold breath out as you extend · inhale to reset",
+            form:["Lie on back · arms straight up · hips and knees at 90°","Brace core — press lower back INTO the mat (no gap)","Slowly extend opposite arm and leg toward floor","Return and switch — opposite arm/leg is one rep","The lower back must NOT lift off the mat at any point"],
+            fix:"Lower back lifting? You're going too far — reduce the range of motion until strength catches up"
+          },
+          {
+            name:"Hollow Body Hold",
+            weight:"Bodyweight",sets:"3 sets × 20–30 sec",
+            img:"hollow body hold exercise gymnastics core",
+            feel:"Entire front of core — deep abs, lower abs especially",
+            breathe:"Exhale to create the hollow · breathe shallowly throughout the hold",
+            form:["Lie on back · press lower back flat","Arms straight overhead by ears · legs straight · toes pointed","Lift shoulders and legs just off floor — create a 'dish' shape","The lower back stays pressed down — non-negotiable","Harder: lower legs; Easier: bend knees or keep arms by sides"],
+            fix:"Lower back arching off floor? Raise your legs higher until you can maintain the press"
+          },
+          {
+            name:"Side Plank",
+            weight:"Bodyweight",sets:"3 sets × 30–40 sec each side",
+            img:"side plank exercise oblique form",
+            feel:"Obliques (side waist) and glute medius — NOT shoulder pain",
+            breathe:"Breathe steadily — don't hold breath",
+            form:["Elbow directly under shoulder — not forward","Stack feet or stagger (bottom foot in front is easier)","Lift hip off floor — body in a straight line hip to head","Don't let hip sag or pike — one straight line","For more: raise top leg or add hip dips"],
+            fix:"Hip sagging? Lower to knee version until obliques are stronger — form beats duration every time"
+          },
+          {
+            name:"Glute Bridge Hold",
+            weight:"Bodyweight or 5–8kg plate/dumbbell on hips",sets:"3 sets × 40–45 sec hold",
+            img:"glute bridge hold exercise mat",
+            feel:"Top of glutes (gluteus maximus) — NOT lower back or hamstrings",
+            breathe:"Exhale as you drive up · breathe steadily during hold",
+            form:["Lie on back · feet flat · hip-width · heels close to glutes","Drive through HEELS — not toes","Squeeze glutes hard at the top — actively contract","Hips fully extended — don't let them drop","Tuck pelvis slightly — no lower back hyperextension"],
+            fix:"Feeling hamstrings? Walk feet slightly further from body — closer feet = more quad, further = more glute"
+          },
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- LOWER BODY -->
+        <div style="padding:10px 14px 4px;background:rgba(106,90,138,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Lower Body · 1× per week · light + controlled</div>
+        </div>
+        <div style="padding:6px 14px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Glute isolation only — if quads are firing, stop and reset. Mind-muscle over weight.</div>
+        ${[
+          {
+            name:"Single Leg Glute Bridge",
+            weight:"Bodyweight",sets:"3 sets × 15 each leg",
+            img:"single leg glute bridge exercise mat",
+            feel:"Working glute only — NOT lower back or quad of supporting leg",
+            breathe:"Exhale as you drive up · inhale as you lower",
+            form:["One foot flat on mat · other leg straight up or bent over knee","Drive through the planted heel","Full hip extension at top — squeeze glute hard","Hips level — don't let one side drop","Lower slowly — 3 sec down"],
+            fix:"Hips rotating? Your glute medius is weak — do extra fire hydrants before this"
+          },
+          {
+            name:"Donkey Kicks",
+            weight:"Bodyweight or 0.5–1kg ankle weight",sets:"3 sets × 20 each leg",
+            img:"donkey kick exercise glute mat",
+            feel:"Gluteus maximus of the kicking leg — the very top of the glute",
+            breathe:"Exhale as you kick up · inhale as you lower",
+            form:["On all fours · wrists under shoulders · knees under hips","Knee stays bent at 90° throughout","Kick heel toward ceiling — not out to the side","Squeeze at the top before lowering","Keep back flat — no rotation in the hips"],
+            fix:"Feeling lower back? You're hyperextending — lower your kick height and keep core braced"
+          },
+          {
+            name:"Fire Hydrants",
+            weight:"Bodyweight",sets:"3 sets × 15 each leg",
+            img:"fire hydrant exercise glute hip mat",
+            feel:"Outer glute (gluteus medius) — the side of the glute, NOT hip flexor",
+            breathe:"Exhale as you lift · inhale as you lower",
+            form:["On all fours · stable neutral spine","Lift knee out to the side — like a dog at a hydrant","Keep knee at 90° · foot flexed","Only lift as high as you can without rotating your hip","Slow and controlled — 2 sec up, 2 sec down"],
+            fix:"Hips rocking? You're going too high — reduce range and squeeze the glute at the top"
+          },
+          {
+            name:"Romanian Deadlift",
+            weight:"5–6kg each hand",sets:"3 sets × 12 reps",
+            img:"romanian deadlift dumbbell exercise form",
+            feel:"Hamstrings and glutes — a deep stretch and squeeze · NOT lower back",
+            breathe:"Inhale before you hinge · exhale as you drive back up",
+            form:["Stand hip-width · soft bend in knees · hold dumbbells in front","Hinge at hips — push them back as weights travel down shins","Back stays flat — not rounded — the whole way","Lower until you feel a deep hamstring stretch (mid-shin)","Drive hips forward to stand — squeeze glutes at top"],
+            fix:"Rounding your back? You're going too low — only go as far as you can keep a flat back"
+          },
+        ].map(e=>renderExCard(e)).join("")}
+
+        <div style="margin:14px 14px 14px;padding:10px 12px;background:var(--gold-pale);border-left:3px solid var(--gold)">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Rules for your shape:</strong> No squats, lunges, or leg press — these add quad bulk. Upper body can go heavier. Lower body: if quads fire more than glutes, the weight is too heavy or your foot position is wrong.</div>
+        </div>
       </div>`:''}
     </div>
 
@@ -3296,6 +3658,60 @@ function renderExerciseTab(){
         ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:12.5px;color:var(--text)">${ex}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div></div>`).join("")}
       </div>`:''}
     </div>`;
+}
+
+// ── EXERCISE CARD RENDERER ────────────────────────────────────────
+function renderExCard(e){
+  const cardId=`excard_${e.name.replace(/\s+/g,'_')}`;
+  const open=(state._exCardOpen||{})[cardId];
+  const imgSrc=(state._exCardImgs||{})[cardId];
+  return `<div style="border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:${open?'var(--gold-pale)':'var(--white)'}" onclick="toggleExCard('${cardId}')">
+      ${imgSrc?`<img src="${imgSrc}" style="width:48px;height:38px;object-fit:cover;border-radius:2px;flex-shrink:0">`:`<div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('${cardId}','${e.img.replace(/'/g,"\\'")}',this)">▶</div>`}
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;color:var(--text)">${e.name}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">${e.sets} · ${e.weight}</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">${open?'▲':'▼'}</span>
+    </div>
+    ${open?`<div style="padding:12px 14px;background:var(--gold-pale);border-top:1px solid rgba(184,147,74,.2)">
+      ${!imgSrc?`<button onclick="loadExImg('${cardId}','${e.img.replace(/'/g,"\\'")}',this)" style="width:100%;padding:7px;background:#ff0000;color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:10px">▶ Watch Demo on YouTube</button>`:''}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div style="background:rgba(184,147,74,.08);padding:8px 10px;border-radius:2px">
+          <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:3px">Feel it here</div>
+          <div style="font-size:11px;color:var(--text);line-height:1.4">${e.feel}</div>
+        </div>
+        <div style="background:rgba(74,140,106,.08);padding:8px 10px;border-radius:2px">
+          <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:3px">Breathing</div>
+          <div style="font-size:11px;color:var(--text);line-height:1.4">${e.breathe}</div>
+        </div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px">Form checklist</div>
+        ${e.form.map(f=>`<div style="display:flex;gap:6px;padding:4px 0;border-bottom:1px solid rgba(184,147,74,.15)">
+          <span style="color:var(--green);font-size:11px;flex-shrink:0;margin-top:1px">✓</span>
+          <span style="font-size:11px;color:var(--soft);line-height:1.4">${f}</span>
+        </div>`).join("")}
+      </div>
+      <div style="background:rgba(224,112,112,.08);border-left:3px solid var(--red);padding:8px 10px;border-radius:0 2px 2px 0">
+        <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:3px">⚠ Common mistake</div>
+        <div style="font-size:11px;color:var(--soft);line-height:1.4">${e.fix}</div>
+      </div>
+    </div>`:''}
+  </div>`;
+}
+
+function toggleExCard(cardId){
+  if(!state._exCardOpen)state._exCardOpen={};
+  state._exCardOpen[cardId]=!state._exCardOpen[cardId];
+  persist();renderExerciseTab();
+}
+
+async function loadExImg(cardId,query,btn){
+  if(btn){btn.style.display='none';}
+  // Open YouTube search for the exercise demo in a new tab
+  const searchUrl=`https://www.youtube.com/results?search_query=${encodeURIComponent(query+' proper form tutorial')}`;
+  window.open(searchUrl,'_blank');
 }
 
 function toggleExerciseCheck(id){
@@ -3329,6 +3745,15 @@ function toggleGut(id){
   state.foods[k][id]=v;
   const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
   if(chip)state.foods[k][chip]=v;
+  persist();renderFood();
+}
+
+function undoGut(id){
+  const k=`foods-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.foods[k])return;
+  state.foods[k][id]=false;
+  const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
+  if(chip)state.foods[k][chip]=false;
   persist();renderFood();
 }
 
@@ -3427,8 +3852,10 @@ function parsePasteAndAdd(){
   if(nameEl)nameEl.value="";
   if(preview)preview.innerHTML="";
 
-  if(statusEl){statusEl.textContent=`✓ ${name} — ${kcal} kcal · ${protein}g protein`;statusEl.className="status-ok";}
   renderFood();
+  showMealStatus(`✓ ${name} — ${kcal} kcal · ${protein}g protein`,true);
+  showSavePrompt(name,protein,fat,carbs,fibre,kcal,salt);
+  setTimeout(()=>showZoePopup(name,detectZoeBoosters(name)),400);
 }
 
 function addMeal(){
@@ -3452,10 +3879,13 @@ function addMeal(){
   s.salt=Math.round((+s.salt||0)+sl);
   s.meals=[...(s.meals||[]),{name,protein:p,fat:f,carbs:c,fibre:fi,kcal:k,salt:sl,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}];
   persist();
-  showMealStatus(`✓ ${name} added · ${k} kcal · ${p}g protein${sl?" · "+sl+"mg salt":""}`,true);
+  const savedName=name, savedK=k, savedP=p, savedSl=sl, savedF=f, savedC=c, savedFi=fi;
   document.getElementById("mealName").value="";
   ["mP","mF","mC","mFi","mK","mS"].forEach(id=>document.getElementById(id).value="");
   renderFood();
+  showMealStatus(`✓ ${savedName} added · ${savedK} kcal · ${savedP}g protein${savedSl?" · "+savedSl+"mg salt":""}`,true);
+  showSavePrompt(savedName,savedP,savedF,savedC,savedFi,savedK,savedSl);
+  setTimeout(()=>showZoePopup(savedName,detectZoeBoosters(savedName)),400);
 }
 
 function removeMeal(idx){
@@ -3516,8 +3946,95 @@ function toggleMealHistory(dayIdx){
   renderFood();
 }
 
-function copyMacros(){
+function copyToClaudeClipboard(){
   const wk=getWeekKey();
+  const mk=`macros-${wk}-${foodDayIdx}`;
+  const ms=(state.macros||{})[mk]||{protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
+  const today=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"});
+  const hour=new Date().getHours();
+  const mealTime=hour<11?"breakfast":hour<14?"lunch":hour<17?"afternoon snack":"dinner";
+
+  // Macros remaining
+  const pLeft=Math.max(0,115-(+ms.protein||0));
+  const cLeft=Math.max(0,130-(+ms.carbs||0));
+  const fLeft=Math.max(0,50-(+ms.fat||0));
+  const kLeft=Math.max(0,1550-(+ms.kcal||0));
+  const fiLeft=Math.max(0,32-(+ms.fibre||0));
+  const sLeft=Math.max(0,1500-(+ms.salt||0));
+
+  // Cycle phase
+  const phase=getCyclePhase();
+  const phaseLabel=phase?`Day ${phase.cycleDay} of 27 · ${phase.phase.name} phase`:"unknown";
+  const phaseTips=phase?phase.phase.tips:"";
+  const phasePriority=phase?phase.phase.prioritiseNames.slice(0,6).join(", "):"";
+
+  // Outstanding Zoe gut boosters this week
+  const outstanding=GUT_BOOSTERS.filter(g=>{
+    const wc=gutWeekCount(g.id);
+    return wc<g.t;
+  });
+  const outstandingLines=outstanding.map(g=>{
+    const wc=gutWeekCount(g.id);
+    return `  · ${g.e} ${g.l} — ${wc}/${g.t} done${g.alts&&g.alts.length?' (also: '+g.alts.slice(0,2).join(', ')+')':''}`;
+  }).join("\n");
+
+  // Meals logged
+  const mealsLogged=(ms.meals||[]).length
+    ? (ms.meals||[]).map(m=>`  · ${m.time} ${m.name} — ${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F`).join("\n")
+    : "  None logged yet";
+
+  const text=`Hi Claude! It's ${today}, ${mealTime} time. Here is my full context so you can advise me on my next meal.
+
+━━ MY GOALS ━━
+Physique: Victoria's Secret body · pear-shaped · 50.7kg · 170cm
+Focus: reduce fat stomach/hips/thighs · build glutes and legs
+Wedding: 13 September — this is my deadline
+
+━━ DAILY TARGETS ━━
+Calories: 1,500–1,600 kcal · Protein: 110–120g · Carbs: 120–140g
+Fat: 45–55g · Fibre: 30–35g · Salt: <1,500mg · Water: 2.5L
+
+━━ MEAL STRUCTURE RULES ━━
+· Front-load protein and carbs — more at breakfast and lunch, less at dinner
+· No carbs after lunch · no cruciferous veg at dinner
+· Do not combine multiple fats in one meal (e.g. avocado + olive oil + nuts)
+· Protect fat allocation for dinner — cook breakfast/lunch with minimal fat
+· Last meal at least 3 hours before bed
+· Dinner = protein + veg only (no carbs, small fat only)
+· ACV before largest meal if possible
+
+━━ MACROS TODAY ━━
+Eaten:    ${+ms.kcal||0} kcal · ${+ms.protein||0}g P · ${+ms.carbs||0}g C · ${+ms.fat||0}g F · ${+ms.fibre||0}g fibre · ${+ms.salt||0}mg salt
+Remaining: ${kLeft} kcal · ${pLeft}g P · ${cLeft}g C · ${fLeft}g F · ${fiLeft}g fibre · ${sLeft}mg salt
+
+━━ MEALS LOGGED ━━
+${mealsLogged}
+
+━━ CYCLE PHASE ━━
+${phaseLabel}
+${phaseTips}
+Prioritise now: ${phasePriority}
+
+━━ ZOE GUT BOOSTERS OUTSTANDING THIS WEEK ━━
+${outstandingLines||"  All weekly targets hit! 🌿"}
+
+━━ MY QUESTION ━━
+It's ${mealTime} time. Based on everything above, what should I eat next? Be specific — suggest 1–2 options with approximate macros. Keep meal suggestions within my remaining targets and follow my meal structure rules.`;
+
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById("copyToClaudeBtn");
+    if(btn){btn.textContent="✓ Copied";setTimeout(()=>{btn.textContent="✉️ Claude";},2000);}
+  }).catch(()=>{
+    const ta=document.createElement("textarea");
+    ta.value=text;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();document.execCommand("copy");
+    document.body.removeChild(ta);
+    const btn=document.getElementById("copyToClaudeBtn");
+    if(btn){btn.textContent="✓ Copied";setTimeout(()=>{btn.textContent="✉️ Claude";},2000);}
+  });
+}
+
+function copyMacros(){  const wk=getWeekKey();
   const mk=`macros-${wk}-${foodDayIdx}`;
   const ms=(state.macros||{})[mk]||{protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
   const today=new Date().toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
@@ -3555,6 +4072,160 @@ function showMealStatus(msg,ok){
   el.textContent=msg;
   el.className=ok?"status-ok":"status-err";
   setTimeout(()=>{el.textContent="";},3000);
+}
+
+// ── ZOE BOOSTER POPUP ─────────────────────────────────────────────
+// Keywords → gut booster IDs for popup detection
+const ZOE_KEYWORDS={
+  "salmon":"g_salmon","trout":"g_trout","mackerel":"g_salmon","sardine":"g_salmon",
+  "kefir":"g_kefir","kimchi":"g_kimchi","miso":"g_miso","sauerkraut":"g_kimchi","kombucha":"g_kimchi",
+  "avocado":"g_avocado","avo":"g_avocado",
+  "lentil":"g_lentils","chickpea":"g_chickpeas","kidney bean":"g_kidney","black bean":"g_kidney",
+  "peas":"g_peas","frozen peas":"g_peas",
+  "beansprout":"g_beansprouts","bean sprout":"g_beansprouts",
+  "green bean":"g_greenbeans",
+  "leek":"g_leeks",
+  "garlic":"g_garlic",
+  "grapefruit":"g_grapefruit",
+  "strawberr":"g_strawberries","raspberr":"g_strawberries","blueberr":"g_strawberries","blackberr":"g_strawberries",
+  "orange":"g_oranges","clementine":"g_oranges","tangerine":"g_oranges",
+  "pistachio":"g_pistachios",
+  "tofu":"g_tofu","tempeh":"g_tofu",
+  "green tea":"g_greentea","matcha":"g_greentea",
+  "black tea":"g_blacktea",
+};
+
+function detectZoeBoosters(text){
+  const lower=text.toLowerCase();
+  const found=new Set();
+  Object.entries(ZOE_KEYWORDS).forEach(([kw,gid])=>{if(lower.includes(kw))found.add(gid);});
+  return [...found];
+}
+
+function showZoePopup(mealName, boosterIds){
+  if(!boosterIds.length)return;
+  const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
+  // Filter to only those not already ticked today
+  const alreadyTicked=boosterIds.filter(id=>(state.foods[fk]||{})[id]);
+  const toTick=boosterIds.filter(id=>!(state.foods[fk]||{})[id]);
+  if(!toTick.length)return; // all already ticked
+
+  // Remove any existing popup
+  const old=document.getElementById("zoePopup");if(old)old.remove();
+
+  const items=toTick.map(id=>{
+    const g=GUT_BOOSTERS.find(b=>b.id===id);
+    return g?`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border)">
+      <div style="font-size:16px">${g.e}</div>
+      <div style="flex:1;font-size:12.5px;color:var(--text);font-weight:500">${g.l}</div>
+      <span style="font-size:9px;padding:1px 6px;background:rgba(74,140,106,.12);color:var(--green);border-radius:10px">Zoe ${g.s}</span>
+    </div>`:""}).join("");
+
+  const popup=document.createElement("div");
+  popup.id="zoePopup";
+  popup.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:380px;background:var(--white);border:1px solid rgba(74,140,106,.4);border-left:4px solid var(--green);box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:200;padding:14px 16px;border-radius:4px;";
+  popup.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green)">🌿 Zoe Gut Boosters Detected</div>
+      <button onclick="document.getElementById('zoePopup').remove()" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0;line-height:1">×</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${mealName} contains these boosters — tick them off?</div>
+    ${items}
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button onclick="tickZoeBoosters(${JSON.stringify(toTick)})" style="flex:1;padding:9px;background:var(--green);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">✓ Tick All</button>
+      <button onclick="document.getElementById('zoePopup').remove()" style="padding:9px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Skip</button>
+    </div>`;
+  document.body.appendChild(popup);
+  setTimeout(()=>{const p=document.getElementById("zoePopup");if(p)p.remove();},12000);
+}
+
+function tickZoeBoosters(ids){
+  const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.foods[fk])state.foods[fk]={};
+  ids.forEach(id=>{
+    state.foods[fk][id]=true;
+    const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
+    if(chip)state.foods[fk][chip]=true;
+  });
+  persist();
+  const p=document.getElementById("zoePopup");if(p)p.remove();
+  renderFood();
+}
+
+// ── SAVE PROMPT AFTER LOGGING ─────────────────────────────────────
+function showSavePrompt(mealName, protein, fat, carbs, fibre, kcal, salt){
+  const old=document.getElementById("savePrompt");if(old)old.remove();
+  const safeN=mealName.replace(/'/g,"\\'").replace(/"/g,"&quot;");
+  const prompt=document.createElement("div");
+  prompt.id="savePrompt";
+  prompt.style.cssText="position:fixed;bottom:140px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:380px;background:var(--ink);border:1px solid rgba(184,147,74,.3);box-shadow:0 4px 20px rgba(0,0,0,.2);z-index:199;padding:12px 16px;border-radius:4px;display:flex;align-items:center;gap:10px;";
+  prompt.innerHTML=`
+    <div style="flex:1;font-size:12px;color:rgba(255,255,255,.7)">Save <strong style="color:var(--gold)">${mealName}</strong> to Meals?</div>
+    <button onclick="quickSaveMeal('${safeN}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="padding:6px 12px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap;font-weight:500">💾 Save</button>
+    <button onclick="document.getElementById('savePrompt').remove()" style="padding:6px;background:none;border:none;color:rgba(255,255,255,.3);font-size:18px;cursor:pointer;line-height:1">×</button>`;
+  document.body.appendChild(prompt);
+  setTimeout(()=>{const p=document.getElementById("savePrompt");if(p)p.remove();},8000);
+}
+
+function quickSaveMeal(name, kcal, protein, fat, carbs, fibre, salt){
+  if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+  const cat=kcal<350?'breakfast':kcal<200?'snacks':kcal<550?'lunch':'dinner';
+  // Don't duplicate
+  const exists=(state.savedMeals[cat]||[]).some(m=>m.name===name);
+  if(!exists)state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),{name,kcal,protein,fat,carbs,fibre,salt:salt||0,ingredients:""}];
+  persist();
+  const p=document.getElementById("savePrompt");if(p)p.remove();
+  showMealStatus(`💾 Saved to ${cat}`,true);
+}
+
+// ── RECIPE PASTE WITH AI MACROS + ZOE BOOSTERS ────────────────────
+async function aiParsePasteWithBoosters(){
+  const raw=document.getElementById("mealPasteInput")?.value||"";
+  const nameInput=document.getElementById("mealPasteName")?.value.trim()||"";
+  const preview=document.getElementById("mealPastePreview");
+  if(!raw.trim()){if(preview)preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Paste a recipe or ingredients list first.</div>`;return;}
+  if(preview)preview.innerHTML=`<div style="font-size:12px;color:var(--muted);padding:8px 0">✨ AI reading recipe…</div>`;
+  try{
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:400,messages:[{role:"user",content:`Calculate the total macros for this meal/recipe. Return ONLY a JSON object with no markdown:
+{"name":"short meal name max 40 chars","kcal":NUMBER,"protein":NUMBER,"carbs":NUMBER,"fat":NUMBER,"fibre":NUMBER,"salt":NUMBER}
+All numbers as integers. salt in mg. Return ONLY the JSON.
+
+Input:
+${raw}`}]})});
+    const data=await resp.json();
+    const raw2=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+    const parsed=JSON.parse(raw2.replace(/```json|```/g,"").trim());
+    const name=nameInput||parsed.name||"Pasted meal";
+    const kcal=parsed.kcal||0,protein=parsed.protein||0,carbs=parsed.carbs||0,fat=parsed.fat||0,fibre=parsed.fibre||0,salt=parsed.salt||0;
+
+    // Detect Zoe boosters in ingredients
+    const boosters=detectZoeBoosters(raw+" "+name);
+    const boosterItems=boosters.map(id=>GUT_BOOSTERS.find(g=>g.id===id)).filter(Boolean);
+
+    const safeN=name.replace(/'/g,"\\'").replace(/"/g,"&quot;");
+    if(preview)preview.innerHTML=`<div style="padding:12px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:2px">
+      <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px">✨ ${name}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-size:12px;font-weight:500;color:var(--ink)">${kcal} kcal</span>
+        <span style="font-size:11px;color:#b8934a">${protein}g P</span>
+        <span style="font-size:11px;color:#4a8c6a">${carbs}g C</span>
+        <span style="font-size:11px;color:#6a9898">${fat}g F</span>
+        ${fibre?`<span style="font-size:11px;color:#9a7060">${fibre}g fibre</span>`:''}
+        ${salt?`<span style="font-size:11px;color:#7a7aaa">${salt}mg salt</span>`:''}
+      </div>
+      ${boosterItems.length?`<div style="background:rgba(74,140,106,.08);border:1px solid rgba(74,140,106,.2);border-radius:2px;padding:8px 10px;margin-bottom:8px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px">🌿 Zoe Boosters in this meal</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px">${boosterItems.map(g=>`<span style="font-size:11px;padding:2px 7px;background:rgba(74,140,106,.12);color:var(--green);border-radius:10px">${g.e} ${g.l}</span>`).join('')}</div>
+        <button onclick="tickZoeBoosters(${JSON.stringify(boosters)})" style="margin-top:8px;width:100%;padding:6px;background:var(--green);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">✓ Tick All Boosters</button>
+      </div>`:''}
+      <div style="display:flex;gap:6px">
+        <button onclick="logAIParsed('${safeN}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="flex:1;padding:8px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">+ Log Today</button>
+        <button onclick="saveAIParsed('${safeN}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save</button>
+      </div>
+    </div>`;
+  }catch(e){
+    if(preview)preview.innerHTML=`<div style="font-size:12px;color:var(--red)">AI couldn't read this — try ⚡ Parse instead.</div>`;
+  }
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
