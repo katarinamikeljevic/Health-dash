@@ -631,7 +631,7 @@ button,input,textarea,select{font-family:inherit}
       </div>
       <div id="mealCartPreview"></div>
       <div id="foodSearchResults"></div>
-      <div class="hint">Tap + Add to Meal to build up a meal · then Save or Log</div>
+      <div class="hint">+ Log to Today — logs single item instantly · + Add to Meal — build a multi-item meal</div>
     </div>
 
     <!-- Manual entry panel -->
@@ -3282,7 +3282,7 @@ function renderFoodSearch(){
       </div>
       <div id="favFoodsSection"></div>
       <div id="foodSearchResults"></div>
-      <div class="hint">☆ star any food to save it to favourites · tap + Add to Log</div>
+      <div class="hint">+ Log to Today — logs instantly · + Add to Meal — build a meal</div>
     </div>
     <div id="fsPanel_label" style="display:none">
       <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Take a photo of any nutrition label — Claude reads the macros and adds to your log.</div>
@@ -3511,9 +3511,13 @@ function buildFoodResultHTML(f,idx,prefix){
       <input type="number" inputmode="decimal" value="${servG}" id="${prefix}_srv_${idx}"
         style="width:60px;padding:5px 8px;border:1px solid var(--border);background:var(--white);font-size:13px;color:var(--text);border-radius:2px;text-align:center"
         oninput="updateSearchMacros('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})">
-      <button onclick="addSearchFoodToLog('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})"
-        style="flex:1;min-width:100px;padding:7px 12px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">
-        + Add to Log
+      <button onclick="addSearchFoodToLog('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0},this)"
+        style="flex:1;min-width:80px;padding:7px 8px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">
+        + Log to Today
+      </button>
+      <button onclick="addToMealCart('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0},this)"
+        style="flex:1;min-width:80px;padding:7px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">
+        + Add to Meal
       </button>
     </div>
     ${GUT_BOOSTERS.some(g=>g.l.toLowerCase().includes(f[0].toLowerCase().split(' ')[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green)"> Tick gut booster?</label>`:''}
@@ -3559,7 +3563,7 @@ function updateSearchMacrosWithFactor(prefix,idx,kcal,protein,carbs,fat,fibre,sa
     ${salt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(salt*g/100)}mg salt</span>`:''}`;
 }
 
-function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt){
+function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   const sEl=document.getElementById(`${prefix}_srv_${idx}`);
   const container=document.getElementById(`${prefix}_${idx}`);
   if(!sEl||!container)return;
@@ -3572,30 +3576,46 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt){
   const r=g/100;
   const label=unit==='g'||unit==='ml'?`${g}${unit}`:`${qty} ${unit}`;
   const item={name:`${name} (${label})`,protein:Math.round(protein*r*10)/10,fat:Math.round(fat*r*10)/10,carbs:Math.round(carbs*r*10)/10,fibre:Math.round(fibre*r*10)/10,kcal:Math.round(kcal*r),salt:Math.round(salt*r)};
-  // Tick gut booster if checked
   const gutCb=document.getElementById(`${prefix}_gut_${idx}`);
   if(gutCb&&gutCb.checked){
     const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
     if(!state.foods[fk])state.foods[fk]={};
-    const fname=name||'';
-    const matchedGut=GUT_BOOSTERS.find(gb=>fname.toLowerCase().includes(gb.l.toLowerCase().split(' ')[0]));
+    const matchedGut=GUT_BOOSTERS.find(gb=>name.toLowerCase().includes(gb.l.toLowerCase().split(' ')[0]));
     if(matchedGut){
       state.foods[fk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
       if(chipId)state.foods[fk][chipId]=true;
     }
   }
-  // Log directly to today with the food name
+  if(btn){btn.style.background='#4a8c6a';btn.style.color='#fff';btn.style.borderColor='#4a8c6a';}
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
   const s=state.macros[mk];
-  const logItem={...item,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+  const logItem={...item,time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+logItem[k]||0)));
   s.meals=[...(s.meals||[]),logItem];
   persist();
-  const st=document.getElementById(`${prefix}_status_${idx}`);
-  if(st){st.textContent=`✓ Logged — ${item.kcal} kcal · ${item.protein}g P`;st.style.color='var(--green)';}
   renderFood();
+}
+
+function addToMealCart(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
+  const sEl=document.getElementById(`${prefix}_srv_${idx}`);
+  const container=document.getElementById(`${prefix}_${idx}`);
+  if(!sEl||!container)return;
+  const name=container.getAttribute('data-name')||container.querySelector('[style*="font-size:13px"]')?.textContent?.trim()||'Food';
+  const factor=getUnitFactor(prefix,idx);
+  const unitEl=document.getElementById(`${prefix}_unit_${idx}`);
+  const unit=unitEl?unitEl.value:'g';
+  const qty=parseFloat(sEl.value)||0;if(!qty)return;
+  const g=qty*factor;
+  const r=g/100;
+  const label=unit==='g'||unit==='ml'?`${g}${unit}`:`${qty} ${unit}`;
+  const item={name:`${name} (${label})`,protein:Math.round(protein*r*10)/10,fat:Math.round(fat*r*10)/10,carbs:Math.round(carbs*r*10)/10,fibre:Math.round(fibre*r*10)/10,kcal:Math.round(kcal*r),salt:Math.round(salt*r)};
+  if(btn){btn.style.background='#4a8c6a';btn.style.color='#fff';btn.style.borderColor='#4a8c6a';}
+  if(!state._mealCart)state._mealCart=[];
+  state._mealCart.push(item);
+  persist();
+  renderMealCart();
 }
 
 function renderMealCart(){
@@ -3620,8 +3640,8 @@ function renderMealCart(){
       <span style="color:#6a9898">${t.f.toFixed(1)}g F</span>
     </div>
     <div style="display:flex;gap:6px;margin-top:10px">
-      <button onclick="logMealCart()" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">Log to Today</button>
-      <button onclick="saveMealCartPrompt()" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
+      <button onclick="logMealCart();flashBtn(this)" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">Log to Today</button>
+      <button onclick="saveMealCartPrompt();flashBtn(this)" style="flex:1;padding:8px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
       <button onclick="clearMealCart()" style="padding:8px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
     </div>
     <div style="margin-top:8px">
@@ -3640,7 +3660,10 @@ function clearMealCart(){state._mealCart=[];persist();renderMealCart();}
 
 function logMealCart(){
   const cart=state._mealCart||[];if(!cart.length)return;
-  const name=document.getElementById("mealCartName")?.value.trim()||"Meal";
+  // Auto-title from first item if no name entered
+  const inputName=document.getElementById("mealCartName")?.value.trim();
+  const autoName=cart.length===1?cart[0].name.split(' (')[0]:cart.map(i=>i.name.split(' (')[0]).join(' + ');
+  const name=inputName||autoName||"Meal";
   const t=cart.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.protein,c:s.c+i.carbs,f:s.f+i.fat,fi:s.fi+(i.fibre||0),salt:s.salt+(i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
@@ -3780,7 +3803,7 @@ function renderFoodLogger(){
       </div>
       <div id="mealCartPreview"></div>
       <div id="foodSearchResults"></div>
-      <div class="hint">Tap + Add to Meal to build up a meal · then Save or Log</div>
+      <div class="hint">+ Log to Today — logs single item instantly · + Add to Meal — build a multi-item meal</div>
     </div>
 
     <!-- Manual entry panel -->
