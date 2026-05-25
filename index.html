@@ -619,7 +619,6 @@ button,input,textarea,select{font-family:inherit}
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border: medium; cursor: pointer; font-family: inherit;">🔍 Search</button>
       <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">✏️ Manual</button>
       <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📋 Paste</button>
-      <button id="fsTab_recipe" onclick="setFoodSearchTab('recipe')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">🍽️ Recipe</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📸 Label</button>
       <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📦 Barcode</button>
     </div>
@@ -657,26 +656,21 @@ button,input,textarea,select{font-family:inherit}
 
     <!-- Paste panel -->
     <div id="fsPanel_paste" style="">
-      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste any recipe Claude gave you — ingredients list, meal description, or nutrition text. Claude will calculate macros and detect all Zoe gut boosters.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste your recipe here e.g.
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste a recipe or macros from Claude. It will extract the name, macros and Zoe gut boosters automatically.</div>
+      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste Claude's recipe here e.g.
 
-150g king prawns
-80g green beans
-60g spinach
-2 garlic cloves
-1 tbsp olive oil
-1 tbsp tamari
-juice of ½ lime
+🐟 Sardine & Cottage Cheese Bowl
+480 kcal · 32g P · 28g C · 24g F · 7g fibre · 680mg salt
 
-Or paste any nutrition label / MyFitnessPal text"></textarea>
-      <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Recipe name (optional — Claude will name it if blank)">
+Spinach, mushrooms, avocado, tomatoes, seaweed, garlic, kimchi
+
+Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
       <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
-      <button style="width:100%;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:6px" onclick="aiParsePasteWithBoosters()">✨ Read Recipe · Calculate Macros + Zoe Boosters</button>
-      <div style="display:flex;gap:8px">
-        <button class="btn-primary" style="flex:1;background:var(--bg);color:var(--muted);border:1px solid var(--border)" onclick="parsePasteAndAdd()">⚡ Quick Parse (numbers only)</button>
-        <button style="flex:1;padding:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px" onclick="parsePasteAndSave()">💾 Save</button>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button onclick="pasteLogToday(this)" style="flex:1;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
+        <button onclick="pasteSaveMeal(this)" style="flex:1;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
       </div>
-      <div class="hint">✨ = AI reads full recipes · ⚡ = instant extraction if numbers are already there</div>
+      <div class="hint">Reads name, macros, ingredients and Zoe gut boosters from any format</div>
     </div>
 
 
@@ -3194,6 +3188,15 @@ const FOOD_DB=[
   ["Pickled red cabbage",18,1,3.5,0.1,1.5,560,40,"2 tbsp (40g)"],
   ["Pickled gherkins",11,0.4,1.8,0.2,0.8,1200,30,"2 gherkins (30g)"],
   ["Caramelised onions",85,1.2,18,1.5,1.5,200,60,"60g"],
+  // ── DELI MEATS ──
+  ["Lean turkey breast slice",105,22,0,1.2,0,680,20,"1 slice (20g)"],
+  ["Lean turkey breast slice",105,22,0,1.2,0,680,40,"2 slices (40g)"],
+  ["Lean turkey breast slice",105,22,0,1.2,0,680,60,"3 slices (60g)"],
+  ["Lean ham slice",107,17,1,3.5,0,1050,25,"1 slice (25g)"],
+  ["Lean ham slice",107,17,1,3.5,0,1050,50,"2 slices (50g)"],
+  ["Lean ham slice",107,17,1,3.5,0,1050,75,"3 slices (75g)"],
+  ["Wafer thin turkey",105,22,0,1.2,0,680,50,"50g"],
+  ["Wafer thin ham",107,17,1,3.5,0,1050,50,"50g"],
   // ── BREAD ──
   ["White bread",235,8,44,2,2,480,38,"1 slice (38g)"],
   ["Wholemeal bread",216,9.5,37,2.5,5.8,420,38,"1 slice (38g)"],
@@ -3306,7 +3309,7 @@ function renderFoodSearch(){
 let currentFoodSearchTab='search';
 function setFoodSearchTab(tab){
   currentFoodSearchTab=tab;
-  ['search','manual','paste','recipe','label','barcode'].forEach(t=>{
+  ['search','manual','paste','label','barcode'].forEach(t=>{
     const p=document.getElementById(`fsPanel_${t}`),b=document.getElementById(`fsTab_${t}`);
     if(p)p.style.display=t===tab?'':'none';
     if(b){b.style.background=t===tab?'var(--ink)':'var(--bg)';b.style.color=t===tab?'var(--gold)':'var(--muted)';}
@@ -3765,7 +3768,6 @@ function renderFoodLogger(){
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;cursor:pointer;font-family:inherit">🔍 Search</button>
       <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">✏️ Manual</button>
       <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📋 Paste</button>
-      <button id="fsTab_recipe" onclick="setFoodSearchTab('recipe')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">🍽️ Recipe</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📸 Label</button>
       <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📦 Barcode</button>
     </div>
@@ -3803,16 +3805,21 @@ function renderFoodLogger(){
 
     <!-- Paste panel -->
     <div id="fsPanel_paste" style="display:none">
-      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste any recipe Claude gave you — ingredients list, meal description, or nutrition text. Claude will calculate macros and detect all Zoe gut boosters.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste your recipe here e.g.&#10;&#10;150g king prawns&#10;80g green beans&#10;60g spinach&#10;2 garlic cloves&#10;1 tbsp olive oil&#10;1 tbsp tamari&#10;juice of ½ lime&#10;&#10;Or paste any nutrition label / MyFitnessPal text"></textarea>
-      <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Recipe name (optional — Claude will name it if blank)">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste a recipe or macros from Claude. Name, macros and Zoe gut boosters are picked up automatically.</div>
+      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste Claude's recipe here e.g.
+
+🐟 Sardine & Cottage Cheese Bowl
+480 kcal · 32g P · 28g C · 24g F · 7g fibre · 680mg salt
+
+Spinach, mushrooms, avocado, garlic, kimchi, seaweed
+
+Or just: 480 kcal · 32g P · 28g C · 24g F"></textarea>
       <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
-      <button style="width:100%;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:6px" onclick="aiParsePasteWithBoosters()">✨ Read Recipe · Calculate Macros + Zoe Boosters</button>
-      <div style="display:flex;gap:8px">
-        <button class="btn-primary" style="flex:1;background:var(--bg);color:var(--muted);border:1px solid var(--border)" onclick="parsePasteAndAdd()">⚡ Quick Parse (numbers only)</button>
-        <button style="flex:1;padding:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px" onclick="parsePasteAndSave()">💾 Save</button>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button onclick="pasteLogToday(this)" style="flex:1;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
+        <button onclick="pasteSaveMeal(this)" style="flex:1;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
       </div>
-      <div class="hint">✨ = AI reads full recipes · ⚡ = instant extraction if numbers are already there</div>
+      <div class="hint">Reads name, macros, ingredients and Zoe gut boosters from any format</div>
     </div>
 
     <!-- Label scanner panel -->
@@ -3986,6 +3993,10 @@ function renderFood(){
       <button class="meal-remove" onclick="removeMeal(${i})">×</button>
     </div>
     <div id="meal-edit-${i}" style="display:none;padding:10px;background:var(--bg);border:1px solid var(--border);border-top:none;margin-bottom:4px">
+      <div style="margin-bottom:8px">
+        <div class="meal-field-lbl">Meal Name</div>
+        <input id="en${i}" class="meal-name-input" style="margin:0" value="${(m.name||'').replace(/"/g,'&quot;')}" placeholder="Meal name">
+      </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
         <div><div class="meal-field-lbl">Protein (g)</div><input id="ep${i}" class="meal-input" type="number" inputmode="decimal" value="${m.protein||0}"></div>
         <div><div class="meal-field-lbl">Fat (g)</div><input id="ef${i}" class="meal-input" type="number" inputmode="decimal" value="${m.fat||0}"></div>
@@ -5819,101 +5830,141 @@ function setMealLogTab(tab){
   });
 }
 
-function parsePasteAndAdd(){
-  const raw=document.getElementById("mealPasteInput")?.value||"";
-  const nameInput=document.getElementById("mealPasteName")?.value.trim()||"";
-  const statusEl=document.getElementById("mealStatus");
-  if(!raw.trim()){if(statusEl){statusEl.textContent="Please paste some nutrition text first.";statusEl.className="status-err";}return;}
-
+function parsePasteData(){
+  const raw=document.getElementById('mealPasteInput')?.value||'';
+  if(!raw.trim())return null;
   const text=raw.toLowerCase();
 
-  // Extract numbers with flexible label matching
   function extract(patterns){
-    for(const p of patterns){
-      const m=text.match(p);
-      if(m)return parseFloat(m[1])||0;
-    }
+    for(const p of patterns){const m=text.match(p);if(m)return parseFloat(m[1])||0;}
     return 0;
   }
-
-  const kcal=extract([
-    /([\d.]+)\s*kcal/,
-    /(?:calories?|energy|cal)\D{0,5}([\d.]+)/,
-  ]);
-  const protein=extract([
-    /([\d.]+)\s*g\s*p\b/,
-    /([\d.]+)\s*g\s*protein/,
-    /protein\D{0,5}([\d.]+)\s*g/,
-  ]);
-  const carbs=extract([
-    /([\d.]+)\s*g\s*c\b/,
-    /([\d.]+)\s*g\s*carb/,
-    /carbo(?:hydrate)?s?\D{0,5}([\d.]+)\s*g/,
-  ]);
-  const fat=extract([
-    /([\d.]+)\s*g\s*f\b/,
-    /([\d.]+)\s*g\s*fat/,
-    /(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/,
-  ]);
-  const fibre=extract([
-    /([\d.]+)\s*g\s*fi/,
-    /([\d.]+)\s*g\s*fib/,
-    /fib(?:er|re)\D{0,5}([\d.]+)\s*g/,
-  ]);
-  // Salt: label may show as "salt 0.4g" (convert to mg) or "sodium 160mg"
+  const kcal=extract([/([\d.]+)\s*kcal/,/(?:calories?|energy|cal)\D{0,5}([\d.]+)/]);
+  const protein=extract([/([\d.]+)\s*g\s*p\b/,/([\d.]+)\s*g\s*protein/,/protein\D{0,5}([\d.]+)\s*g/]);
+  const carbs=extract([/([\d.]+)\s*g\s*c\b/,/([\d.]+)\s*g\s*carb/,/carbo(?:hydrate)?s?\D{0,5}([\d.]+)\s*g/]);
+  const fat=extract([/([\d.]+)\s*g\s*f\b/,/([\d.]+)\s*g\s*fat/,/(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/]);
+  const fibre=extract([/([\d.]+)\s*g\s*fi/,/([\d.]+)\s*g\s*fib/,/fib(?:er|re)\D{0,5}([\d.]+)\s*g/]);
   let salt=0;
+  const saltMg=text.match(/([\d.]+)\s*mg\s*salt/)||text.match(/salt\D{0,5}([\d.]+)\s*mg/);
   const saltG=text.match(/salt\D{0,5}([\d.]+)\s*g/);
-  const saltMg=text.match(/salt\D{0,5}([\d.]+)\s*mg/);
-  const sodiumMg=text.match(/sodium\D{0,5}([\d.]+)\s*mg/);
-  const sodiumG=text.match(/sodium\D{0,5}([\d.]+)\s*g/);
-  if(saltMg) salt=parseFloat(saltMg[1])||0;
-  else if(saltG) salt=Math.round((parseFloat(saltG[1])||0)*1000);
-  else if(sodiumMg) salt=Math.round((parseFloat(sodiumMg[1])||0)*2.5);
-  else if(sodiumG) salt=Math.round((parseFloat(sodiumG[1])||0)*2500);
+  if(saltMg)salt=parseFloat(saltMg[1])||0;
+  else if(saltG)salt=Math.round((parseFloat(saltG[1])||0)*1000);
 
-  // Auto-detect name - if first line has numbers (macros), use second line
+  // Auto-detect name from raw text
+  // Look for emoji + text line, or first non-numeric line, or second line if first has numbers
   const rawLines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  let name=nameInput;
-  if(!name){
-    const firstHasNums=/\d/.test(rawLines[0]);
-    const candidate=firstHasNums?(rawLines[1]||rawLines[0]):(rawLines[0]||'Pasted meal');
-    name=candidate.length<80?candidate:'Pasted meal';
-  }
-
-  // Show preview
-  const preview=document.getElementById("mealPastePreview");
-  if(preview){
-    if(!kcal&&!protein){
-      preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Couldn't find any numbers — try including "Calories: 320" or "Protein 28g"</div>`;
-      return;
+  let name='';
+  for(const line of rawLines){
+    // Skip lines that are just macros/numbers
+    const isJustMacros=/^\d+[\s·]/.test(line)&&/kcal|protein|\bg\b|\bP\b|\bC\b|\bF\b/i.test(line);
+    const isJustIngredient=/^\d+g\s|^\d+ml\s|^½|^¼|^\d+\s*tsp|^\d+\s*tbsp/i.test(line);
+    if(!isJustMacros&&!isJustIngredient&&line.length>2&&line.length<80){
+      // Strip leading emoji
+      name=line.replace(/^[\u{1F300}-\u{1FFFF}🌿🐟🥗🥑🍽️]+\s*/u,'').trim();
+      if(name)break;
     }
-    preview.innerHTML=`<div style="padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);font-size:12px;color:var(--soft);border-radius:2px">
-      <strong style="color:var(--text)">${name}</strong><br>
-      ${kcal?`${kcal} kcal · `:""}${protein?`${protein}g P · `:""}${carbs?`${carbs}g C · `:""}${fat?`${fat}g F`:""}${fibre?` · ${fibre}g fibre`:""}${salt?` · ${salt}mg salt`:""}
-    </div>`;
   }
+  if(!name)name='Pasted meal';
 
-  // Add to log
+  // Detect Zoe gut boosters in the text
+  const boosters=[];
+  GUT_BOOSTERS.forEach(g=>{
+    const keywords=[g.l.toLowerCase(),...(g.alts||[]).map(a=>a.toLowerCase().split(' ')[0])];
+    if(keywords.some(k=>text.includes(k)))boosters.push(g.id);
+  });
+
+  return {name,kcal,protein,carbs,fat,fibre,salt,boosters,raw};
+}
+
+function pasteLogToday(btn){
+  const data=parsePasteData();
+  if(!data||(!data.kcal&&!data.protein)){
+    showMealStatus('Could not read macros — check format',false);return;
+  }
+  flashBtn(btn);
+  // Log the meal
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
   const s=state.macros[mk];
-  const meal={name,protein,fat,carbs,fibre,kcal,salt,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+  const meal={name:data.name,protein:data.protein,fat:data.fat,carbs:data.carbs,fibre:data.fibre,kcal:data.kcal,salt:data.salt,time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+meal[k]||0)));
   s.meals=[...(s.meals||[]),meal];
   persist();
-
-  // Clear
-  const pasteEl=document.getElementById("mealPasteInput");
-  const nameEl=document.getElementById("mealPasteName");
-  if(pasteEl)pasteEl.value="";
-  if(nameEl)nameEl.value="";
-  if(preview)preview.innerHTML="";
-
   renderFood();
-  showMealStatus(`✓ ${name} — ${kcal} kcal · ${protein}g protein`,true);
-  showSavePrompt(name,protein,fat,carbs,fibre,kcal,salt);
-  setTimeout(()=>showZoePopup(name,detectZoeBoosters(name)),400);
+  // Show gut booster popup if any detected
+  if(data.boosters.length){
+    const toTick=data.boosters;
+    state._pendingZoeTick=toTick;
+    document.querySelectorAll('#zoePopup').forEach(e=>e.remove());
+    const popup=document.createElement('div');
+    popup.id='zoePopup';
+    popup.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:380px;background:var(--white);border:1px solid rgba(74,140,106,.4);border-left:4px solid var(--green);box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:200;padding:14px 16px;border-radius:4px';
+    const items=toTick.map(id=>{const g=GUT_BOOSTERS.find(gb=>gb.id===id);return g?`<div style="font-size:12px;color:var(--text);padding:4px 0">${g.e} ${g.l} <span style="font-size:10px;color:var(--green)">Zoe ${g.s}</span></div>`:''}).join('');
+    popup.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green)">🌿 Zoe Gut Boosters Detected</div>
+        <button onclick="this.closest('#zoePopup').remove()" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0;line-height:1">×</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${data.name} contains these boosters — tick them off?</div>
+      ${items}
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button onclick="tickZoeBoosters(state._pendingZoeTick);this.closest('#zoePopup').remove()" style="flex:1;padding:9px;background:var(--green);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">✓ Tick All</button>
+        <button onclick="this.closest('#zoePopup').remove()" style="padding:9px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Skip</button>
+      </div>`;
+    document.body.appendChild(popup);
+    setTimeout(()=>{const p=document.getElementById('zoePopup');if(p)p.remove();},12000);
+  }
+  // Show save meal prompt
+  showPasteSavePrompt(data);
 }
+
+function showPasteSavePrompt(data){
+  document.querySelectorAll('.paste-save-prompt').forEach(e=>e.remove());
+  const div=document.createElement('div');
+  div.className='paste-save-prompt';
+  div.style.cssText='position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:2px solid rgba(184,147,74,.4);padding:16px;z-index:400;box-shadow:0 -4px 24px rgba(0,0,0,.5)';
+  div.innerHTML=`
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">✓ Logged — ${data.name}</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.6);margin-bottom:12px">Save this meal for next time?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <button onclick="savePastedMeal('breakfast',this)" style="padding:10px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.3);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">☀️ Breakfast</button>
+      <button onclick="savePastedMeal('lunch',this)" style="padding:10px;background:rgba(74,140,106,.15);border:1px solid rgba(74,140,106,.3);color:#4a8c6a;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">🥗 Lunch</button>
+      <button onclick="savePastedMeal('dinner',this)" style="padding:10px;background:rgba(106,106,152,.15);border:1px solid rgba(106,106,152,.3);color:#9090c0;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">🌙 Dinner</button>
+      <button onclick="savePastedMeal('snacks',this)" style="padding:10px;background:rgba(192,96,112,.15);border:1px solid rgba(192,96,112,.3);color:#c06070;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">🍎 Snack</button>
+    </div>
+    <button onclick="this.closest('.paste-save-prompt').remove()" style="width:100%;padding:10px;background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">✕ Don't save</button>`;
+  // Store data for save buttons
+  state._pendingPasteData=data;
+  document.body.appendChild(div);
+}
+
+function savePastedMeal(cat,btn){
+  const data=state._pendingPasteData;
+  if(!data)return;
+  if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
+  state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),{
+    name:data.name,ingredients:data.raw,
+    kcal:data.kcal,protein:data.protein,fat:data.fat,carbs:data.carbs,fibre:data.fibre,salt:data.salt
+  }];
+  persist();
+  flashBtn(btn);
+  document.querySelectorAll('.paste-save-prompt').forEach(e=>e.remove());
+  showMealStatus(`💾 Saved to ${cat}`,true);
+  state._pendingPasteData=null;
+}
+
+function pasteSaveMeal(btn){
+  const data=parsePasteData();
+  if(!data||(!data.kcal&&!data.protein)){
+    showMealStatus('Could not read macros — check format',false);return;
+  }
+  flashBtn(btn);
+  showPasteSavePrompt(data);
+}
+
+function parsePasteAndAdd(){pasteLogToday(null);}
+
+
 
 function addMeal(){
   const name=document.getElementById("mealName").value.trim();
@@ -5980,21 +6031,23 @@ function saveMealEdit(idx){
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   const s=state.macros[mk];if(!s||!s.meals[idx])return;
   const old=s.meals[idx];
+  const newName=document.getElementById(`en${idx}`)?.value.trim()||old.name;
   const newP=parseFloat(document.getElementById(`ep${idx}`).value)||0;
   const newF=parseFloat(document.getElementById(`ef${idx}`).value)||0;
   const newC=parseFloat(document.getElementById(`ec${idx}`).value)||0;
   const newFi=parseFloat(document.getElementById(`efi${idx}`).value)||0;
   const newK=parseFloat(document.getElementById(`ek${idx}`).value)||0;
   const newSl=parseFloat(document.getElementById(`es${idx}`).value)||0;
-  // Adjust totals: subtract old, add new
   s.protein=Math.max(0,Math.round((+s.protein||0)-(+old.protein||0)+newP));
   s.fat=Math.max(0,Math.round((+s.fat||0)-(+old.fat||0)+newF));
   s.carbs=Math.max(0,Math.round((+s.carbs||0)-(+old.carbs||0)+newC));
   s.fibre=Math.max(0,Math.round((+s.fibre||0)-(+old.fibre||0)+newFi));
   s.kcal=Math.max(0,Math.round((+s.kcal||0)-(+old.kcal||0)+newK));
   s.salt=Math.max(0,Math.round((+s.salt||0)-(+old.salt||0)+newSl));
-  s.meals[idx]={...old,protein:newP,fat:newF,carbs:newC,fibre:newFi,kcal:newK,salt:newSl};
-  persist();renderFood();
+  s.meals[idx]={...old,name:newName,protein:newP,fat:newF,carbs:newC,fibre:newFi,kcal:newK,salt:newSl};
+  persist();
+  showMealStatus('✓ Meal updated',true);
+  renderFood();
 }
 
 function toggleMealHistory(dayIdx){
