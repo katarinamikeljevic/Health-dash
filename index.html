@@ -3560,7 +3560,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt){
   const sEl=document.getElementById(`${prefix}_srv_${idx}`);
   const container=document.getElementById(`${prefix}_${idx}`);
   if(!sEl||!container)return;
-  const name=container.getAttribute('data-name')||'Food';
+  const name=container.getAttribute('data-name')||container.querySelector('[style*="font-size:13px"]')?.textContent?.trim()||'Food';
   const factor=getUnitFactor(prefix,idx);
   const unitEl=document.getElementById(`${prefix}_unit_${idx}`);
   const unit=unitEl?unitEl.value:'g';
