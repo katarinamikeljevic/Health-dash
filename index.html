@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Katarina · Health Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&amp;family=DM+Sans:wght@200;300;400;500&amp;display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f0eb;--white:#fff;--ink:#1a1410;--border:#e0d8d0;--gold:#b8934a;--gold-pale:#f5ead8;--gold-dim:rgba(184,147,74,.15);--green:#4a8c6a;--green-pale:#e8f4ee;--green-dim:rgba(74,140,106,.12);--muted:#9a8878;--soft:#6a5a4a;--text:#2c1e10;--amber:#e8a44a;--red:#e07070}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -178,6 +176,7 @@ button,input,textarea,select{font-family:inherit}
 .cycle-date-input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 8px;font-size:12px;border-radius:2px;font-family:inherit}
 .chip.cycle-highlight{box-shadow:0 0 0 2px currentColor;font-weight:500}
 .chip.cycle-avoid{opacity:.4}
+.btn-flashed{background:#4a8c6a!important;color:#fff!important;border-color:#4a8c6a!important;transition:all .15s}
 </style>
 </head>
 <body>
@@ -188,19 +187,19 @@ button,input,textarea,select{font-family:inherit}
   <h1>Weekly<br><em>Checklist</em></h1>
   <div class="hdr-meta">
     <span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3)">Week of</span>
-    <span class="hdr-week" id="weekDates">—</span>
+    <span class="hdr-week" id="weekDates">25 May – 31 May</span>
     <button class="hdr-btn save" onclick="exportData()" title="Download your data as a backup file">📤 Backup</button>
     <label class="hdr-btn" style="cursor:pointer;color:rgba(255,255,255,.3)" title="Restore data from a backup file">📥 Restore<input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
     <button class="hdr-btn save" onclick="saveHTML()">💾 Save HTML</button>
   </div>
-  <div class="prog-wrap"><div class="prog-fill" id="progBar" style="width:0%"></div></div>
-  <div class="prog-txt" id="progTxt">0 of 0 tasks</div>
+  <div class="prog-wrap"><div class="prog-fill" id="progBar" style="width: 17%;"></div></div>
+  <div class="prog-txt" id="progTxt">4 of 24 tasks · 17%</div>
 </div>
 
 <!-- TABS -->
 <nav class="tabs">
-  <button class="tab active" onclick="showTab('routine',this)">Routine</button>
-  <button class="tab" onclick="showTab('food',this)">Food Log</button>
+  <button class="tab" onclick="showTab('routine',this)">Routine</button>
+  <button class="tab active" onclick="showTab('food',this)">Food Log</button>
   <button class="tab" onclick="showTab('meals',this)">Meals</button>
   <button class="tab" onclick="showTab('exercise',this)">Exercise</button>
   <button class="tab" onclick="showTab('supps',this)">Supplements</button>
@@ -209,57 +208,1688 @@ button,input,textarea,select{font-family:inherit}
 </nav>
 
 <!-- ROUTINE TAB -->
-<div id="tab-routine" class="panel active">
-  <div id="quoteBar"></div>
-  <div class="day-strip" id="dayStrip"></div>
-  <div class="card-dark" id="summaryCard"></div>
-  <div class="card" id="stepsCard"></div>
-  <div class="card" id="waterCard"></div>
-  <div id="exerciseSummaryCard" style="margin:0 16px 12px"></div>
-  <div id="checklistContainer" style="padding:0 16px"></div>
+<div id="tab-routine" class="panel">
+  <div id="quoteBar"><div style="background:linear-gradient(135deg,#1a1410,#2a1e14);padding:14px 20px;border-bottom:1px solid rgba(184,147,74,.2)">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(184,147,74,.6);margin-bottom:6px">Daily Motivation</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(255,255,255,.85);font-style:italic;line-height:1.5">"Strong is the new beautiful — and you're building both."</div>
+  </div></div>
+  <div class="day-strip" id="dayStrip"><button class="day-btn active" onclick="selectDay(0)">
+      <div class="dname">Mon·</div>
+      <div class="dnum">25</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectDay(1)">
+      <div class="dname">Tue</div>
+      <div class="dnum">26</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectDay(2)">
+      <div class="dname">Wed</div>
+      <div class="dnum">27</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectDay(3)">
+      <div class="dname">Thu</div>
+      <div class="dnum">28</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectDay(4)">
+      <div class="dname">Fri</div>
+      <div class="dnum">29</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectDay(5)">
+      <div class="dname">Sat</div>
+      <div class="dnum">30</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectDay(6)">
+      <div class="dname">Sun</div>
+      <div class="dnum">31</div>
+      <div class="ddot"></div>
+    </button></div>
+  <div class="card-dark" id="summaryCard">
+    <div class="card-label">Today at a glance</div>
+    <div class="summary-grid">
+      <div><div class="stat-val">4</div><div class="stat-lbl">Done</div></div>
+      <div><div class="stat-val">20</div><div class="stat-lbl">Left</div></div>
+      <div><div class="stat-val">💧4</div><div class="stat-lbl">Glasses</div></div>
+    </div></div>
+  <div class="card" id="stepsCard">
+    <div class="card-label">👟 Daily Steps · Target 10,000–20,000</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <input type="number" inputmode="numeric" id="stepsInput" placeholder="Add steps e.g. 3,000" style="flex:1;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-size:16px;color:var(--text);border-radius:2px;font-family:inherit">
+      <button onclick="addStepsEntry()" style="padding:10px 14px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:11px;letter-spacing:1px;cursor:pointer;border-radius:2px;white-space:nowrap">+ Add</button>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--amber);line-height:1;min-width:56px;text-align:right">—</div>
+    </div>
+    <div style="height:6px;background:var(--bg);border-radius:3px;overflow:hidden;position:relative;margin-bottom:6px">
+      <div style="height:100%;width:0%;background:var(--amber);border-radius:3px;transition:width .4s"></div>
+      <div style="position:absolute;top:0;bottom:0;left:66.66666666666666%;width:2px;background:rgba(0,0,0,.15)"></div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:0">Log your steps above</div>
+    </div>
+  <div class="card" id="waterCard">
+    <div class="card-label">Daily Water · Target 2.5–3L</div>
+    <div class="glasses"><button class="glass filled" onclick="setWater(1)">💧</button><button class="glass filled" onclick="setWater(2)">💧</button><button class="glass filled" onclick="setWater(3)">💧</button><button class="glass filled" onclick="setWater(3)">💧</button><button class="glass" onclick="setWater(5)">💧</button><button class="glass" onclick="setWater(6)">💧</button><button class="glass" onclick="setWater(7)">💧</button><button class="glass" onclick="setWater(8)">💧</button><button class="glass" onclick="setWater(9)">💧</button><button class="glass" onclick="setWater(10)">💧</button><button class="glass" onclick="setWater(11)">💧</button></div>
+    <div style="font-size:12px;color:var(--soft);margin-bottom:8px"><strong style="color:#6aaad4">1000ml</strong> of 2,750ml</div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.6">Each 💧 = 250ml · <strong style="color:var(--text)">What counts:</strong> plain water ✓ · sparkling water ✓ · herbal teas (dandelion, peppermint, ginger) ✓ · green/black tea ✓ · electrolyte water ✓ · <span style="color:var(--red)">coffee, alcohol, fruit juice</span> ✗</div></div>
+  <div id="checklistContainer" style="padding:0 16px"><div style="margin-top:12px">
+      <div class="sec-hdr" onclick="toggleSec(this)">
+        <div class="sec-title">Morning Protocol</div>
+        <div class="sec-count">3/6</div>
+        <div class="sec-chev">▼</div>
+      </div>
+      <div class="checklist">
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">1L water + LMNT electrolytes</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">On waking — first thing</div>
+            </div>
+          </div><div class="check-item supp checked" onclick="toggleCheck('sup1','morning')">
+              <div class="check-box">✓</div>
+              <div style="flex:1"><div class="check-lbl">💊 Iron</div><div class="check-note">Empty stomach</div></div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Ice face 60 sec</div>
+              
+            </div>
+          </div><div class="check-item checked" onclick="toggleCheck('m_physio','morning')">
+              <div class="check-box">✓</div>
+              <div style="flex:1"><div class="check-lbl">Physio — ball release + marching drill</div><div class="check-note">Left glute · left lower back · then march 5kg</div></div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Fasted morning walk</div>
+              
+            </div>
+          </div><div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text)">Incline walks this week</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:1px">6% · 5.5 km/h · 30–35 min · fasted</div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+                <button onclick="event.stopPropagation();toggleWeeklyDot('inchwalk',0,'morning')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--green);background:var(--green);color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s">✓</button><button onclick="event.stopPropagation();toggleWeeklyDot('inchwalk',1,'morning')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button>
+                <span style="font-size:10px;color:var(--muted);margin-left:4px;min-width:28px">1/2</span>
+              </div>
+            </div><div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text)">Arm exercises on walk</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:1px">1–2kg · alternate days</div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+                <button onclick="event.stopPropagation();toggleWeeklyDot('arms',0,'morning')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('arms',1,'morning')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('arms',2,'morning')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button>
+                <span style="font-size:10px;color:var(--muted);margin-left:4px;min-width:28px">0/3</span>
+              </div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Kefir shake post-walk</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">Kefir, flax, chia, protein, creatine</div>
+            </div>
+          </div><div class="check-item supp" onclick="toggleCheck('sup3','morning')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Creatine</div><div class="check-note">In kefir shake</div></div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Coffee after 45 min</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">After kefir — not before</div>
+            </div>
+          </div><div class="check-item supp" onclick="toggleCheck('sup2','morning')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Omega-3 + Ubiquinol + Vitamin D3+K2</div><div class="check-note">With first meal</div></div>
+            </div>
+      </div>
+    </div><div style="margin-top:12px">
+      <div class="sec-hdr" onclick="toggleSec(this)">
+        <div class="sec-title">Midday</div>
+        <div class="sec-count">0/2</div>
+        <div class="sec-chev">▼</div>
+      </div>
+      <div class="checklist">
+        <div class="check-item supp" onclick="toggleCheck('sup4','midday')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Berberine</div><div class="check-note">10–20 min before lunch</div></div>
+            </div><div class="check-item supp" onclick="toggleCheck('sup5','midday')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Omega-3 second dose</div><div class="check-note">With lunch</div></div>
+            </div>
+      </div>
+    </div><div style="margin-top:12px">
+      <div class="sec-hdr" onclick="toggleSec(this)">
+        <div class="sec-title">Evening Protocol</div>
+        <div class="sec-count">0/5</div>
+        <div class="sec-chev">▼</div>
+      </div>
+      <div class="checklist">
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Dinner 3h before bed · no carbs · no cruciferous veg</div>
+              
+            </div>
+          </div><div class="check-item supp" onclick="toggleCheck('sup6','evening')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Berberine</div><div class="check-note">10–20 min before dinner</div></div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Evening walk 20 min</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">After dinner</div>
+            </div>
+          </div><div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text)">Dry brush</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:1px">3 min on dry skin</div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+                <button onclick="event.stopPropagation();toggleWeeklyDot('drybr',0,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('drybr',1,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('drybr',2,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('drybr',3,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button>
+                <span style="font-size:10px;color:var(--muted);margin-left:4px;min-width:28px">0/4</span>
+              </div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Red light therapy</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">30 min before bed · clean skin</div>
+            </div>
+          </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Legs up wall 10–15 min</div>
+              
+            </div>
+          </div><div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text)">Facial lymphatic brush</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:1px">3–4 min · after red light</div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+                <button onclick="event.stopPropagation();toggleWeeklyDot('lymph',0,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('lymph',1,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('lymph',2,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('lymph',3,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('lymph',4,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button>
+                <span style="font-size:10px;color:var(--muted);margin-left:4px;min-width:28px">0/5</span>
+              </div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">Skincare: serum → moisturiser</div>
+              
+            </div>
+          </div><div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text)">Sheet mask</div>
+                <div style="font-size:10px;color:var(--muted);margin-top:1px">Not consecutive nights</div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+                <button onclick="event.stopPropagation();toggleWeeklyDot('mask',0,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('mask',1,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button><button onclick="event.stopPropagation();toggleWeeklyDot('mask',2,'evening')" style="width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:10px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s"></button>
+                <span style="font-size:10px;color:var(--muted);margin-left:4px;min-width:28px">0/3</span>
+              </div>
+            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
+            <div>
+              <div style="font-size:13px;color:var(--soft)">In bed by 10:30pm</div>
+              
+            </div>
+          </div><div class="check-item supp" onclick="toggleCheck('sup7','evening')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Zinc + Collagen + Magnesium glycinate 300mg</div><div class="check-note">Before sleep</div></div>
+            </div>
+      </div>
+    </div></div>
 </div>
 
 <!-- FOOD TAB -->
-<div id="tab-food" class="panel">
-  <div class="day-strip" id="dayStripFood"></div>
-  <div id="cycleBanner"></div>
-  <div class="card-dark" id="yolkCard"></div>
-  <div id="macroCard"></div>
-  <div id="foodLoggerCard"></div>
-  <div id="teasCard" style="padding:0 16px"></div>
-  <div id="gutSection" style="padding:0 16px"></div>
-  <div id="foodChipsSection" style="padding:0 16px"></div>
-  <div id="nutritionTips" style="padding:0 16px 20px"></div>
-  <div id="aiMealSuggest" style="padding:0 16px 20px"></div>
-  <div id="highFibreGuide" style="padding:0 16px 20px"></div>
+<div id="tab-food" class="panel active">
+  <div class="day-strip" id="dayStripFood"><button class="day-btn active" onclick="selectFoodDay(0)">
+      <div class="dname">Mon·</div>
+      <div class="dnum">25</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectFoodDay(1)">
+      <div class="dname">Tue</div>
+      <div class="dnum">26</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectFoodDay(2)">
+      <div class="dname">Wed</div>
+      <div class="dnum">27</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectFoodDay(3)">
+      <div class="dname">Thu</div>
+      <div class="dnum">28</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectFoodDay(4)">
+      <div class="dname">Fri</div>
+      <div class="dnum">29</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectFoodDay(5)">
+      <div class="dname">Sat</div>
+      <div class="dnum">30</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectFoodDay(6)">
+      <div class="dname">Sun</div>
+      <div class="dnum">31</div>
+      <div class="ddot"></div>
+    </button></div>
+  <div id="cycleBanner"><div class="cycle-banner" style="background:rgba(106,90,138,.15);border-color:rgba(106,90,138,.35)">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+      <div>
+        <div class="cycle-day" style="color:#6a5a8a">🌘 Day 22 of 27 · 6 days left in phase</div>
+        <div class="cycle-phase-name" style="color:var(--ink)">Luteal<span style="font-size:14px;color:var(--muted);margin-left:8px">Phase</span></div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--soft);margin-bottom:10px;line-height:1.6">Progesterone rising. Cravings, fatigue and bloating increase toward days 24–27. Magnesium-rich foods reduce PMS symptoms. Complex carbs stabilise blood sugar and mood. Limit sodium and processed food to reduce puffiness.</div>
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a;margin-bottom:6px">✓ Prioritise now</div>
+    <div class="cycle-foods">
+      <span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Sweet potato</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Oats</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Lentils</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Chickpeas</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Salmon</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Sardines</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Spinach</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Avocado</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Kefir</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Green tea</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Ginger</span><span class="cycle-food-tag" style="background:rgba(106,90,138,.2);color:#6a5a8a;border-color:rgba(106,90,138,.35)">Almonds</span>
+    </div>
+    
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:6px;margin-top:8px">⚠ Limit</div>
+    <div class="cycle-foods">
+      <span class="cycle-food-tag" style="background:rgba(224,112,112,.1);color:var(--red);border-color:rgba(224,112,112,.3)">Limit caffeine — worsens anxiety late luteal</span><span class="cycle-food-tag" style="background:rgba(224,112,112,.1);color:var(--red);border-color:rgba(224,112,112,.3)">Limit sodium — increases puffiness</span><span class="cycle-food-tag" style="background:rgba(224,112,112,.1);color:var(--red);border-color:rgba(224,112,112,.3)">Limit ACV if sensitive</span>
+    </div>
+    <div class="cycle-settings">
+      <label style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase">Last period:</label>
+      <input type="date" value="2026-05-04" onchange="setCycleStart(this.value)" style="background:rgba(255,255,255,.6);border:1px solid rgba(106,90,138,.35);color:var(--ink);padding:5px 8px;font-size:12px;border-radius:2px;font-family:inherit">
+    </div>
+  </div></div>
+  <div class="card-dark" id="yolkCard">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div><div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">🥚 Egg Yolks This Week</div><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">Max 6 · LDL cholesterol limit</div></div>
+      <div class="serif" style="font-size:28px;color:white">0/6</div>
+    </div>
+    <div class="yolk-eggs"><div class="yolk-egg"></div><div class="yolk-egg"></div><div class="yolk-egg"></div><div class="yolk-egg"></div><div class="yolk-egg"></div><div class="yolk-egg"></div></div>
+    <div class="yolk-btns">
+      <button class="yolk-add" onclick="addYolk()">+ Add Yolk</button>
+      <button class="yolk-undo" onclick="removeYolk()">− Undo</button>
+    </div>
+    <div style="font-size:10px;color:rgba(255,255,255,.3)">6 yolks remaining</div></div>
+  <div id="macroCard"><div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div class="card-label" style="margin-bottom:0">Today's Macros</div>
+      <div style="display:flex;gap:6px">
+        <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
+        <button onclick="copyToClaudeClipboard()" id="copyToClaudeBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:rgba(184,147,74,.1);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">✉️ Claude</button>
+      </div>
+    </div>
+    <div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Protein</span>
+      <span class="macro-vals"><strong>2</strong>g / 115g <span style="color:var(--muted);font-size:10px">113g left</span></span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:1.25%;background:#b8934a"></div><div class="macro-target" style="left:71.875%"></div></div>
+    </div><div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Fat</span>
+      <span class="macro-vals"><strong>1</strong>g / 50g <span style="color:var(--muted);font-size:10px">49g left</span></span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:1.1111111111111112%;background:#6a9898"></div><div class="macro-target" style="left:55.55555555555556%"></div></div>
+    </div><div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Carbs</span>
+      <span class="macro-vals"><strong>3</strong>g / 130g <span style="color:var(--muted);font-size:10px">127g left</span></span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:1.5%;background:#4a8c6a"></div><div class="macro-target" style="left:65%"></div></div>
+    </div><div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Fibre</span>
+      <span class="macro-vals"><strong>1</strong>g / 32g <span style="color:var(--muted);font-size:10px">31g left</span></span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:1.8181818181818181%;background:#9a7060"></div><div class="macro-target" style="left:58.18181818181818%"></div></div>
+    </div><div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Calories</span>
+      <span class="macro-vals"><strong>32</strong>kcal / 1550kcal <span style="color:var(--muted);font-size:10px">1518kcal left</span></span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:1.4545454545454546%;background:#9a7878"></div><div class="macro-target" style="left:70.45454545454545%"></div></div>
+    </div><div class="macro-row">
+      <div class="macro-top"><span class="macro-name">Salt (Sodium)</span>
+      <span class="macro-vals"><strong>20</strong>mg / 1500mg <span style="color:var(--muted);font-size:10px">1480mg left</span></span></div>
+      <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:0.6666666666666667%;background:#7a7aaa"></div><div class="macro-target" style="left:50%"></div></div>
+    </div><div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;cursor:pointer" onclick="toggleMealHistory(0)">
+      <div class="card-label" style="margin:0">Logged Today (1)</div>
+      <span style="font-size:11px;color:var(--gold);letter-spacing:1px">▲ Hide</span>
+    </div>
+    <div style="display:block">
+    
+    <div class="meal-entry" id="meal-entry-0">
+      <div style="flex:1">
+        <div class="meal-entry-name">Meal</div>
+        <div class="meal-entry-macros">32 kcal · 1.6g P · 3.0g C · 0.7g F · 1.3g fibre · 20mg salt · 11:33</div>
+      </div>
+      <button onclick="editMeal(0)" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:10px;cursor:pointer;padding:4px 8px;margin-right:4px;border-radius:2px;letter-spacing:1px">Edit</button>
+      <button class="meal-remove" onclick="removeMeal(0)">×</button>
+    </div>
+    <div id="meal-edit-0" style="display:none;padding:10px;background:var(--bg);border:1px solid var(--border);border-top:none;margin-bottom:4px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+        <div><div class="meal-field-lbl">Protein (g)</div><input id="ep0" class="meal-input" type="number" inputmode="decimal" value="1.6"></div>
+        <div><div class="meal-field-lbl">Fat (g)</div><input id="ef0" class="meal-input" type="number" inputmode="decimal" value="0.7"></div>
+        <div><div class="meal-field-lbl">Carbs (g)</div><input id="ec0" class="meal-input" type="number" inputmode="decimal" value="3"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+        <div><div class="meal-field-lbl">Fibre (g)</div><input id="efi0" class="meal-input" type="number" inputmode="decimal" value="1.3"></div>
+        <div><div class="meal-field-lbl">Calories</div><input id="ek0" class="meal-input" type="number" inputmode="decimal" value="32"></div>
+        <div><div class="meal-field-lbl">Salt (mg)</div><input id="es0" class="meal-input" type="number" inputmode="decimal" value="20"></div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button onclick="saveMealEdit(0)" style="flex:1;padding:8px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer">Save</button>
+        <button onclick="cancelMealEdit(0)" style="padding:8px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:11px;cursor:pointer">Cancel</button>
+      </div>
+    </div>
+  </div>
+  </div></div></div>
+  <div id="foodLoggerCard"><div class="card">
+    <div class="card-label">🍽️ Log Food or Meal</div>
+    <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:2px;overflow:hidden">
+      <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border: medium; cursor: pointer; font-family: inherit;">🔍 Search</button>
+      <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">✏️ Manual</button>
+      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--ink); color: var(--gold); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">🍳 Recipe</button>
+      <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📸 Label</button>
+      <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📦 Barcode</button>
+    </div>
+
+    <!-- Search panel -->
+    <div id="fsPanel_search" style="display:none">
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="foodSearchInput" class="meal-name-input" style="margin:0;flex:1" placeholder="Search food, brand, herb, sauce…" oninput="searchFood(this.value)" value="">
+        <button onclick="clearFoodSearch()" style="padding:8px 10px;background:none;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-size:12px;border-radius:2px">Clear</button>
+      </div>
+      <div id="mealCartPreview"></div>
+      <div id="foodSearchResults"></div>
+      <div class="hint">Tap + Add to Meal to build up a meal · then Save or Log</div>
+    </div>
+
+    <!-- Manual entry panel -->
+    <div id="fsPanel_manual" style="display:none">
+      <input id="mealName" class="meal-name-input" placeholder="Meal name e.g. Salmon &amp; asparagus">
+      <div class="meal-grid-3">
+        <div><div class="meal-field-lbl">Protein (g)</div><input id="mP" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Fat (g)</div><input id="mF" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Carbs (g)</div><input id="mC" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <div class="meal-grid-3">
+        <div><div class="meal-field-lbl">Fibre (g)</div><input id="mFi" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Calories</div><input id="mK" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Salt (mg)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn-primary" style="flex:1" onclick="addMeal()">+ Log Today</button>
+        <button style="flex:1;padding:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px" onclick="saveCurrentMeal()">💾 Save Meal</button>
+      </div>
+      <div class="hint">Salt in mg · e.g. 400mg per serving</div>
+    </div>
+
+    <!-- Paste panel -->
+    <div id="fsPanel_paste" style="">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste any recipe Claude gave you — ingredients list, meal description, or nutrition text. Claude will calculate macros and detect all Zoe gut boosters.</div>
+      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste your recipe here e.g.
+
+150g king prawns
+80g green beans
+60g spinach
+2 garlic cloves
+1 tbsp olive oil
+1 tbsp tamari
+juice of ½ lime
+
+Or paste any nutrition label / MyFitnessPal text"></textarea>
+      <input id="mealPasteName" class="meal-name-input" style="margin-top:8px" placeholder="Recipe name (optional — Claude will name it if blank)">
+      <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
+      <button style="width:100%;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:6px" onclick="aiParsePasteWithBoosters()">✨ Read Recipe · Calculate Macros + Zoe Boosters</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" style="flex:1;background:var(--bg);color:var(--muted);border:1px solid var(--border)" onclick="parsePasteAndAdd()">⚡ Quick Parse (numbers only)</button>
+        <button style="flex:1;padding:10px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px" onclick="parsePasteAndSave()">💾 Save</button>
+      </div>
+      <div class="hint">✨ = AI reads full recipes · ⚡ = instant extraction if numbers are already there</div>
+    </div>
+
+
+    <!-- Recipe panel -->
+    <div id="fsPanel_recipe" style="display:none">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:8px;line-height:1.6">Paste ingredients with weights — Claude calculates total macros.</div>
+      <textarea id="recipeInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.6;box-sizing:border-box;border-radius:2px" placeholder="e.g.
+100g tuna spring water
+120g cottage cheese
+80g green beans
+20g sauerkraut
+½ lemon, 1 garlic clove"></textarea>
+      <input id="recipeNameInput" class="meal-name-input" style="margin-top:8px" placeholder="Meal name e.g. Sardine bowl">
+      <div id="recipeResult" style="margin:10px 0;min-height:20px"></div>
+      <button onclick="interpretRecipe(this)" style="width:100%;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">✨ Calculate Macros</button>
+      <div class="hint">Works on GitHub Pages · requires internet</div>
+    </div>
+
+    <!-- Label scanner panel -->
+    <div id="fsPanel_label" style="display:none">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Take a photo of any nutrition label.</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;color:var(--soft);border-radius:2px">
+          📷 Camera<input type="file" id="labelCameraInput" accept="image/*" capture="environment" style="display:none" onchange="scanLabel(this)">
+        </label>
+        <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:12px;color:var(--soft);border-radius:2px">
+          🖼 Library<input type="file" id="labelLibraryInput" accept="image/*" style="display:none" onchange="scanLabel(this)">
+        </label>
+      </div>
+      <div id="labelPreview"></div>
+      <div id="labelStatus" style="font-size:12px;margin-top:8px;min-height:16px"></div>
+      <div id="labelResult"></div>
+    </div>
+
+    <!-- Barcode scanner panel -->
+    <div id="fsPanel_barcode" style="display:none">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Point your camera at a barcode — scans automatically.</div>
+      <div id="barcodeScanner" style="display:none;position:relative;width:100%;max-width:340px;margin-bottom:10px;border-radius:2px;overflow:hidden;border:1px solid var(--border)">
+        <video id="barcodeVideo" style="width:100%;display:block" autoplay="" playsinline="" muted=""></video>
+        <div style="position:absolute;inset:0;border:2px solid var(--gold);pointer-events:none;border-radius:2px;opacity:0.6"></div>
+        <canvas id="barcodeCanvas" style="display:none"></canvas>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button id="barcodeScanBtn" onclick="startBarcodeScanner()" style="flex:1;padding:9px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">📷 Start Scanner</button>
+        <button id="barcodeStopBtn" onclick="stopBarcodeScanner()" style="display:none;flex:1;padding:9px;background:none;border:1px solid var(--border);color:var(--muted);font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">■ Stop</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px">Or enter barcode number manually:</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="barcodeManual" class="meal-name-input" style="margin:0;flex:1" type="number" inputmode="numeric" placeholder="e.g. 5000112548167">
+        <button onclick="lookupBarcode(document.getElementById('barcodeManual').value)" style="padding:8px 12px;background:var(--ink);color:white;border:none;font-size:11px;cursor:pointer;border-radius:2px;white-space:nowrap;font-family:inherit">Look up</button>
+      </div>
+      <div id="barcodeStatus" style="font-size:12px;color:var(--muted);margin-top:8px;min-height:16px"></div>
+      <div id="barcodeResult"></div>
+      <div class="hint">Uses Open Food Facts — most UK supermarket products are listed</div>
+    </div>
+
+    <div id="mealStatus"></div>
+  </div></div>
+  <div id="teasCard" style="padding:0 16px"><div class="card" style="margin-bottom:4px">
+    <div class="card-label">🍵 Teas — When to Drink</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div style="padding:10px;background:#f0f8f0;border:1px solid rgba(122,184,122,.3);border-left:3px solid #7ab87a">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a8c6a;margin-bottom:4px">AM</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400">Green tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Antioxidant · fat oxidation</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Ginger tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Anti-inflammatory · digestion</div>
+      </div>
+      <div style="padding:10px;background:#f4f0f8;border:1px solid rgba(138,120,192,.3);border-left:3px solid #8a78c0">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7060a8;margin-bottom:4px">PM</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400">Dandelion tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Diuretic · reduces puffiness</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Peppermint tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Digestion · bloat relief</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">Herbal teas count toward your daily water target ✓</div>
+  </div></div>
+  <div id="gutSection" style="padding:0 16px">
+    <div class="gut-intro">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:4px">🌿 Zoe Gut Boosters · Weekly Tracker</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit</div>
+      <div class="gut-stats">
+        <div><div class="gut-stat-val">1</div><div class="gut-stat-lbl">Today</div></div>
+        <div><div class="gut-stat-val">1</div><div class="gut-stat-lbl">This week</div></div>
+        <div><div class="gut-stat-val">1%</div><div class="gut-stat-lbl">Week score</div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px"><div class="gut-section-hdr">Score 100 — Daily Priority</div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_avocado')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🥑 Avocado</div>
+            <div class="gut-item-note">½ avocado daily · ~120 kcal</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/7</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_lentils')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🫘 Lentils <span style="font-size:10px;color:var(--muted);font-weight:400">/ Black beans / Butter beans / Cannellini beans</span></div>
+            <div class="gut-item-note">80g cooked · ~100 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_tofu')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🟨 Tofu</div>
+            <div class="gut-item-note">100–150g · ~80–120 kcal · 2× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/2</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_peas')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🫛 Peas</div>
+            <div class="gut-item-note">80g · ~60 kcal · 4× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/4</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div></div><div style="margin-bottom:16px"><div class="gut-section-hdr">Score 88–99 — Weekly Targets</div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_beansprouts')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🌱 Beansprouts</div>
+            <div class="gut-item-note">50–80g · ~15 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_kidney')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🫘 Kidney Beans <span style="font-size:10px;color:var(--muted);font-weight:400">/ Black beans / Butter beans</span></div>
+            <div class="gut-item-note">80g cooked · ~90 kcal · 2× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/2</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_greenbeans')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🫛 Green Beans</div>
+            <div class="gut-item-note">80–100g · ~30 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_grapefruit')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🍊 Grapefruit</div>
+            <div class="gut-item-note">½ grapefruit · ~40 kcal · 3× week · morning only</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_kefir')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🥛 Kefir <span style="font-size:10px;color:var(--muted);font-weight:400">/ Arla Skyr / Fage 0% Greek yogurt / Live plain yogurt</span></div>
+            <div class="gut-item-note">150ml · ~65 kcal · Daily: in your morning shake</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/7</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_leeks')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🧅 Leeks <span style="font-size:10px;color:var(--muted);font-weight:400">/ Onions / Spring onions</span></div>
+            <div class="gut-item-note">½ leek (~75g) · ~25 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_pistachios')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🟢 Pistachios</div>
+            <div class="gut-item-note">25g shelled · ~140 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_kimchi')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🌶️ Kimchi <span style="font-size:10px;color:var(--muted);font-weight:400">/ Sauerkraut (add cold) / Kombucha 200ml low sugar</span></div>
+            <div class="gut-item-note">2–3 tbsp · ~15 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_chickpeas')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🟡 Chickpeas <span style="font-size:10px;color:var(--muted);font-weight:400">/ Black beans / Butter beans</span></div>
+            <div class="gut-item-note">80g cooked · ~120 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_salmon')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🐟 Salmon <span style="font-size:10px;color:var(--muted);font-weight:400">/ Trout / Mackerel / Sardines</span></div>
+            <div class="gut-item-note">130–150g fillet · ~260 kcal · 2× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/2</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_trout')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🐟 Trout <span style="font-size:10px;color:var(--muted);font-weight:400">/ Salmon / Mackerel / Sardines</span></div>
+            <div class="gut-item-note">130–150g fillet · ~220 kcal · 2× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/2</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_miso')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🍜 Miso Soup</div>
+            <div class="gut-item-note">1 tbsp paste in hot water · ~30 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div></div><div style="margin-bottom:16px"><div class="gut-section-hdr">Score 80–87 — Regular Rotation</div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_blacktea')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🍵 Black Tea</div>
+            <div class="gut-item-note">1–2 cups · ~2 kcal · 5× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/5</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_greentea')">
+          <div class="gut-tick ticked">✓</div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🍵 Green Tea <span style="font-size:10px;color:var(--muted);font-weight:400">/ White tea / Matcha (1 tsp)</span></div>
+            <div class="gut-item-note">1–2 cups · ~2 kcal · Daily</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">1<span style="font-size:11px;color:var(--muted)">/7</span></div>
+            <div style="font-size:9px;color:var(--muted);">✓ today</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:14.285714285714285%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          <button onclick="event.stopPropagation();undoGut('g_greentea')" style="padding:2px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;cursor:pointer;border-radius:2px;white-space:nowrap;line-height:1.5">↩ Undo</button>
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_garlic')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🧄 Garlic <span style="font-size:10px;color:var(--muted);font-weight:400">/ Onions / Leeks / Spring onions</span></div>
+            <div class="gut-item-note">1–2 cloves · Daily: add to cooking</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/7</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_oranges')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🍊 Oranges <span style="font-size:10px;color:var(--muted);font-weight:400">/ Clementines / Tangerines / Mandarins — any citrus counts</span></div>
+            <div class="gut-item-note">1 medium · ~60 kcal · 3× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/3</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div><div class="gut-item" style="cursor:pointer;">
+        <div class="gut-item-top" onclick="toggleGut('g_strawberries')">
+          <div class="gut-tick"></div>
+          <div style="flex:1">
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🍓 Strawberries <span style="font-size:10px;color:var(--muted);font-weight:400">/ Blackberries / Raspberries / Blueberries / Kiwi</span></div>
+            <div class="gut-item-note">100g · ~30 kcal · 4× week</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/4</span></div>
+            <div style="font-size:9px;color:var(--muted);">this wk</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
+          </div>
+          
+        </div>
+      </div></div></div>
+  <div id="foodChipsSection" style="padding:0 16px">
+    <div style="background:var(--ink);padding:14px 16px;margin-bottom:16px;margin-top:12px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Focus Foods — Your Guidelines</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px"><span style="color:#b4a0d4">★ = Luteal phase priority · faded = limit this phase</span> · 🌿 = Zoe top food</div>
+    </div>
+    <div class="food-cat-hdr" style="border-bottom-color:#b8934a40">Lean Protein</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip" style="cursor:default;">Chicken breast</div><div class="chip" style="cursor:default;">Cod / Haddock</div><div class="chip" style="cursor:default;">Tuna</div><div class="chip" style="cursor:default;">Mackerel</div><div class="chip zoe" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>🌿 Salmon</div><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Sardines</div><div class="chip zoe" style="cursor:default;">🌿 Trout</div><div class="chip" style="cursor:default;">Shrimp / Prawns</div><div class="chip" style="cursor:default;">Egg whites</div><div class="chip zoe" style="cursor:default;">🌿 Tofu</div><div class="chip" style="cursor:default;">Tempeh</div><div class="chip" style="cursor:default;">Edamame</div></div><div class="food-cat-hdr" style="border-bottom-color:#6a989840">Dairy</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip" style="cursor:default;">0% Greek yogurt</div><div class="chip" style="cursor:default;">Cottage cheese</div><div class="chip" style="cursor:default;">Quark</div><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Kefir</div></div><div class="food-cat-hdr" style="border-bottom-color:#8a7a5a40">Carbohydrates</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Sweet potato</div><div class="chip" style="cursor:default;">Rice cakes</div><div class="chip" style="cursor:default;">Konjac noodles</div><div class="chip zoe" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>🌿 Lentils</div><div class="chip" style="cursor:default;">Black beans</div><div class="chip zoe" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>🌿 Chickpeas</div><div class="chip zoe" style="cursor:default;">🌿 Kidney beans</div><div class="chip zoe" style="cursor:default;">🌿 Peas</div><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Oats</div><div class="chip" style="cursor:default;">Quinoa</div></div><div class="food-cat-hdr" style="border-bottom-color:#7a9a5a40">Fats</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip zoe" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>🌿 Avocado</div><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Almonds</div><div class="chip" style="cursor:default;">Olive oil</div><div class="chip zoe" style="cursor:default;">🌿 Pistachios</div></div><div class="food-cat-hdr" style="border-bottom-color:#4a8c6a40">Vegetables</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Spinach</div><div class="chip" style="cursor:default;">Asparagus</div><div class="chip" style="cursor:default;">Cucumber</div><div class="chip" style="cursor:default;">Courgette</div><div class="chip" style="cursor:default;">Rocket</div><div class="chip" style="cursor:default;">Peppers</div><div class="chip" style="cursor:default;">Mushrooms</div><div class="chip zoe" style="cursor:default;">🌿 Leeks</div><div class="chip zoe" style="cursor:default;">🌿 Green beans</div><div class="chip zoe" style="cursor:default;">🌿 Beansprouts</div><div class="chip" style="cursor:default;">Broccoli (lunch only)</div><div class="chip" style="cursor:default;">Cauliflower (lunch only)</div><div class="chip zoe" style="cursor:default;">🌿 Garlic</div></div><div class="food-cat-hdr" style="border-bottom-color:#c0607040">Fruit</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip zoe" style="cursor:default;">🌿 Strawberries</div><div class="chip" style="cursor:default;">Blueberries</div><div class="chip" style="cursor:default;">Raspberries</div><div class="chip zoe" style="cursor:default;">🌿 Grapefruit</div><div class="chip" style="cursor:default;">Watermelon</div><div class="chip" style="cursor:default;">Kiwi</div><div class="chip zoe" style="cursor:default;">🌿 Orange</div><div class="chip" style="cursor:default;">Melon</div></div><div class="food-cat-hdr" style="border-bottom-color:#7a6aa040">Fermented &amp; Gut</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip" style="cursor:default;">Kimchi</div><div class="chip" style="cursor:default;">Miso soup</div><div class="chip" style="cursor:default;">Bone broth</div><div class="chip" style="cursor:default;">Seaweed snacks</div><div class="chip" style="cursor:default;">Chia seeds</div></div><div class="food-cat-hdr" style="border-bottom-color:#6a8a9a40">Drinks &amp; Spices</div>
+    <div class="food-chips" style="margin-bottom:14px"><div class="chip zoe" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>🌿 Green tea</div><div class="chip zoe" style="cursor:default;">🌿 Black tea</div><div class="chip" style="cursor:default;opacity:0.35;">Black coffee (AM only)</div><div class="chip" style="cursor:default;opacity:0.35;">Apple cider vinegar</div><div class="chip" style="cursor:default;">Cinnamon</div><div class="chip" style="cursor:default;">Cayenne pepper</div><div class="chip" style="cursor:default;box-shadow:0 0 0 2px #b4a0d4;font-weight:500;"><span style="color:#b4a0d4;margin-right:3px">★</span>Ginger</div></div></div>
+  <div id="nutritionTips" style="padding:0 16px 20px">
+    <div style="margin-top:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px">🥗 Nutrition Rules &amp; Reminders</div>
+      <div class="card" style="margin:0 0 10px">
+        <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:8px">🧀 Cheese — LDL Impact</div>
+        <div style="font-size:12px;color:var(--soft);line-height:1.7"><span style="color:var(--green)">✓ Choose:</span> mozzarella, feta, cottage cheese, soft cheese, quark<br><span style="color:var(--red)">✗ Cut back:</span> hard cheese, parmesan — high saturated fat raises LDL</div>
+      </div>
+      <div class="card" style="margin:0 0 10px">
+        <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:8px">🥩 Saturated Fat Guide</div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <div style="flex:1;padding:10px;background:var(--green-pale);border:1px solid rgba(74,140,106,.2);border-radius:2px;text-align:center"><div style="font-size:18px;margin-bottom:4px">✓</div><div style="font-size:11px;font-weight:500;color:var(--green)">Low — Good for LDL</div><div style="font-size:13px;color:var(--green);font-weight:600;margin-top:2px">&lt;1.5g per 100g</div></div>
+          <div style="flex:1;padding:10px;background:#faeaea;border:1px solid rgba(224,96,96,.2);border-radius:2px;text-align:center"><div style="font-size:18px;margin-bottom:4px">⚠️</div><div style="font-size:11px;font-weight:500;color:var(--red)">High — Raises LDL</div><div style="font-size:13px;color:var(--red);font-weight:600;margin-top:2px">&gt;5g per 100g</div></div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px">Check the nutrition label. Keep daily saturated fat under 10g total.</div>
+      </div>
+      <div class="card" style="margin:0">
+        <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:6px">🌿 Psyllium Husk — Only If Needed</div>
+        <div style="font-size:12px;color:var(--soft);line-height:1.75">Use <strong>only if not hitting 30–35g fibre/day</strong>. Chia (1 tsp = ~3g) and flax (1 tbsp = ~3g) already contribute.<br><strong>Timing:</strong> 30 min after a meal, or 1–2 hours before — never with food.<br><strong>Always drink a full glass of water with it.</strong></div>
+      </div>
+    </div></div>
+  <div id="aiMealSuggest" style="padding:0 16px 20px"><div style="padding:12px 0;border-top:1px solid var(--border)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)">✨ AI Meal Suggestions</div>
+      <button onclick="getAIMealSuggestion()" style="padding:5px 12px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">Get Ideas</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">113g protein still needed · 1518 kcal left · Luteal phase</div>
+    <div id="aiSuggestResult" style="font-size:12px;color:var(--soft);line-height:1.7">Suggestions unavailable — the AI requires the app to be hosted on Netlify. Works at katarinahealth.netlify.app</div>
+  </div></div>
+  <div id="highFibreGuide" style="padding:0 16px 20px"><div style="margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border);cursor:pointer" onclick="toggleFibreGuide()">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green)">🌿 High Fibre Foods Reference</div>
+      <span style="font-size:11px;color:var(--gold);letter-spacing:1px">▼ Show</span>
+    </div>
+    
+  </div></div>
 </div>
 
 <!-- MEALS TAB -->
 <div id="tab-meals" class="panel">
-  <div id="mealTabAISuggest" style="padding:0 16px;padding-top:12px"></div>
+  <div id="mealTabAISuggest" style="padding:0 16px;padding-top:12px"><div style="padding:10px 0 4px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)">✨ AI Meal Suggestions</div>
+      <button onclick="getAIMealSuggestion()" style="padding:5px 12px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-family:inherit">Get Ideas</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:6px">115g P left · 1550 kcal left · Luteal phase</div>
+    <div id="aiSuggestResult" style="font-size:12px;color:var(--soft);line-height:1.7">Suggestions unavailable — the AI requires the app to be hosted on Netlify. Works at katarinahealth.netlify.app</div>
+  </div></div>
   <div style="display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0" id="mealsSubNav">
     <button class="meals-sub active" onclick="setMealsView('saved',this)">💾 My Meals</button>
     <button class="meals-sub" onclick="setMealsView('atis',this)">🥗 Atis</button>
     <button class="meals-sub" onclick="setMealsView('salad',this)">🥬 Salad Project</button>
     <button class="meals-sub" onclick="setMealsView('saladkitchen',this)">🫙 Salad Kitchen</button>
   </div>
-  <div id="mealsContainer" style="padding:16px 16px 40px"></div>
+  <div id="mealsContainer" style="padding:16px 16px 40px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">My Saved Meals</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:20px">Save meals you eat often · edit ingredients before logging · tap + Log to add to today</div>
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:2px solid #b8934a30;margin-bottom:10px">
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#b8934a">☀️ Breakfast</div>
+        <button onclick="startNewMeal('breakfast')" style="font-size:10px;padding:4px 10px;background:#b8934a20;border:1px solid #b8934a50;color:#b8934a;cursor:pointer;border-radius:2px;font-family:inherit;letter-spacing:1px">+ Save Meal</button>
+      </div>
+      
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;padding:12px 14px;margin-bottom:6px">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:400;color:var(--text)">Kefir shake</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5">Kefir plain (138g), Flaxseeds ground (6g), Form Unflavoured Protein (10), Form Tiramisu Protein (10)</div>
+              <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--ink);font-weight:500">191 kcal</span>
+                <span style="font-size:11px;color:#b8934a">21.0g P</span>
+                <span style="font-size:11px;color:#4a8c6a">9.1g C</span>
+                <span style="font-size:11px;color:#6a9898">8.0g F</span>
+                <span style="font-size:11px;color:#9a7060">2.2g fibre</span>
+                <span style="font-size:11px;color:#7a7aaa">149mg salt</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+              <button onclick="logSavedMeal('breakfast',0)" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">+ Log</button>
+              <button onclick="copySavedMeal('breakfast',0)" style="padding:5px 10px;background:none;border:1px solid rgba(74,140,106,.4);color:var(--green);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Copy</button>
+              <button onclick="editSavedMeal('breakfast',0)" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit</button>
+              <button onclick="deleteSavedMeal('breakfast',0)" style="padding:5px 10px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Del</button>
+            </div>
+          </div>
+        </div>
+      
+    </div><div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:2px solid #4a8c6a30;margin-bottom:10px">
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#4a8c6a">🥗 Lunch &amp; Main</div>
+        <button onclick="startNewMeal('lunch')" style="font-size:10px;padding:4px 10px;background:#4a8c6a20;border:1px solid #4a8c6a50;color:#4a8c6a;cursor:pointer;border-radius:2px;font-family:inherit;letter-spacing:1px">+ Save Meal</button>
+      </div>
+      
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a8c6a;padding:12px 14px;margin-bottom:6px">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:400;color:var(--text)">White Miso Soup Paste (15g)</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5"></div>
+              <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--ink);font-weight:500">23 kcal</span>
+                <span style="font-size:11px;color:#b8934a">1.3g P</span>
+                <span style="font-size:11px;color:#4a8c6a">2.1g C</span>
+                <span style="font-size:11px;color:#6a9898">0.7g F</span>
+                
+                <span style="font-size:11px;color:#7a7aaa">2235mg salt</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+              <button onclick="logSavedMeal('lunch',0)" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">+ Log</button>
+              <button onclick="copySavedMeal('lunch',0)" style="padding:5px 10px;background:none;border:1px solid rgba(74,140,106,.4);color:var(--green);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Copy</button>
+              <button onclick="editSavedMeal('lunch',0)" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit</button>
+              <button onclick="deleteSavedMeal('lunch',0)" style="padding:5px 10px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Del</button>
+            </div>
+          </div>
+        </div>
+      
+    </div><div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:2px solid #6a789830;margin-bottom:10px">
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#6a7898">🌙 Dinner</div>
+        <button onclick="startNewMeal('dinner')" style="font-size:10px;padding:4px 10px;background:#6a789820;border:1px solid #6a789850;color:#6a7898;cursor:pointer;border-radius:2px;font-family:inherit;letter-spacing:1px">+ Save Meal</button>
+      </div>
+      
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #6a7898;padding:12px 14px;margin-bottom:6px">
+          <div style="display:flex;align-items:flex-start;gap:8px">
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:400;color:var(--text)">Mediterranean Sardine Bowl 🐟</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5">100g sardines in oil (drained) · 120g cottage cheese · 150g asparagus · 40g rocket · 100g red pepper · 30g sauerkraut (rinsed) · 15g seaweed snack · lemon juice · pinch garlic powder · 1 tsp sardine oil</div>
+              <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+                <span style="font-size:11px;color:var(--ink);font-weight:500">314 kcal</span>
+                <span style="font-size:11px;color:#b8934a">42.4g P</span>
+                <span style="font-size:11px;color:#4a8c6a">7.8g C</span>
+                <span style="font-size:11px;color:#6a9898">12.3g F</span>
+                <span style="font-size:11px;color:#9a7060">3.2g fibre</span>
+                <span style="font-size:11px;color:#7a7aaa">280mg salt</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+              <button onclick="logSavedMeal('dinner',0)" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap">+ Log</button>
+              <button onclick="copySavedMeal('dinner',0)" style="padding:5px 10px;background:none;border:1px solid rgba(74,140,106,.4);color:var(--green);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Copy</button>
+              <button onclick="editSavedMeal('dinner',0)" style="padding:5px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Edit</button>
+              <button onclick="deleteSavedMeal('dinner',0)" style="padding:5px 10px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">Del</button>
+            </div>
+          </div>
+        </div>
+      
+    </div><div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px;border-bottom:2px solid #c0607030;margin-bottom:10px">
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:#c06070">🍎 Snacks</div>
+        <button onclick="startNewMeal('snacks')" style="font-size:10px;padding:4px 10px;background:#c0607020;border:1px solid #c0607050;color:#c06070;cursor:pointer;border-radius:2px;font-family:inherit;letter-spacing:1px">+ Save Meal</button>
+      </div>
+      <div style="font-size:12px;color:var(--muted);padding:8px 0;font-style:italic">No saved meals yet — tap + Save Meal to add one</div>
+      
+      
+    </div></div>
 </div>
 
 <!-- EXERCISE TAB -->
 <div id="tab-exercise" class="panel">
-  <div id="exerciseContainer" style="padding:16px 16px 40px"></div>
+  <div id="exerciseContainer" style="padding:16px 16px 40px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">This Week's Training</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px">1/6 sessions · 17% this week</div>
+
+    <!-- Training guide -->
+    <div style="background:var(--bg);border:1px solid var(--border);padding:12px 14px;margin-bottom:16px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">This Week</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Incline Walk ×2<br>Reformer Pilates<br>Lagree<br>PT Strength<br>Own Strength</div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Substitutes</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Walk → Infrared Sculpt/Strength<br>Lagree → Reformer Pilates<br>PT → Own session</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:8px">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:3px">Avoid</div>
+        <div style="font-size:11px;color:var(--muted)">HIIT · Heavy squats/leg press · Hip abduction machine · Mat Pilates only</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(106,90,138,.15);border:1px solid rgba(106,90,138,.35);padding:10px 14px;margin-bottom:16px;border-radius:2px">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#6a5a8a;margin-bottom:4px">🌘 Early Luteal · HIIT Still OK</div>
+        <div style="font-size:12px;color:var(--soft)">1 light HIIT session is fine early luteal (days 17–22). Choose upper body or glutes/abs — avoid full body HIIT. From day 23, skip HIIT and prioritise walking + Pilates.</div>
+      </div>
+
+    <!-- Weekly trackers -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">This Week</div>
+
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1;font-size:13px;color:var(--text)">Incline Walks</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <div style="width:28px;height:28px;border-radius:50%;border:1.5px solid #4a6a8a;background:#4a6a8a;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_walk1')">✓</div><div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_walk2')"></div>
+            <span style="font-size:10px;color:var(--muted);margin-left:5px;min-width:28px">1/2</span>
+          </div>
+        </div><div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1;font-size:13px;color:var(--text)">Sculpt (Pilates/Lagree)</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_pilates1')"></div><div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_lagree')"></div>
+            <span style="font-size:10px;color:var(--muted);margin-left:5px;min-width:28px">0/2</span>
+          </div>
+        </div><div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="flex:1;font-size:13px;color:var(--text)">Strength</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_pt')"></div><div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_strength')"></div>
+            <span style="font-size:10px;color:var(--muted);margin-left:5px;min-width:28px">0/2</span>
+          </div>
+        </div>
+    </div>
+
+    <!-- Individual session ticks -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Sessions</div>
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_walk1')">
+          <div style="width:22px;height:22px;border:1.5px solid #4a6a8a;background:#4a6a8a;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s">✓</div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--muted);text-decoration:line-through">Incline Walk</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">6% · 5.5 km/h · 30–35 min · fasted · fat burn zone</div>
+            <div style="font-size:10px;color:var(--soft);margin-top:2px">↔ Sub: Infrared Sculpt · Infrared Strength</div>
+          </div>
+        </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_walk2')">
+          <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--text);">Incline Walk</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">6% · 5.5 km/h · 30–35 min · fasted · fat burn zone</div>
+            <div style="font-size:10px;color:var(--soft);margin-top:2px">↔ Sub: Infrared Sculpt · Infrared Strength</div>
+          </div>
+        </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_pilates1')">
+          <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--text);">Reformer Pilates</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Inner thigh · waist · glutes · posture</div>
+            
+          </div>
+        </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_lagree')">
+          <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--text);">Lagree</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">High intensity · lean muscle · glutes</div>
+            <div style="font-size:10px;color:var(--soft);margin-top:2px">↔ Sub: Reformer Pilates</div>
+          </div>
+        </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_pt')">
+          <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--text);">PT Strength</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Compound lifts · upper body + core · kefir shake first</div>
+            
+          </div>
+        </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_strength')">
+          <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--text);">Own Strength Session</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Follow PT programme independently</div>
+            
+          </div>
+        </div>
+    </div>
+
+    <!-- Daily walks — weekly trackers linked to routine -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Daily Walks · This Week</div>
+      <div style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div>
+              <div style="font-size:13px;color:var(--text)">Morning fasted walk</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px">Fasted · before kefir</div>
+            </div>
+            <span style="font-size:11px;color:var(--muted);flex-shrink:0;margin-left:8px">1/7</span>
+          </div>
+          <div style="display:flex;gap:4px"><div onclick="toggleCheckDay('m4',0)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid #4a6a8a;background:#4a6a8a;color:white;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">M</div><div onclick="toggleCheckDay('m4',1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">T</div><div onclick="toggleCheckDay('m4',2)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">W</div><div onclick="toggleCheckDay('m4',3)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">T</div><div onclick="toggleCheckDay('m4',4)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">F</div><div onclick="toggleCheckDay('m4',5)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">S</div><div onclick="toggleCheckDay('m4',6)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">S</div></div>
+        </div><div style="padding:8px 0;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div>
+              <div style="font-size:13px;color:var(--text)">Evening walk</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px">After dinner · flat · 20 min</div>
+            </div>
+            <span style="font-size:11px;color:var(--muted);flex-shrink:0;margin-left:8px">0/7</span>
+          </div>
+          <div style="display:flex;gap:4px"><div onclick="toggleCheckDay('e0b',0)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">M</div><div onclick="toggleCheckDay('e0b',1)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">T</div><div onclick="toggleCheckDay('e0b',2)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">W</div><div onclick="toggleCheckDay('e0b',3)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">T</div><div onclick="toggleCheckDay('e0b',4)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">F</div><div onclick="toggleCheckDay('e0b',5)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">S</div><div onclick="toggleCheckDay('e0b',6)" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">S</div></div>
+        </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:8px">Tap a day to tick · linked to your Routine tab</div>
+    </div>
+
+    <!-- Strength guide dropdown -->
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;cursor:pointer" onclick="toggleStrengthGuide()">
+        <div>
+          <div style="font-size:13px;color:var(--text)">💪 Solo Strength Session</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Mat + free weights · ⭐ = not in PT programme — prioritise these</div>
+        </div>
+        <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">▲</span>
+      </div>
+      <div style="border:1px solid var(--border);border-top:none">
+
+        <div style="padding:10px 14px;background:var(--gold-pale);border-bottom:1px solid rgba(184,147,74,.2)">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">⭐ = Your PT never programmes these.</strong> These are the exercises most important to do on your own — they target your specific goals (shoulder definition, deep core, waist preservation) that are missing from PT sessions.</div>
+        </div>
+
+        <!-- UPPER BODY -->
+        <div style="padding:10px 14px 4px;background:rgba(184,147,74,.06)">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#b8934a">Upper Body · Every Solo Session</div>
+        </div>
+        <div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Lateral_Raises')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Lateral_Raises','dumbbell lateral raise exercise',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Lateral Raises</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 15 reps · 3–4kg</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Bent_Over_Rows')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Bent_Over_Rows','dumbbell bent over row exercise form',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Bent Over Rows</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 12 reps · 5–6kg each hand</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Shoulder_Press')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Shoulder_Press','dumbbell overhead shoulder press form',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Shoulder Press</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 12 reps · 4–5kg each hand</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Tricep_Overhead_Extension')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Tricep_Overhead_Extension','overhead tricep extension dumbbell exercise',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Tricep Overhead Extension</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 15 reps · 3–4kg single dumbbell, both hands</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Band_Pull-Aparts')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Band_Pull-Aparts','resistance band pull apart exercise posture',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Band Pull-Aparts</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 20 reps · Light resistance band</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div>
+
+        <!-- CORE -->
+        <div style="padding:10px 14px 4px;background:rgba(74,140,106,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Core · Every Solo Session</div>
+        </div>
+        <div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Dead_Bug')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Dead_Bug','dead bug exercise core form',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Dead Bug</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 10 each side · Bodyweight</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Hollow_Body_Hold')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Hollow_Body_Hold','hollow body hold exercise gymnastics core',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Hollow Body Hold</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 20–30 sec · Bodyweight</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);border-left:3px solid var(--gold);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:rgba(184,147,74,.04)" onclick="toggleExCard('excard_Side_Plank')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Side_Plank','side plank exercise oblique form',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Side Plank</span>
+          <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 30–40 sec each side · Bodyweight</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Plank_+_Reach')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Plank_+_Reach','plank reach forward exercise core stability',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Plank + Reach</span>
+          
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 16 reps · Bodyweight</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div>
+
+        <!-- LOWER BODY -->
+        <div style="padding:10px 14px 4px;background:rgba(106,90,138,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Lower Body · Solo Day (skip if PT session same day)</div>
+        </div>
+        <div style="padding:6px 14px 8px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Only do lower body if you haven't had PT that day. Glute isolation only — if quads fire, stop and reset.</div>
+        <div style="border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Romanian_Deadlift')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Romanian_Deadlift','romanian deadlift dumbbell exercise form',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Romanian Deadlift</span>
+          
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 12 reps · 5–6kg each hand</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Donkey_Kick_+_Fire_Hydrant')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Donkey_Kick_+_Fire_Hydrant','donkey kick fire hydrant glute exercise',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Donkey Kick + Fire Hydrant</span>
+          
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 16 reps each leg · 6kg behind knee</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Supine_Leg_Open/Close')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Supine_Leg_Open/Close','supine leg raise open close inner thigh exercise',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Supine Leg Open/Close</span>
+          
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 20 reps · Ankle weights</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Glute_Bridge_Hold')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Glute_Bridge_Hold','glute bridge hold exercise mat',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Glute Bridge Hold</span>
+          
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 40–45 sec hold · 5–8kg on hips</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div><div style="border-bottom:1px solid var(--border);">
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Sumo_Squat_Pulses')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Sumo_Squat_Pulses','sumo squat pulse inner thigh exercise',this)">▶</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Sumo Squat Pulses</span>
+          
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 30 pulses · Bodyweight or light dumbbell</div>
+      </div>
+      <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
+    </div>
+    
+  </div>
+
+        <div style="margin:14px 14px 14px;padding:10px 12px;background:var(--gold-pale);border-left:3px solid var(--gold)">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Key rule:</strong> ⭐ Upper body + core exercises are the most important to do on your own — PT doesn't programme them. Do all 5 upper + 4 core every solo session. Lower body only if no PT that day.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Physio guide dropdown -->
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid var(--green);cursor:pointer" onclick="togglePhysioGuide()">
+        <div>
+          <div style="font-size:13px;color:var(--text)">🩺 Daily Physio · Marching Drill</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Release + march · 5kg · pelvis stable · daily</div>
+        </div>
+        <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">▼</span>
+      </div>
+      
+    </div>
+
+    <!-- Arm walk exercises dropdown -->
+    <div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;cursor:pointer" onclick="toggleArmGuide()">
+        <div>
+          <div style="font-size:13px;color:var(--text)">🚶 Arm Exercises on Walk</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Alternate days · 1–2kg walking · 2–3kg at end</div>
+        </div>
+        <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">▼</span>
+      </div>
+      
+    </div></div>
 </div>
 
 <!-- SUPPLEMENTS TAB -->
 <div id="tab-supps" class="panel">
-  <div class="day-strip" id="dayStripSupps"></div>
-  <div id="suppsContainer" style="padding:0 16px 20px"></div>
+  <div class="day-strip" id="dayStripSupps"><button class="day-btn active" onclick="selectSuppDay(0)">
+      <div class="dname">Mon·</div>
+      <div class="dnum">25</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectSuppDay(1)">
+      <div class="dname">Tue</div>
+      <div class="dnum">26</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectSuppDay(2)">
+      <div class="dname">Wed</div>
+      <div class="dnum">27</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectSuppDay(3)">
+      <div class="dname">Thu</div>
+      <div class="dnum">28</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectSuppDay(4)">
+      <div class="dname">Fri</div>
+      <div class="dnum">29</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectSuppDay(5)">
+      <div class="dname">Sat</div>
+      <div class="dnum">30</div>
+      <div class="ddot"></div>
+    </button><button class="day-btn" onclick="selectSuppDay(6)">
+      <div class="dname">Sun</div>
+      <div class="dnum">31</div>
+      <div class="ddot"></div>
+    </button></div>
+  <div id="suppsContainer" style="padding:0 16px 20px">
+    <div class="card-dark" style="margin-top:12px">
+      <div class="card-label">Today's Supplements</div>
+      <div style="display:flex;gap:20px;margin-bottom:12px">
+        <div><div class="stat-val" style="font-size:28px">1</div><div class="stat-lbl">Taken</div></div>
+        <div><div class="stat-val" style="font-size:28px">10</div><div class="stat-lbl">Remaining</div></div>
+        <div><div class="stat-val" style="font-size:28px">9%</div><div class="stat-lbl">Done</div></div>
+      </div>
+      <div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:9%;background:linear-gradient(90deg,var(--gold),#d4b07a);border-radius:2px;transition:width .4s"></div>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:5px">Ticking here also updates your daily Routine checklist</div>
+    </div>
+    <div class="supp-group">
+        <div class="supp-group-hdr">
+          <div class="supp-group-title">☀️ Morning — On Waking</div>
+          <div class="supp-group-count">1/2</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;font-style:italic">With electrolyte water before walk</div>
+        <div class="supp-item checked" onclick="toggleSupp('sup1')">
+            <div class="check-box" style="border-color:var(--gold);background:var(--gold);color:#fff">✓</div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Iron</div>
+              <div class="supp-why">Take on empty stomach — best absorbed before food</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Morning Protocol</div>
+            </div>
+          </div><div class="supp-item" onclick="toggleSupp('sup3')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Creatine</div>
+              <div class="supp-why">Add to kefir shake post-walk — supports muscle recomposition</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Morning Protocol</div>
+            </div>
+          </div>
+      </div><div class="supp-group">
+        <div class="supp-group-hdr">
+          <div class="supp-group-title">☀️ Morning — With Breakfast</div>
+          <div class="supp-group-count">0/3</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;font-style:italic">Take with first meal</div>
+        <div class="supp-item" onclick="toggleSupp('sup2a')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Omega-3</div>
+              <div class="supp-why">Lowers LDL, supports HDL — take with fat-containing meal for absorption</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Morning Protocol</div>
+            </div>
+          </div><div class="supp-item" onclick="toggleSupp('sup2b')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Ubiquinol (CoQ10)</div>
+              <div class="supp-why">Heart health &amp; energy · ⚠ needs 5–10g fat to absorb — take with avocado, eggs or oily fish</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Morning Protocol</div>
+            </div>
+          </div><div class="supp-item" onclick="toggleSupp('sup2c')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Vitamin D3 + K2</div>
+              <div class="supp-why">Fat-soluble · ⚠ needs 15g+ fat to absorb — take with breakfast containing fat (eggs, avocado, nut butter)</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Morning Protocol</div>
+            </div>
+          </div>
+      </div><div class="supp-group">
+        <div class="supp-group-hdr">
+          <div class="supp-group-title">🍽️ Midday — Before &amp; With Lunch</div>
+          <div class="supp-group-count">0/2</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;font-style:italic">Berberine 10–20 min before eating</div>
+        <div class="supp-item" onclick="toggleSupp('sup4')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Berberine (before lunch)</div>
+              <div class="supp-why">Blood sugar management · LDL reduction — take 10–20 min before meal</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Midday</div>
+            </div>
+          </div><div class="supp-item" onclick="toggleSupp('sup5')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Omega-3 (second dose)</div>
+              <div class="supp-why">Split dosing improves absorption — optional if taking full dose at breakfast</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Midday</div>
+            </div>
+          </div>
+      </div><div class="supp-group">
+        <div class="supp-group-hdr">
+          <div class="supp-group-title">🌙 Evening — Before Dinner</div>
+          <div class="supp-group-count">0/1</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;font-style:italic">Berberine 10–20 min before eating</div>
+        <div class="supp-item" onclick="toggleSupp('sup6')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Berberine (before dinner)</div>
+              <div class="supp-why">Blood sugar management — take 10–20 min before evening meal</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Evening Protocol</div>
+            </div>
+          </div>
+      </div><div class="supp-group">
+        <div class="supp-group-hdr">
+          <div class="supp-group-title">🌙 Evening — Before Sleep</div>
+          <div class="supp-group-count">0/3</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;font-style:italic">Take before bed</div>
+        <div class="supp-item" onclick="toggleSupp('sup7a')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Zinc</div>
+              <div class="supp-why">Supports immune function, skin repair &amp; hormone balance overnight</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Evening Protocol</div>
+            </div>
+          </div><div class="supp-item" onclick="toggleSupp('sup7b')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Collagen peptides</div>
+              <div class="supp-why">Skin, hair, joint support — synthesised during sleep</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Evening Protocol</div>
+            </div>
+          </div><div class="supp-item" onclick="toggleSupp('sup7c')">
+            <div class="check-box" style="border-color:var(--border);background:none;color:#fff"></div>
+            <div style="flex:1">
+              <div class="supp-name">💊 Magnesium glycinate 300mg</div>
+              <div class="supp-why">Lowers cortisol, improves sleep quality &amp; reduces water retention</div>
+              <div class="supp-sync">⟳ ⟳ Linked to Evening Protocol</div>
+            </div>
+          </div>
+      </div></div>
 </div>
 
 <!-- CYCLE TAB -->
 <div id="tab-cycle" class="panel">
-  <div id="cycleContainer" style="padding:16px 16px 40px"></div>
+  <div id="cycleContainer" style="padding:16px 16px 40px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:16px">Cycle Guide</div>
+    <div class="card" style="margin:0 0 14px">
+    <div class="card-label">Your Cycle Settings</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Last Period Started</div>
+        <input type="date" value="2026-05-04" onchange="setCycleDate(this.value)" style="width:100%;padding:9px 10px;border:1px solid var(--border);background:var(--bg);font-size:13px;color:var(--text);border-radius:2px;font-family:inherit">
+      </div>
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Cycle Length (days)</div>
+        <input type="number" value="27" min="21" max="35" onchange="setCycleLen(this.value)" style="width:100%;padding:9px 10px;border:1px solid var(--border);background:var(--bg);font-size:13px;color:var(--text);border-radius:2px;font-family:inherit;text-align:center">
+      </div>
+    </div>
+  </div>
+
+    <div style="background:rgba(106,90,138,.15);border:1px solid rgba(106,90,138,.35);border-left:4px solid #6a5a8a;padding:16px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="font-size:26px">🌘</div>
+        <div style="flex:1">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#b4a0d4">Current Phase · Day 22 of 27</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ink)">Luteal Phase</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#6a5a8a">Day 22</div>
+          <div style="font-size:10px;color:var(--muted)">6 days left</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--soft);line-height:1.7">Progesterone rising. Cravings, fatigue and bloating increase toward days 24–27. Magnesium-rich foods reduce PMS symptoms. Complex carbs stabilise blood sugar and mood. Limit sodium and processed food to reduce puffiness.</div>
+    </div>
+
+    <div class="card" style="margin:0 0 14px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Cycle Overview · Day 22 of 27</div>
+      <div style="display:flex;height:8px;border-radius:3px;overflow:hidden;margin-bottom:6px;position:relative"><div style="flex:5;height:8px;background:#d04040;border-radius:3px 0 0 3px"></div><div style="flex:8;height:8px;background:#b8934a;"></div><div style="flex:3;height:8px;background:#4a8c6a;"></div><div style="flex:11;height:8px;background:#7a6aa0;border-radius:0 3px 3px 0"></div></div>
+      <div style="position:relative;height:10px;margin-bottom:6px">
+        <div style="position:absolute;left:81.48148148148148%;transform:translateX(-50%);width:2px;height:10px;background:var(--ink)"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="font-size:9px;color:#d04040;letter-spacing:1px">Menstrual</span><span style="font-size:9px;color:#b8934a;letter-spacing:1px">Follicular</span><span style="font-size:9px;color:#4a8c6a;letter-spacing:1px">Ovulatory</span><span style="font-size:9px;color:#7a6aa0;letter-spacing:1px">Luteal</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin:0 0 10px">
+      <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:10px">✓ Prioritise These Foods</div>
+      <div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Sweet potato</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Oats</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Lentils</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Chickpeas</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Salmon</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Sardines</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Spinach</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Avocado</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Kefir</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Green tea</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Ginger</div><div style="font-size:12.5px;color:var(--green);padding:5px 0;border-bottom:1px solid var(--border)">Almonds</div>
+    </div><div class="card" style="margin:0 0 10px">
+      <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:10px">⚠ Limit This Phase</div>
+      <div style="font-size:12.5px;color:var(--red);padding:5px 0;border-bottom:1px solid var(--border)">Limit caffeine — worsens anxiety late luteal</div><div style="font-size:12.5px;color:var(--red);padding:5px 0;border-bottom:1px solid var(--border)">Limit sodium — increases puffiness</div><div style="font-size:12.5px;color:var(--red);padding:5px 0;border-bottom:1px solid var(--border)">Limit ACV if sensitive</div>
+    </div>
+
+    <div class="card" style="margin:0 0 10px">
+      <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:10px">🥦 Cooked vs Raw Veg This Phase</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:6px">✓ Cooked — Prioritise</div>
+      <div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">✓ Favour cooked veg from day 20+ — digestion slows with progesterone</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Sweet potato baked — serotonin precursor + complex carb</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Spinach wilted — magnesium + iron</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Courgette, asparagus steamed — low bloat</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Ginger in cooking — reduces nausea and bloating</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Garlic cooked — anti-inflammatory</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:10px 0 6px">Raw</div>
+      <div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">↓ Reduce raw cruciferous veg (broccoli, cauliflower) — causes bloating</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">↓ Limit large raw salads day 24–27 — hard to digest</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Small amounts of rocket, cucumber, lettuce are fine raw</div><div style="font-size:12px;color:var(--soft);padding:4px 0;border-bottom:1px solid var(--border);line-height:1.5">Berries raw fine — low gas, high antioxidant</div>
+      <div style="font-size:11px;color:var(--gold);margin-top:10px;line-height:1.6;font-style:italic">From day 20 onwards, shift predominantly to cooked veg. Progesterone slows gut motility — raw cruciferous veg and large salads significantly worsen bloating in late luteal.</div>
+    </div>
+
+    <div class="card" style="margin:0 0 10px">
+      <div style="font-size:11px;font-weight:500;color:var(--text);margin-bottom:10px">🏃 Exercise This Phase</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:6px">Best Sessions</div>
+      <div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">🚶 Incline walk — best exercise this phase, keeps cortisol low</div><div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">🌡️ Infrared Sculpt — heat reduces cramps and water retention early</div><div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">🎯 Reformer Pilates — mood-lifting, restorative</div><div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">🧘 Yin stretching — particularly beneficial late luteal</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin:10px 0 6px">Modify</div>
+      <div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">↓ Reduce PT weights by 10–15% from day 22 — injury risk higher</div><div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">↓ Short incline walk (30 min) instead of full from day 24</div><div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">↓ TRX lighter resistance late luteal</div><div style="font-size:12.5px;color:var(--soft);padding:5px 0;border-bottom:1px solid var(--border)">→ Add extra stretching and foam rolling</div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin:10px 0 6px">Avoid</div>
+      <div style="font-size:12.5px;color:var(--red);padding:5px 0;border-bottom:1px solid var(--border)">✗ HIIT or very high intensity from day 24–27 — cortisol spike worsens PMS</div><div style="font-size:12.5px;color:var(--red);padding:5px 0;border-bottom:1px solid var(--border)">✗ Forcing yourself through heavy sessions when fatigued</div>
+      <div style="font-size:11px;color:var(--gold);margin-top:10px;line-height:1.6;font-style:italic">Early luteal (days 17–22) still has good energy. Late luteal (days 24–27) expect fatigue and cravings — prioritise walking and Pilates over heavy lifting. Listen to your body.</div>
+    </div>
+
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin:16px 0 12px">All Phases Reference</div>
+    <div style="background:rgba(208,64,64,.08);border:1px solid #d0404030;border-left:3px solid #d04040;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500;color:#d04040">Menstrual 🌑</span>
+        <span style="font-size:10px;color:var(--muted)">Days 1–5</span>
+      </div>
+      <div style="font-size:11px;color:var(--soft);line-height:1.6">Rest &amp; restore. Prioritise iron, anti-inflammatory foods, warm cooked veg. Gentle movement only.</div>
+    </div><div style="background:rgba(184,147,74,.08);border:1px solid #b8934a30;border-left:3px solid #b8934a;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500;color:#b8934a">Follicular 🌒</span>
+        <span style="font-size:10px;color:var(--muted)">Days 6–13</span>
+      </div>
+      <div style="font-size:11px;color:var(--soft);line-height:1.6">Oestrogen rises. Best phase for training hard. Raw and cooked veg both great. Push intensity at PT and TRX.</div>
+    </div><div style="background:rgba(74,140,106,.08);border:1px solid #4a8c6a30;border-left:3px solid #4a8c6a;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500;color:#4a8c6a">Ovulatory 🌕</span>
+        <span style="font-size:10px;color:var(--muted)">Days 14–16</span>
+      </div>
+      <div style="font-size:11px;color:var(--soft);line-height:1.6">Peak performance. Highest energy and strength. Plenty of raw colourful veg. Hit new targets at PT.</div>
+    </div><div style="background:rgba(122,90,160,.08);border:1px solid #7a6aa030;border-left:3px solid #7a6aa0;padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:13px;font-weight:500;color:#7a6aa0">Luteal 🌘</span>
+        <span style="font-size:10px;color:var(--muted)">Days 17–27</span>
+      </div>
+      <div style="font-size:11px;color:var(--soft);line-height:1.6">Progesterone rises. Shift to cooked veg from day 20. Reduce intensity late luteal. Prioritise walking and Pilates.</div>
+    </div></div>
 </div>
 
 <!-- BLOOD TAB -->
@@ -271,7 +1901,7 @@ button,input,textarea,select{font-family:inherit}
     <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:0 0 10px">Address These</div>
     <div class="blood-card high"><div class="blood-name">Total Cholesterol</div><div class="blood-val">6.69 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Desirable &lt;5.17 · HDL very high (2.92) which is protective</div><span class="blood-badge badge-high">High — Monitor</span><div class="blood-tip">↗ Eat: lentils, chickpeas, avocado, oats, fatty fish<br>↘ Reduce: egg yolks, saturated fat, processed food</div></div>
     <div class="blood-card watch"><div class="blood-name">LDL Cholesterol</div><div class="blood-val">3.58 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Borderline 3.40–4.10 · Desirable &lt;3.40</div><span class="blood-badge badge-watch">Borderline</span></div>
-    <div class="blood-card watch"><div class="blood-name">Morning Cortisol</div><div class="blood-val">533 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Upper limit 537 — affects belly fat & puffiness</div><span class="blood-badge badge-watch">Upper Limit</span><div class="blood-tip">↗ 8h sleep, gentle walk, magnesium 300mg<br>↘ Avoid overtraining, caffeine after 2pm</div></div>
+    <div class="blood-card watch"><div class="blood-name">Morning Cortisol</div><div class="blood-val">533 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Upper limit 537 — affects belly fat &amp; puffiness</div><span class="blood-badge badge-watch">Upper Limit</span><div class="blood-tip">↗ 8h sleep, gentle walk, magnesium 300mg<br>↘ Avoid overtraining, caffeine after 2pm</div></div>
     <div class="blood-card high"><div class="blood-name">Vitamin B12</div><div class="blood-val">828 <span style="font-size:13px;color:var(--muted)">pg/mL</span></div><div class="blood-ref">Above range 197–771 — mention to GP</div><span class="blood-badge badge-high">Above Range</span></div>
     <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">Keep These Excellent</div>
     <div class="blood-card"><div class="blood-name">Glucose</div><div class="blood-val">4.77 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Optimal 4.11–5.89</div><span class="blood-badge badge-ok">Excellent</span></div>
@@ -610,53 +2240,70 @@ function renderQuote(){
 function renderMacroSplit(){
   const el=document.getElementById("macroSplitCard");
   if(!el)return;
+  const isWeekend=state._macroSplitView==='weekend';
 
-  // How to distribute macros across the day — fixed guide, not live tracking
-  const meals=[
-    {time:"On waking",label:"Kefir shake",kcal:250,p:28,c:10,f:6,note:"Kefir · flax · chia · protein · creatine"},
-    {time:"Breakfast",label:"Solid breakfast",kcal:290,p:25,c:25,f:10,note:"Front-load carbs here · eggs / salmon / oats"},
-    {time:"Lunch",label:"Main meal",kcal:460,p:38,c:60,f:14,note:"Last carbs of the day · biggest meal"},
-    {time:"Snack",label:"If hungry",kcal:100,p:10,c:8,f:3,note:"Skip if not hungry · yogurt / edamame"},
-    {time:"Dinner",label:"Light protein",kcal:290,p:28,c:5,f:12,note:"No carbs · no cruciferous · protein + veg + small fat"},
+  const weekday=[
+    {label:"Kefir",      p:[25,30],  c:[6,10],   f:[5,8],   kcal:"~250"},
+    {label:"Breakfast",  p:[20,25],  c:[18,28],  f:[8,12],  kcal:"280–320"},
+    {label:"Lunch",      p:[30,37],  c:[48,58],  f:[12,16], kcal:"450–520"},
+    {label:"Snack",      p:[8,13],   c:[4,8],    f:[2,4],   kcal:"80–130", optional:true},
+    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[8,12],  kcal:"280–340"},
   ];
-  const maxKcal=460;
+  const weekend=[
+    {label:"Brunch",     p:[38,48],  c:[22,38],  f:[16,22], kcal:"480–560"},
+    {label:"Lunch",      p:[22,28],  c:[0,8],    f:[8,12],  kcal:"250–350"},
+    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[8,12],  kcal:"280–340"},
+  ];
+
+  const meals=isWeekend?weekend:weekday;
 
   el.innerHTML=`
-    <div class="card-label" style="margin-bottom:10px">How to Split Your Daily Macros</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div class="card-label" style="margin:0">Daily Macro Blueprint</div>
+      <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:2px;overflow:hidden">
+        <button onclick="state._macroSplitView='weekday';renderMacroSplit()" style="padding:5px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;background:${!isWeekend?'var(--ink)':'var(--bg)'};color:${!isWeekend?'var(--gold)':'var(--muted)'}">Week</button>
+        <button onclick="state._macroSplitView='weekend';renderMacroSplit()" style="padding:5px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit;background:${isWeekend?'var(--ink)':'var(--bg)'};color:${isWeekend?'var(--gold)':'var(--muted)'}">Weekend</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:#b8934a;border-radius:2px"></div><span style="font-size:10px;color:var(--muted)">Protein</span></div>
+      <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:#4a8c6a;border-radius:2px"></div><span style="font-size:10px;color:var(--muted)">Carbs</span></div>
+      <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:#6a9898;border-radius:2px"></div><span style="font-size:10px;color:var(--muted)">Fat</span></div>
+    </div>
     ${meals.map(m=>{
-      const barW=Math.round(m.kcal/maxKcal*100);
-      const pW=Math.round(m.p*4/m.kcal*100);
-      const cW=Math.round(m.c*4/m.kcal*100);
-      const fW=Math.round(m.f*9/m.kcal*100);
+      const pW=Math.round((m.p[0]+m.p[1])/2/115*100);
+      const cW=Math.round((m.c[0]+m.c[1])/2/130*100);
+      const fW=Math.round((m.f[0]+m.f[1])/2/50*100);
+      const total=pW+cW+fW;
+      const pPct=Math.round(pW/total*100);
+      const cPct=Math.round(cW/total*100);
+      const fPct=100-pPct-cPct;
       return `<div style="margin-bottom:10px">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:3px">
-          <div>
-            <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)">${m.time}</span>
-            <span style="font-size:12.5px;color:var(--text);margin-left:7px">${m.label}</span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
+          <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:12px;font-weight:500;color:var(--text)">${m.label}</span>
+            ${m.optional?`<span style="font-size:9px;color:var(--muted);letter-spacing:1px">optional</span>`:''}
           </div>
-          <span style="font-size:11px;color:var(--muted)">${m.kcal} kcal</span>
+          <span style="font-size:10px;color:var(--muted)">${m.kcal} kcal</span>
         </div>
-        <div style="height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin-bottom:3px;width:${barW}%;min-width:20%">
-          <div style="display:flex;height:100%">
-            <div style="width:${pW}%;background:#b8934a"></div>
-            <div style="width:${cW}%;background:#4a8c6a"></div>
-            <div style="width:${fW}%;background:#6a9898"></div>
-          </div>
+        <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px">
+          <div style="width:${pPct}%;background:#b8934a"></div>
+          <div style="width:${cPct}%;background:#4a8c6a"></div>
+          <div style="width:${fPct}%;background:#6a9898"></div>
         </div>
-        <div style="display:flex;gap:10px;margin-bottom:2px">
-          <span style="font-size:10px;color:#b8934a">${m.p}g P</span>
-          <span style="font-size:10px;color:#4a8c6a">${m.c}g C</span>
-          <span style="font-size:10px;color:#6a9898">${m.f}g F</span>
+        <div style="display:flex;gap:10px;margin-top:3px">
+          <span style="font-size:9px;color:#b8934a">${m.p[0]}–${m.p[1]}g P</span>
+          <span style="font-size:9px;color:#4a8c6a">${m.c[0]}–${m.c[1]}g C</span>
+          <span style="font-size:9px;color:#6a9898">${m.f[0]}–${m.f[1]}g F</span>
         </div>
-        <div style="font-size:9px;color:var(--muted);line-height:1.4">${m.note}</div>
       </div>`;
-    }).join("")}
-    <div style="display:flex;gap:10px;padding-top:8px;border-top:1px solid var(--border);margin-top:4px">
-      <span style="font-size:9px;padding:2px 6px;background:rgba(184,147,74,.1);color:#b8934a;border-radius:10px">■ Protein</span>
-      <span style="font-size:9px;padding:2px 6px;background:rgba(74,140,106,.1);color:#4a8c6a;border-radius:10px">■ Carbs</span>
-      <span style="font-size:9px;padding:2px 6px;background:rgba(106,152,152,.1);color:#6a9898;border-radius:10px">■ Fat</span>
+    }).join('')}
+    <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap">
+      <span style="font-size:10px;color:var(--red)">⚠ Carbs end at lunch</span>
+      <span style="font-size:10px;color:var(--muted)">· Last meal 3h before bed</span>
     </div>`;
 }
+
 
 // ── MEAL STRUCTURE KEY TIPS ───────────────────────────────────────
 function renderMealStructure(){
@@ -761,48 +2408,6 @@ function renderRoutine(){
     }
     return n;
   }
-
-  // Exercise Summary Card in Routine
-  (function(){
-    const exCard=document.getElementById('exerciseSummaryCard');
-    if(!exCard)return;
-    const exKey='exercise-'+wk;
-    const exChecks=(state.exerciseChecks||{})[exKey]||{};
-    const groups=[
-      {label:'Incline Walks',    ids:['ex_walk1','ex_walk2'],       target:2, color:'#4a6a8a', emoji:'🚶'},
-      {label:'Pilates / Lagree', ids:['ex_pilates1','ex_lagree'],   target:2, color:'#4a8c6a', emoji:'🧘'},
-      {label:'Strength',         ids:['ex_pt','ex_strength'],       target:2, color:'#b8934a', emoji:'💪'},
-    ];
-    const totalDone=groups.reduce((a,g)=>a+g.ids.filter(id=>exChecks[id]).length,0);
-    const totalTarget=groups.reduce((a,g)=>a+g.target,0);
-    const bars=groups.map(g=>{
-      const done=g.ids.filter(id=>exChecks[id]).length;
-      const dots=g.ids.map(id=>{
-        const ticked=!!exChecks[id];
-        return `<div onclick="toggleExerciseCheck('${id}');renderRoutine()" style="width:20px;height:20px;border-radius:50%;border:1.5px solid ${ticked?g.color:'var(--border)'};background:${ticked?g.color:'none'};color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s">${ticked?'✓':''}</div>`;
-      }).join('');
-      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
-        <span style="font-size:13px;width:16px;flex-shrink:0">${g.emoji}</span>
-        <div style="flex:1;font-size:12px;color:var(--text)">${g.label}</div>
-        <div style="display:flex;gap:4px">${dots}</div>
-        <span style="font-size:10px;color:${done>=g.target?g.color:'var(--muted)'};min-width:24px;text-align:right">${done}/${g.target}</span>
-      </div>`;
-    }).join('');
-    const pct=Math.round(totalDone/totalTarget*100);
-    exCard.innerHTML=`<div style="background:var(--white);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px 14px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div>
-          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">This Week's Training</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px">${totalDone}/${totalTarget} sessions · ${pct}%</div>
-        </div>
-        <button onclick="showTab('exercise',document.querySelectorAll('.tab')[3])" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:none;border:1px solid rgba(184,147,74,.4);padding:5px 10px;cursor:pointer;font-family:inherit;border-radius:2px">View →</button>
-      </div>
-      <div style="height:3px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden">
-        <div style="height:100%;width:${pct}%;background:var(--gold);border-radius:2px;transition:width .4s"></div>
-      </div>
-      ${bars}
-    </div>`;
-  })();
 
   // Checklist
   document.getElementById("checklistContainer").innerHTML=ROUTINE_SECTIONS.map(sec=>{
@@ -1406,8 +3011,8 @@ const FOOD_DB=[
   ["Cappuccino almond milk",30,0.8,1.4,3,0.3,30,180,"180ml"],
   ["Cappuccino soy milk",50,2.5,1.5,3.5,0.3,30,180,"180ml"],
   // ── MATCHA ──
-  ["Matcha latte almond milk",65,1.2,2.5,8,0.5,50,250,"250ml"],
-  ["Matcha latte soy milk",90,3.5,2.5,9.5,0.5,50,250,"250ml"],
+  ["Matcha latte almond milk",26,0.5,4,1.5,0.2,20,250,"250ml — 65 kcal"],
+  ["Matcha latte soy milk",36,1.4,4,1.5,0.2,20,250,"250ml — 90 kcal"],
   ["Matcha powder",324,20,4.5,31,35,30,2,"1 tsp (2g)"],
   // ── FRUIT BY NUMBER ──
   ["Strawberries",32,0.7,7.7,0.3,2,1,12,"1 strawberry (12g)"],
@@ -1648,7 +3253,7 @@ function renderFoodSearch(){
 let currentFoodSearchTab='search';
 function setFoodSearchTab(tab){
   currentFoodSearchTab=tab;
-  ['search','manual','paste','label','barcode'].forEach(t=>{
+  ['search','manual','paste','recipe','label','barcode'].forEach(t=>{
     const p=document.getElementById(`fsPanel_${t}`),b=document.getElementById(`fsTab_${t}`);
     if(p)p.style.display=t===tab?'':'none';
     if(b){b.style.background=t===tab?'var(--ink)':'var(--bg)';b.style.color=t===tab?'var(--gold)':'var(--muted)';}
@@ -2103,6 +3708,7 @@ function renderFoodLogger(){
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;cursor:pointer;font-family:inherit">🔍 Search</button>
       <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">✏️ Manual</button>
       <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">🍳 Recipe</button>
+      <button id="fsTab_recipe" onclick="setFoodSearchTab('recipe')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">🍽️ Recipe</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📸 Label</button>
       <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📦 Barcode</button>
     </div>
@@ -3219,6 +4825,133 @@ function saveMealEntry(catId,idx){
   renderMeals();
 }
 
+function flashBtn(btn,ms){
+  if(!btn)return;
+  btn.classList.add('btn-flashed');
+  setTimeout(()=>btn.classList.remove('btn-flashed'),ms||1200);
+}
+
+async function interpretRecipe(btn){
+  const input=document.getElementById('recipeInput')?.value.trim();
+  const name=document.getElementById('recipeNameInput')?.value.trim()||'Recipe meal';
+  const resultEl=document.getElementById('recipeResult');
+  if(!input||!resultEl)return;
+  if(btn){btn.textContent='⏳ Calculating…';btn.disabled=true;}
+  resultEl.innerHTML='<div style="font-size:12px;color:var(--muted);font-style:italic">Calculating macros…</div>';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,messages:[{role:'user',content:`You are a nutrition calculator. Calculate the total macros for this recipe.\n\nIngredients:\n${input}\n\nRespond ONLY with a JSON object, no markdown:\n{"kcal":number,"protein":number,"fat":number,"carbs":number,"fibre":number,"salt":number,"notes":"brief 1-line note"}\n\nAll numbers rounded to 1 decimal. Salt in mg.`}]})
+    });
+    const data=await resp.json();
+    const text=data.content?.filter(b=>b.type==='text').map(b=>b.text).join('')||'';
+    const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
+    resultEl.innerHTML=`
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px;border-radius:2px">
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px">
+          <span style="font-size:14px;font-weight:500;color:var(--ink)">${Math.round(parsed.kcal)} kcal</span>
+          <span style="font-size:13px;color:#b8934a">${parsed.protein}g P</span>
+          <span style="font-size:13px;color:#4a8c6a">${parsed.carbs}g C</span>
+          <span style="font-size:13px;color:#6a9898">${parsed.fat}g F</span>
+          <span style="font-size:13px;color:#9a7060">${parsed.fibre}g fibre</span>
+          ${parsed.salt?`<span style="font-size:12px;color:#7a7aaa">${Math.round(parsed.salt)}mg salt</span>`:''}
+        </div>
+        ${parsed.notes?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px">${parsed.notes}</div>`:''}
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button onclick="copyMealToLog('${name}',${parsed.protein},${parsed.fat},${parsed.carbs},${parsed.fibre},${parsed.kcal},${parsed.salt||0});flashBtn(this)" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
+        </div>
+      </div>`;
+  }catch(e){
+    resultEl.innerHTML='<div style="font-size:11px;color:var(--red)">Requires GitHub Pages (HTTPS). Or use Manual tab.</div>';
+  }finally{
+    if(btn){btn.textContent='✨ Calculate Macros';btn.disabled=false;}
+  }
+}
+
+function copySavedMealToClipboard(catId,idx){
+  const meal=(state.savedMeals||{})[catId]?.[idx];
+  if(!meal)return;
+  const text=`🍽️ ${meal.name}\n${meal.kcal} kcal · ${meal.protein}g P · ${meal.carbs}g C · ${meal.fat}g F · ${meal.fibre||0}g fibre · ${meal.salt||0}mg salt\n${meal.ingredients||''}`;
+  navigator.clipboard.writeText(text).then(()=>showMealStatus('📋 Meal copied',true));
+}
+
+function copyAllForClaude(btn){
+  const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
+  const ms=(state.macros||{})[mk]||{protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
+  const phase=getCyclePhase();
+  const phaseLabel=phase?`${phase.phase.name} (day ${phase.cycleDay} of 27)`:'Unknown';
+  const pLeft=Math.max(0,115-(+ms.protein||0));
+  const kLeft=Math.max(0,1550-(+ms.kcal||0));
+  const fLeft=Math.max(0,50-(+ms.fat||0));
+  const cLeft=Math.max(0,130-(+ms.carbs||0));
+  const fiLeft=Math.max(0,32-(+ms.fibre||0));
+  const wk=getWeekKey();
+  const remaining=GUT_BOOSTERS.filter(g=>{
+    let count=0;for(let d=0;d<7;d++){if((state.foods||{})[`foods-${wk}-${d}`]?.[g.id])count++;}
+    return count<g.t;
+  }).map(g=>{
+    let count=0;for(let d=0;d<7;d++){if((state.foods||{})[`foods-${wk}-${d}`]?.[g.id])count++;}
+    return `  ${g.e} ${g.l} — ${count}/${g.t} (need ${g.t-count} more)`;
+  });
+  const text=`━━━━━━━━━━━━━━━━━━━━━━
+👤 MY PROFILE & GOALS
+━━━━━━━━━━━━━━━━━━━━━━
+Goal: Victoria's Secret physique for wedding
+Body type: Pear shaped — fat loss focus on stomach, hips & thighs
+Targets: 1550 kcal · 115g protein · 50g fat max · 130g carbs · 32g fibre · 1500mg salt max
+
+━━━━━━━━━━━━━━━━━━━━━━
+🌙 MENSTRUAL PHASE
+━━━━━━━━━━━━━━━━━━━━━━
+${phaseLabel}
+${phase?phase.phase.tips:''}
+
+━━━━━━━━━━━━━━━━━━━━━━
+📊 TODAY'S MACROS
+━━━━━━━━━━━━━━━━━━━━━━
+Logged so far:
+  Calories: ${Math.round(+ms.kcal||0)} / 1550 kcal
+  Protein:  ${+(+ms.protein||0).toFixed(1)}g / 115g
+  Carbs:    ${+(+ms.carbs||0).toFixed(1)}g / 130g
+  Fat:      ${+(+ms.fat||0).toFixed(1)}g / 50g
+  Fibre:    ${+(+ms.fibre||0).toFixed(1)}g / 32g
+  Salt:     ${Math.round(+ms.salt||0)}mg / 1500mg
+
+Remaining: ${kLeft} kcal · ${pLeft}g P · ${cLeft}g C · ${fLeft}g F · ${fiLeft}g fibre
+
+Meals today:
+${(ms.meals||[]).map(m=>`  • ${m.time} ${m.name} — ${m.kcal} kcal, ${(+m.protein||0).toFixed(1)}g P`).join('\n')||'  None logged yet'}
+
+━━━━━━━━━━━━━━━━━━━━━━
+🌿 ZOE GUT BOOSTERS STILL NEEDED
+━━━━━━━━━━━━━━━━━━━━━━
+${remaining.length?remaining.join('\n'):'  ✅ All completed this week!'}
+
+━━━━━━━━━━━━━━━━━━━━━━
+📋 DAILY MACRO BLUEPRINT
+━━━━━━━━━━━━━━━━━━━━━━
+🟠 Front-load protein — hit 85g by lunch
+🟠 Front-load calories — biggest meal at lunch
+🥑 Healthy fat at lunch — avocado
+🟢 Carbs end at lunch — nothing after 12:30pm
+🌙 Bone broth at bedtime
+⚠ Last meal 3h before bed · no cruciferous veg at dinner`;
+  navigator.clipboard.writeText(text).then(()=>showCopyToast(btn)).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showCopyToast(btn);
+  });
+}
+
+function showCopyToast(btn){
+  if(btn){const o=btn.textContent;btn.textContent='✓ Copied!';btn.style.background='var(--green)';setTimeout(()=>{btn.textContent=o;btn.style.background='var(--gold)';},2000);}
+  document.querySelectorAll('.copy-toast').forEach(e=>e.remove());
+  const t=document.createElement('div');t.className='copy-toast';
+  t.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--ink);border:1px solid rgba(184,147,74,.6);color:var(--gold);font-family:inherit;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 28px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.5)';
+  t.innerHTML='✓ Copied!<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:4px;letter-spacing:1px">Paste into Claude chat</div>';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),1800);
+}
+
 function deleteSavedMeal(catId,idx){
   if(!confirm("Delete this saved meal?"))return;
   state.savedMeals[catId].splice(idx,1);
@@ -3953,9 +5686,6 @@ function toggleExCard(cardId){
   if(!state._exCardOpen)state._exCardOpen={};
   state._exCardOpen[cardId]=!state._exCardOpen[cardId];
   persist();renderExerciseTab();
-  // Keep routine summary in sync
-  const exSummCard=document.getElementById("exerciseSummaryCard");
-  if(exSummCard)renderRoutine();
 }
 
 async function loadExImg(cardId,query,btn){
@@ -4049,27 +5779,28 @@ function parsePasteAndAdd(){
   }
 
   const kcal=extract([
-    /(?:calories?|energy|kcal|cal)\D{0,5}([\d.]+)\s*(?:kcal|cal|k)?/,
-    /([\d.]+)\s*(?:kcal|calories?|cal)\b/,
+    /([\d.]+)\s*kcal/,
+    /(?:calories?|energy|cal)\D{0,5}([\d.]+)/,
   ]);
   const protein=extract([
-    /protein\D{0,5}([\d.]+)\s*g/,
+    /([\d.]+)\s*g\s*p\b/,
     /([\d.]+)\s*g\s*protein/,
-    /\b(\d+)\s*p\b/,
+    /protein\D{0,5}([\d.]+)\s*g/,
   ]);
   const carbs=extract([
+    /([\d.]+)\s*g\s*c\b/,
+    /([\d.]+)\s*g\s*carb/,
     /carbo(?:hydrate)?s?\D{0,5}([\d.]+)\s*g/,
-    /([\d.]+)\s*g\s*carbo/,
-    /\b(\d+)\s*c\b/,
   ]);
   const fat=extract([
-    /(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/,
+    /([\d.]+)\s*g\s*f\b/,
     /([\d.]+)\s*g\s*fat/,
-    /\b(\d+)\s*f\b/,
+    /(?:total\s+)?fat\D{0,5}([\d.]+)\s*g/,
   ]);
   const fibre=extract([
-    /fib(?:er|re)\D{0,5}([\d.]+)\s*g/,
+    /([\d.]+)\s*g\s*fi/,
     /([\d.]+)\s*g\s*fib/,
+    /fib(?:er|re)\D{0,5}([\d.]+)\s*g/,
   ]);
   // Salt: label may show as "salt 0.4g" (convert to mg) or "sodium 160mg"
   let salt=0;
@@ -4082,9 +5813,14 @@ function parsePasteAndAdd(){
   else if(sodiumMg) salt=Math.round((parseFloat(sodiumMg[1])||0)*2.5);
   else if(sodiumG) salt=Math.round((parseFloat(sodiumG[1])||0)*2500);
 
-  // Auto-detect name from first line if not provided
-  const firstLine=raw.split(/[\n,·]/)[0].trim();
-  const name=nameInput||(firstLine.length<60&&!/\d/.test(firstLine)?firstLine:"Pasted meal");
+  // Auto-detect name - if first line has numbers (macros), use second line
+  const rawLines=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  let name=nameInput;
+  if(!name){
+    const firstHasNums=/\d/.test(rawLines[0]);
+    const candidate=firstHasNums?(rawLines[1]||rawLines[0]):(rawLines[0]||'Pasted meal');
+    name=candidate.length<80?candidate:'Pasted meal';
+  }
 
   // Show preview
   const preview=document.getElementById("mealPastePreview");
@@ -4512,5 +6248,6 @@ if(!state.cycleStart&&state.cycleLastPeriod)state.cycleStart=state.cycleLastPeri
 if(!state.cycleStart)state.cycleStart="2026-05-04";
 renderAll();
 </script>
-</body>
-</html>
+
+
+</body></html>
