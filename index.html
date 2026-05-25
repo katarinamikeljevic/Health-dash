@@ -618,7 +618,8 @@ button,input,textarea,select{font-family:inherit}
     <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:2px;overflow:hidden">
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border: medium; cursor: pointer; font-family: inherit;">🔍 Search</button>
       <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">✏️ Manual</button>
-      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--ink); color: var(--gold); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">🍳 Recipe</button>
+      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📋 Paste</button>
+      <button id="fsTab_recipe" onclick="setFoodSearchTab('recipe')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">🍽️ Recipe</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📸 Label</button>
       <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex: 1 1 0%; padding: 7px 2px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; background: var(--bg); color: var(--muted); border-top: medium; border-right: medium; border-bottom: medium; border-image: none; border-left: 1px solid var(--border); cursor: pointer; font-family: inherit;">📦 Barcode</button>
     </div>
@@ -3568,26 +3569,30 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt){
   const r=g/100;
   const label=unit==='g'||unit==='ml'?`${g}${unit}`:`${qty} ${unit}`;
   const item={name:`${name} (${label})`,protein:Math.round(protein*r*10)/10,fat:Math.round(fat*r*10)/10,carbs:Math.round(carbs*r*10)/10,fibre:Math.round(fibre*r*10)/10,kcal:Math.round(kcal*r),salt:Math.round(salt*r)};
-  // Check "tick gut booster?" checkbox
+  // Tick gut booster if checked
   const gutCb=document.getElementById(`${prefix}_gut_${idx}`);
   if(gutCb&&gutCb.checked){
     const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
     if(!state.foods[fk])state.foods[fk]={};
-    const fname=container.getAttribute('data-name')||'';
-    const matchedGut=GUT_BOOSTERS.find(g=>fname.toLowerCase().includes(g.l.toLowerCase().split(' ')[0]));
+    const fname=name||'';
+    const matchedGut=GUT_BOOSTERS.find(gb=>fname.toLowerCase().includes(gb.l.toLowerCase().split(' ')[0]));
     if(matchedGut){
       state.foods[fk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
       if(chipId)state.foods[fk][chipId]=true;
     }
   }
-  // Add to meal cart
-  if(!state._mealCart)state._mealCart=[];
-  state._mealCart.push(item);
+  // Log directly to today with the food name
+  const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
+  const s=state.macros[mk];
+  const logItem={...item,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})};
+  ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+logItem[k]||0)));
+  s.meals=[...(s.meals||[]),logItem];
   persist();
   const st=document.getElementById(`${prefix}_status_${idx}`);
-  if(st)st.textContent=`✓ Added to meal (${state._mealCart.length} item${state._mealCart.length!==1?'s':''})`;
-  renderMealCart();
+  if(st){st.textContent=`✓ Logged — ${item.kcal} kcal · ${item.protein}g P`;st.style.color='var(--green)';}
+  renderFood();
 }
 
 function renderMealCart(){
@@ -3759,7 +3764,7 @@ function renderFoodLogger(){
     <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:2px;overflow:hidden">
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;cursor:pointer;font-family:inherit">🔍 Search</button>
       <button id="fsTab_manual" onclick="setFoodSearchTab('manual')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">✏️ Manual</button>
-      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">🍳 Recipe</button>
+      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📋 Paste</button>
       <button id="fsTab_recipe" onclick="setFoodSearchTab('recipe')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">🍽️ Recipe</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📸 Label</button>
       <button id="fsTab_barcode" onclick="setFoodSearchTab('barcode')" style="flex:1;padding:7px 2px;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📦 Barcode</button>
@@ -6176,6 +6181,7 @@ function showZoePopup(mealName, boosterIds){
   const popup=document.createElement("div");
   popup.id="zoePopup";
   popup.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:380px;background:var(--white);border:1px solid rgba(74,140,106,.4);border-left:4px solid var(--green);box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:200;padding:14px 16px;border-radius:4px;";
+  state._pendingZoeTick=toTick;
   popup.innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
       <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green)">🌿 Zoe Gut Boosters Detected</div>
@@ -6184,7 +6190,7 @@ function showZoePopup(mealName, boosterIds){
     <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${mealName} contains these boosters — tick them off?</div>
     ${items}
     <div style="display:flex;gap:8px;margin-top:10px">
-      <button onclick="tickZoeBoosters(${JSON.stringify(toTick)})" style="flex:1;padding:9px;background:var(--green);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">✓ Tick All</button>
+      <button onclick="tickZoeBoosters(state._pendingZoeTick)" style="flex:1;padding:9px;background:var(--green);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">✓ Tick All</button>
       <button onclick="document.getElementById('zoePopup').remove()" style="padding:9px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Skip</button>
     </div>`;
   document.body.appendChild(popup);
