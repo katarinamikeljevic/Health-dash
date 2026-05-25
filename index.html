@@ -215,6 +215,7 @@ button,input,textarea,select{font-family:inherit}
   <div class="card-dark" id="summaryCard"></div>
   <div class="card" id="stepsCard"></div>
   <div class="card" id="waterCard"></div>
+  <div id="exerciseSummaryCard" style="margin:0 16px 12px"></div>
   <div id="checklistContainer" style="padding:0 16px"></div>
 </div>
 
@@ -760,6 +761,48 @@ function renderRoutine(){
     }
     return n;
   }
+
+  // Exercise Summary Card in Routine
+  (function(){
+    const exCard=document.getElementById('exerciseSummaryCard');
+    if(!exCard)return;
+    const exKey='exercise-'+wk;
+    const exChecks=(state.exerciseChecks||{})[exKey]||{};
+    const groups=[
+      {label:'Incline Walks',    ids:['ex_walk1','ex_walk2'],       target:2, color:'#4a6a8a', emoji:'🚶'},
+      {label:'Pilates / Lagree', ids:['ex_pilates1','ex_lagree'],   target:2, color:'#4a8c6a', emoji:'🧘'},
+      {label:'Strength',         ids:['ex_pt','ex_strength'],       target:2, color:'#b8934a', emoji:'💪'},
+    ];
+    const totalDone=groups.reduce((a,g)=>a+g.ids.filter(id=>exChecks[id]).length,0);
+    const totalTarget=groups.reduce((a,g)=>a+g.target,0);
+    const bars=groups.map(g=>{
+      const done=g.ids.filter(id=>exChecks[id]).length;
+      const dots=g.ids.map(id=>{
+        const ticked=!!exChecks[id];
+        return `<div onclick="toggleExerciseCheck('${id}');renderRoutine()" style="width:20px;height:20px;border-radius:50%;border:1.5px solid ${ticked?g.color:'var(--border)'};background:${ticked?g.color:'none'};color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .15s">${ticked?'✓':''}</div>`;
+      }).join('');
+      return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+        <span style="font-size:13px;width:16px;flex-shrink:0">${g.emoji}</span>
+        <div style="flex:1;font-size:12px;color:var(--text)">${g.label}</div>
+        <div style="display:flex;gap:4px">${dots}</div>
+        <span style="font-size:10px;color:${done>=g.target?g.color:'var(--muted)'};min-width:24px;text-align:right">${done}/${g.target}</span>
+      </div>`;
+    }).join('');
+    const pct=Math.round(totalDone/totalTarget*100);
+    exCard.innerHTML=`<div style="background:var(--white);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px 14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div>
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">This Week's Training</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">${totalDone}/${totalTarget} sessions · ${pct}%</div>
+        </div>
+        <button onclick="showTab('exercise',document.querySelectorAll('.tab')[3])" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:none;border:1px solid rgba(184,147,74,.4);padding:5px 10px;cursor:pointer;font-family:inherit;border-radius:2px">View →</button>
+      </div>
+      <div style="height:3px;background:var(--border);border-radius:2px;margin-bottom:12px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--gold);border-radius:2px;transition:width .4s"></div>
+      </div>
+      ${bars}
+    </div>`;
+  })();
 
   // Checklist
   document.getElementById("checklistContainer").innerHTML=ROUTINE_SECTIONS.map(sec=>{
@@ -3910,6 +3953,9 @@ function toggleExCard(cardId){
   if(!state._exCardOpen)state._exCardOpen={};
   state._exCardOpen[cardId]=!state._exCardOpen[cardId];
   persist();renderExerciseTab();
+  // Keep routine summary in sync
+  const exSummCard=document.getElementById("exerciseSummaryCard");
+  if(exSummCard)renderRoutine();
 }
 
 async function loadExImg(cardId,query,btn){
