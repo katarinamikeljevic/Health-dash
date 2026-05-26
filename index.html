@@ -1563,11 +1563,11 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
     </div>
     
   </div><div style="border-bottom:1px solid var(--border);">
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Pallof_Press')">
-      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Pallof_Press','pallof press cable band anti rotation core exercise',this)">▶</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Side_Lying_Double_Leg_Lift')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Side_Lying_Double_Leg_Lift','side lying double leg lift oblique waist exercise mat',this)">▶</div>
       <div style="flex:1">
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
-          <span style="font-size:13px;font-weight:500;color:var(--text)">Pallof Press (Cable / Band)</span>
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Side-Lying Double Leg Lift</span>
           
         </div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 16 reps · Bodyweight</div>
@@ -2974,7 +2974,10 @@ const FOOD_DB=[
   ["Guacamole",142,1.9,8,12,5.1,390,30,"2 tbsp (30g)"],
   ["Lemon tahini dressing",280,5,10,25,3,320,20,"1 tbsp (20g)"],
   // ── DRINKS ──
-  ["Green tea",2,0.2,0.4,0,0,6,200,"1 mug (200ml)"],
+  ["Pukka Matcha Green Tea",2,0.2,0.3,0,0,0,200,"1 mug (200ml)"],
+  ["Twinings Lemon & Ginger Tea",2,0,0.4,0,0,0,200,"1 mug (200ml)"],
+  ["Twinings Spearmint Tea",2,0,0.3,0,0,0,200,"1 mug (200ml)"],
+  ["Yogi Detox Tea",2,0,0.3,0,0,0,200,"1 mug (200ml)"],
   ["Black tea no milk",2,0.1,0.3,0,0,5,200,"1 mug (200ml)"],
   ["Black tea with skimmed milk",12,0.9,1.6,0.1,0,18,200,"1 mug + splash"],
   ["Black tea with semi-skimmed milk",18,0.9,1.8,0.5,0,18,200,"1 mug + splash"],
@@ -3227,7 +3230,10 @@ const FOOD_DB=[
   ["Biotiful Kefir Quark",68,11,4.2,0.2,0,50,130,"130g pot"],
   ["Yeo Valley Greek Yogurt 0%",57,10,4,0.2,0,46,150,"150g pot"],
   ["Yeo Valley Greek Yogurt 5%",115,7.5,4,8,0,50,150,"150g pot"],
-  ["Arla Protein Raspberry Skyr",70,15,6.5,0.3,0,52,150,"150g pot"],
+  ["Arla Protein Strawberry Yogurt",72,10,6.3,0.2,0,52,200,"1 pouch (200g) — 144 kcal"],
+  ["Arla Protein Strawberry Yogurt",72,10,6.3,0.2,0,52,100,"100g — 72 kcal"],
+  ["Arla Protein Mango Yogurt",70,10,6,0.2,0,50,200,"1 pouch (200g) — 140 kcal"],
+  ["Arla Protein Mango Yogurt",70,10,6,0.2,0,50,100,"100g — 70 kcal"],
   ["Lindahls Kvarg Protein Cottage Cheese",90,15,4,1.5,0,320,150,"150g pot"],
   ["Lindahls Quark Natural",68,11,4.5,0.3,0,60,150,"150g pot"],
   // ── FISH & TUNA ──
@@ -5524,14 +5530,14 @@ function renderExerciseTab(){
             fix:"Hip sagging? Drop to knee version — form beats duration every time"
           },
           {
-            name:"Pallof Press (Cable / Band)",priority:false,
-            weight:"Bodyweight",sets:"1 set × 16 reps",
-            img:"pallof press cable band anti rotation core exercise",
-            position:"High plank position — hands flat on floor, wrists under shoulders, arms straight. Feet hip-width apart. Body in one straight line from head to heels.",
-            feel:"Deep core and shoulder — anti-rotation stability",
-            breathe:"Exhale as you reach · Inhale as you return",
-            form:["High plank — hands flat, wrists under shoulders","Reach one arm straight forward — keep hips still","No rotation — pelvis stays square to the floor","Return and alternate sides","Slow and controlled — the slower the harder"],
-            fix:"Hips rotating? Widen your feet slightly until core is strong enough to hold"
+            name:"Side-Lying Double Leg Lift",priority:false,
+            weight:"Bodyweight (ankle weights optional)",sets:"3 sets × 12 reps each side",
+            img:"side lying double leg lift oblique waist exercise mat",
+            position:"Lie on your side in a straight line — hips stacked, bottom arm extended under your head, top hand lightly on floor in front for balance. Legs together, straight, feet stacked or slightly in front of hips.",
+            feel:"Obliques and QL (deep waist muscle) holding both legs up — NOT hip flexors. You should feel the indent between your hip and ribcage working.",
+            breathe:"Exhale as you lift legs · hold and breathe steadily at top · inhale as you lower",
+            form:["Lie on side · body in straight line · legs stacked together","Brace the side waist — draw ribs toward hip","Lift BOTH legs together off the mat — keep them glued","Hold 2–3 seconds at top · feel the QL squeeze","Lower slowly — don't let legs drop","Keep hips stacked throughout — don't roll back"],
+            fix:"Hips rolling back? Place top hand further forward for support and reduce lift height until QL is strong enough"
           },
         ].map(e=>renderExCard(e)).join("")}
 
