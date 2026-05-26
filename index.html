@@ -4677,6 +4677,23 @@ function renderRestaurantCalc(container, which){
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--ink);margin-bottom:4px">${name}</div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Tap + Add to build your meal · see running macros · log to food diary</div>
+
+    ${(()=>{
+      const saved=(state._savedRestOrders||{})[cartKey]||[];
+      if(!saved.length)return'';
+      return`<div style="margin-bottom:12px">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">⭐ Saved Orders</div>
+        ${saved.map((o,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--gold-pale);border:1px solid rgba(184,147,74,.3);border-left:3px solid var(--gold);margin-bottom:4px;border-radius:2px">
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:500;color:var(--ink)">${o.orderName}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">${o.kcal} kcal · ${o.p}g P · ${o.items.map(it=>it.name).join(', ')}</div>
+          </div>
+          <button onclick="loadRestOrder('${cartKey}',${i});flashBtn(this)" style="padding:5px 10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Load</button>
+          <button onclick="logSavedRestOrder('${cartKey}',${i});flashBtn(this)" style="padding:5px 10px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:9px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">+ Log</button>
+          <button onclick="deleteSavedRestOrder('${cartKey}',${i})" style="padding:5px 8px;background:none;border:1px solid rgba(224,96,96,.3);color:var(--red);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">×</button>
+        </div>`).join('')}
+      </div>`;
+    })()}
     <div id="restAISuggest_${cartKey}" style="background:var(--bg);border:1px solid var(--border);padding:10px 12px;margin-bottom:12px;border-radius:2px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">✨ What to order</div>
@@ -4708,8 +4725,12 @@ function renderRestaurantCalc(container, which){
         <span style="font-size:12px;color:#6a9898">${totals.f}g F</span>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px">
-        <button onclick="logRestOrder('${cartKey}','${name}')" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
-        <button onclick="clearRestCart('${cartKey}')" style="padding:9px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
+        <button onclick="logRestOrder('${cartKey}','${name}');flashBtn(this)" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
+        <button onclick="saveRestOrder('${cartKey}','${name}',this)" style="padding:9px 12px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save</button>
+        <button onclick="clearRestCart('${cartKey}')" style="padding:9px 12px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
+      </div>
+      <div style="margin-top:8px">
+        <input id="restOrderName_${cartKey}" class="meal-name-input" style="margin:0" placeholder="Name this order e.g. My go-to Atis">
       </div>
     </div>`:
     `<div style="font-size:12px;color:var(--muted);padding:10px 0 14px;font-style:italic">Tap + Add on any item to build your order</div>`}
@@ -4732,6 +4753,43 @@ function renderRestaurantCalc(container, which){
           </div>`;
         }).join("")}
       </div>`).join("")}`;
+}
+
+function saveRestOrder(cartKey, restName, btn){
+  const items=(state._restCart||{})[cartKey]||[];
+  if(!items.length){showMealStatus('Add items first',false);return;}
+  const nameEl=document.getElementById(`restOrderName_${cartKey}`);
+  const orderName=nameEl?.value.trim()||(restName+' order');
+  const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f}),{kcal:0,p:0,c:0,f:0});
+  if(!state._savedRestOrders)state._savedRestOrders={};
+  if(!state._savedRestOrders[cartKey])state._savedRestOrders[cartKey]=[];
+  state._savedRestOrders[cartKey].push({orderName,kcal:t.kcal,p:t.p,c:t.c,f:t.f,items:JSON.parse(JSON.stringify(items))});
+  persist();
+  flashBtn(btn);
+  showMealStatus(`💾 "${orderName}" saved`,true);
+  renderMeals();
+}
+
+function loadRestOrder(cartKey, idx){
+  const order=(state._savedRestOrders||{})[cartKey]?.[idx];
+  if(!order)return;
+  if(!state._restCart)state._restCart={};
+  state._restCart[cartKey]=JSON.parse(JSON.stringify(order.items));
+  persist();renderMeals();
+}
+
+function logSavedRestOrder(cartKey, idx){
+  const order=(state._savedRestOrders||{})[cartKey]?.[idx];
+  if(!order)return;
+  const name=order.orderName;
+  copyMealToLog(name,order.p,order.f,order.c,0,order.kcal,0);
+  showMealStatus(`✓ ${name} logged`,true);
+}
+
+function deleteSavedRestOrder(cartKey, idx){
+  if(!state._savedRestOrders?.[cartKey])return;
+  state._savedRestOrders[cartKey].splice(idx,1);
+  persist();renderMeals();
 }
 
 function addRestItemByKey(cartKey, sectionKey, itemIdx){
