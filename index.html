@@ -1563,11 +1563,11 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
     </div>
     
   </div><div style="border-bottom:1px solid var(--border);">
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Plank_+_Reach')">
-      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Plank_+_Reach','plank reach forward exercise core stability',this)">▶</div>
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--white)" onclick="toggleExCard('excard_Pallof_Press')">
+      <div style="width:48px;height:38px;background:#ff000015;border:1px solid #ff000030;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" onclick="loadExImg('excard_Pallof_Press','pallof press cable band anti rotation core exercise',this)">▶</div>
       <div style="flex:1">
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
-          <span style="font-size:13px;font-weight:500;color:var(--text)">Plank + Reach</span>
+          <span style="font-size:13px;font-weight:500;color:var(--text)">Pallof Press (Cable / Band)</span>
           
         </div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 16 reps · Bodyweight</div>
@@ -1975,6 +1975,7 @@ const ROUTINE_SECTIONS=[
     {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
     {id:"m5",label:"Kefir shake post-walk",note:"Kefir, flax, chia, protein, creatine",tag:"info",tick:false},
     {id:"sup3",label:"💊 Creatine",note:"In kefir shake",tag:"supp",tick:true},
+    {id:"train1",label:"🚇 Elizabeth line → Abbey Wood",note:"Paddington Plts A&B · 07:36 · 07:42 · 07:48 · 07:54 · 08:00 · 08:06",tag:"info"},
     {id:"m6",label:"Coffee after 45 min",note:"After kefir — not before",tag:"info",tick:false},
     {id:"sup2",label:"💊 Omega-3 + Ubiquinol + Vitamin D3+K2",note:"With first meal",tag:"supp",tick:true},
   ]},
@@ -3248,7 +3249,9 @@ const FOOD_DB=[
   ["Waitrose Easy Chopped Garlic",149,6.4,33,0.5,2.1,400,5,"1 tsp (5g)"],
   // ── BONE BROTH ──
   ["Borough Broth Chicken Bone Broth",14,2.6,0.4,0.2,0,440,300,"1 mug (300ml)"],
-  ["Freja Chicken Bone Broth",12,2.4,0.3,0.1,0,380,300,"1 mug (300ml)"],
+  ["Freja Chicken Bone Broth",345,73,9.7,1.2,4.3,5000,15,"1 sachet (15g) — 52 kcal"],
+  ["Starpowa Electrolytes",0,0,0,0,0,510,1,"1 sachet (sodium 204mg)"],
+  ["Freja Chicken Bone Broth",345,73,9.7,1.2,4.3,5000,30,"2 sachets (30g)"],
   // ── PROTEIN POWDERS ──
   ["Form Pea Protein",380,76,4.5,5.5,3,390,30,"1 scoop (30g)"],
   ["Form Chocolate Pea Protein",375,74,6,5.5,3,380,30,"1 scoop (30g)"],
@@ -4141,13 +4144,13 @@ function renderFood(){
       </div>
     </div>
     ${groups.map(g=>`<div style="margin-bottom:16px"><div class="gut-section-hdr">${g.lbl}</div>${g.items.map(item=>{
-      const wc=gutWeekCount(item.id),ticked=!!foods[item.id],met=wc>=item.t;
+      const wc=gutWeekCount(item.id),todayCount=typeof foods[item.id]==="number"?foods[item.id]:(foods[item.id]?1:0),ticked=todayCount>0,met=wc>=item.t;
       const pct=Math.min(wc/item.t,1)*100;
       const nameStyle=met?'color:var(--muted);font-weight:400;':'font-weight:700;color:var(--text);';
       const itemStyle=met?'opacity:0.55;background:#f7f5f2;':'';
       return `<div class="gut-item${met?" met":""}" style="cursor:pointer;${itemStyle}">
         <div class="gut-item-top" onclick="toggleGut('${item.id}')">
-          <div class="gut-tick${ticked?" ticked":""}">${ticked?"✓":""}</div>
+          <div class="gut-tick${ticked?" ticked":""}" style="font-size:${todayCount>1?"11px":"13px"}">${todayCount>1?todayCount+"×":"✓"}</div>
           <div style="flex:1">
             <div class="gut-item-name" style="${nameStyle}">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:400">/ ${item.alts.join(' / ')}</span>`:''}</div>
             <div class="gut-item-note">${item.n}</div>
@@ -5521,9 +5524,9 @@ function renderExerciseTab(){
             fix:"Hip sagging? Drop to knee version — form beats duration every time"
           },
           {
-            name:"Plank + Reach",priority:false,
+            name:"Pallof Press (Cable / Band)",priority:false,
             weight:"Bodyweight",sets:"1 set × 16 reps",
-            img:"plank reach forward exercise core stability",
+            img:"pallof press cable band anti rotation core exercise",
             position:"High plank position — hands flat on floor, wrists under shoulders, arms straight. Feet hip-width apart. Body in one straight line from head to heels.",
             feel:"Deep core and shoulder — anti-rotation stability",
             breathe:"Exhale as you reach · Inhale as you return",
@@ -5537,6 +5540,54 @@ function renderExerciseTab(){
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Lower Body · Solo Day (skip if PT session same day)</div>
         </div>
         <div style="padding:6px 14px 8px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Only do lower body if you haven't had PT that day. Glute isolation only — if quads fire, stop and reset.</div>
+        <div style="padding:8px 14px 4px">
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7a6aa0;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:4px">🦵 Inner Thigh · 2× Week</div>
+        </div>
+        ${[
+          {
+            name:"Side-Lying Inner Thigh Lift",priority:false,
+            weight:"Ankle weight optional",sets:"3 sets × 15 reps each side",
+            img:"side lying inner thigh lift adductor exercise mat",
+            position:"Lie on your side, body in a straight line. Bottom leg is the working leg. Cross top leg in front with foot flat on mat for support. Stack hips — don't let them roll back.",
+            feel:"Inner thigh (adductors) of the bottom leg — NOT hip flexor",
+            breathe:"Exhale as you lift · inhale as you lower",
+            form:["Lie on side · bottom leg straight · top foot flat in front","Keep hips stacked — don't roll back","Lift bottom leg toward ceiling — slow and controlled","Pause at top · squeeze inner thigh","Lower with full control — don't let it drop"],
+            fix:"Feeling hip flexor? Rotate leg so toes point slightly down toward floor"
+          },
+          {
+            name:"Pilates Ball Inner Thigh Squeeze",priority:false,
+            weight:"Pilates ball between knees",sets:"3 sets × 15 reps",
+            img:"pilates ball inner thigh squeeze glute bridge exercise",
+            position:"Lie on your back. Knees bent, feet flat on mat hip-width apart. Place a Pilates ball or folded pillow between your inner knees. Arms flat by sides.",
+            feel:"Inner thighs squeezing together — also activates pelvic floor",
+            breathe:"Exhale on squeeze · inhale to release slightly",
+            form:["Lie on back · knees bent · ball between knees","Squeeze ball gently but firmly — hold 3 seconds","Option: add glute bridge — drive hips up while squeezing","Keep lower back pressed into mat","Release slowly — don't drop the ball"],
+            fix:"Only squeeze to about 70% effort — gripping too hard tenses the hip flexors"
+          },
+          {
+            name:"Lateral Lunge to Balance",priority:false,
+            weight:"Bodyweight or 4kg dumbbell",sets:"3 sets × 10 reps each side",
+            img:"lateral lunge to balance inner thigh exercise",
+            position:"Stand tall, feet together. Step one foot wide to the side — toes forward or slightly out. Keep the standing leg straight.",
+            feel:"Inner thigh of the lunging leg as you push back · also outer glute of the standing leg",
+            breathe:"Inhale as you step out · exhale as you push back to stand",
+            form:["Step wide to one side · toes forward","Sit into the hip of the bent leg — push it back","Keep chest up · bent knee tracks over toes","Inner thigh of the bent leg does the work pushing back","Drive through heel to return to standing · balance 1 sec"],
+            fix:"Knee caving in? Push it outward in line with your toes throughout"
+          },
+          {
+            name:"Standing Hip Adduction (Band)",priority:false,
+            weight:"Resistance band around ankles",sets:"3 sets × 12 reps each side",
+            img:"standing hip adduction resistance band inner thigh exercise",
+            position:"Stand side-on to a wall for balance. Band looped around both ankles. Working leg slightly lifted off floor. Keep pelvis square — don't tilt.",
+            feel:"Inner thigh of the working leg drawing across — NOT hip flexor or groin",
+            breathe:"Exhale as you draw leg across · inhale to return",
+            form:["Stand tall · band at ankles · hand on wall for balance","Draw working leg across in front of the standing leg","Keep both hips facing forward — don't twist","Slow controlled return — don't let band snap back","Keep core braced throughout"],
+            fix:"Hip tilting? Reduce the range until your pelvis stays square"
+          },
+        ].map(e=>renderExCard(e)).join("")}
+        <div style="margin:0 14px 14px;padding:10px 12px;background:rgba(106,90,138,.08);border-left:3px solid #7a6aa0">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6">Sumo Squat Pulses already in the card list below ↓ · Reformer Pilates hits inner thigh deeply every session · Inner thigh fat driven by oestrogen — reduces with calorie deficit + targeted activation</div>
+        </div>
         ${[
           {
             name:"Romanian Deadlift",priority:false,
@@ -5826,7 +5877,13 @@ function toggleArmGuide(){state._armGuideOpen=!state._armGuideOpen;persist();ren
 function togglePhysioGuide(){state._physioGuideOpen=!state._physioGuideOpen;persist();renderExerciseTab();}
 
 function gutWeekCount(id){
-  let n=0;for(let i=0;i<7;i++){const k=`foods-${getWeekKey()}-${i}`;if((state.foods||{})[k]?.[id])n++;}return n;
+  let n=0;
+  for(let i=0;i<7;i++){
+    const k=`foods-${getWeekKey()}-${i}`;
+    const v=(state.foods||{})[k]?.[id];
+    if(v)n+=typeof v==="number"?v:1;
+  }
+  return n;
 }
 
 function toggleFood(id){
@@ -5841,19 +5898,21 @@ function toggleFood(id){
 function toggleGut(id){
   const k=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[k])state.foods[k]={};
-  const v=!state.foods[k][id];
-  state.foods[k][id]=v;
+  // Increment count each tap (allows multiple per day)
+  const cur=typeof state.foods[k][id]==='number'?state.foods[k][id]:(state.foods[k][id]?1:0);
+  state.foods[k][id]=cur+1;
   const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
-  if(chip)state.foods[k][chip]=v;
+  if(chip)state.foods[k][chip]=true;
   persist();renderFood();
 }
 
 function undoGut(id){
   const k=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[k])return;
-  state.foods[k][id]=false;
+  const cur=typeof state.foods[k][id]==='number'?state.foods[k][id]:(state.foods[k][id]?1:0);
+  state.foods[k][id]=Math.max(0,cur-1);
   const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
-  if(chip)state.foods[k][chip]=false;
+  if(chip)state.foods[k][chip]=state.foods[k][id]>0;
   persist();renderFood();
 }
 
