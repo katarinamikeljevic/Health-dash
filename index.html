@@ -3589,7 +3589,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   if(gutCb&&gutCb.checked){
     const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
     if(!state.foods[fk])state.foods[fk]={};
-    const matchedGut=GUT_BOOSTERS.find(gb=>name.toLowerCase().includes(gb.l.toLowerCase().split(' ')[0]));
+    const matchedGut=GUT_BOOSTERS.find(gb=>name.toLowerCase().includes(gb.l.toLowerCase()));
     if(matchedGut){
       state.foods[fk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
@@ -3604,6 +3604,8 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+logItem[k]||0)));
   s.meals=[...(s.meals||[]),logItem];
   persist();
+  // Show persistent toast that survives renderFood
+  showLoggedToast(item.name, item.kcal, item.protein);
   renderFood();
 }
 
@@ -4584,8 +4586,8 @@ function getRestItemTags(name, cartKey){
 
   // Zoe gut booster check
   const gutMatch=GUT_BOOSTERS.find(g=>{
-    const gl=g.l.toLowerCase().split('/')[0].trim();
-    return n.includes(gl)||n.includes(g.l.toLowerCase().split(' ')[0]);
+    const gl=g.l.toLowerCase();
+    return n.includes(gl);
   });
   if(gutMatch){
     badges.push({label:`🌿 Zoe ${gutMatch.s}`,bg:'rgba(74,140,106,.15)',color:'#4a8c6a'});
@@ -4824,7 +4826,9 @@ function logRestOrder(cartKey,restaurantName){
 
 async function getRestSuggestion(cartKey, restName){
   const el=document.getElementById(`restAISuggestResult_${cartKey}`);
+  const btn=document.querySelector(`[onclick*="getRestSuggestion('${cartKey}'"]`);
   if(el)el.textContent="Loading…";
+  if(btn){btn.textContent='Loading…';btn.disabled=true;}
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   const ms=(state.macros||{})[mk]||{protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0};
   const proteinLeft=Math.max(0,115-(+ms.protein||0));
@@ -4833,22 +4837,43 @@ async function getRestSuggestion(cartKey, restName){
   const phase=getCyclePhase();
   const phaseLabel=phase?phase.phase.name:'';
   const gutBoosters=GUT_BOOSTERS.filter(g=>g.s>=88).map(g=>g.l).join(", ");
+
+  // Build menu context from actual data
+  const data = cartKey==='atis' ? ATIS_MEALS : cartKey==='saladkitchen' ? SALAD_KITCHEN_MEALS : SALAD_PROJECT_MEALS;
+  const menuContext = Object.entries(data).map(([section,items])=>
+    `${section}: ${items.map(i=>i.name).join(', ')}`
+  ).join('\n');
+
   try{
-    const resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:300,messages:[{role:"user",content:`You are a nutrition advisor for Katarina. Goals: VS physique, pear shaped, fat loss, build glutes. Macros target: 115g protein, 1550 kcal, 50g fat, 130g carbs. No carbs at dinner.
+    const resp=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:300,
+        messages:[{role:"user",content:`You are a nutrition advisor for Katarina. Goals: VS physique, pear shaped, fat loss, build glutes. Macros target: 115g protein, 1550 kcal, 50g fat, 130g carbs. No carbs at dinner.
 
 Today remaining: ${proteinLeft}g protein · ${kcalLeft} kcal · ${fatLeft}g fat.
 Menstrual cycle phase: ${phaseLabel}.
 Top Zoe gut boosters: ${gutBoosters}.
 
-She is ordering from ${restName}. Based on the available ingredients (proteins, bases, toppings, dressings), suggest a specific bowl or combination she should order. Be very specific about what to choose. Keep under 150 words.`}]})});
-    const data=await resp.json();
-    const text=data.content.filter(b=>b.type==="text").map(b=>b.text).join("");
+She is ordering from ${restName}. Here is the actual menu:
+${menuContext}
+
+Suggest a specific bowl combination using items from this menu. Name exactly what to order from each section. Be specific and concise. Under 120 words.`}]
+      })
+    });
+    const json=await resp.json();
+    if(json.error){throw new Error(json.error.message);}
+    const text=json.content.filter(b=>b.type==="text").map(b=>b.text).join("");
     if(!state._restSuggest)state._restSuggest={};
     state._restSuggest[cartKey]=text;
     persist();
     if(el)el.innerHTML=text.replace(/\n/g,'<br>');
   }catch(e){
-    if(el)el.textContent="Works at katarinahealth.netlify.app";
+    if(el)el.textContent="AI suggestions require GitHub Pages with internet access. Make sure you're on https://katarinamikeljevic.github.io/Health-dash/";
+  }finally{
+    if(btn){btn.textContent='Suggest';btn.disabled=false;}
   }
 }
 
@@ -4997,6 +5022,16 @@ function saveMealEntry(catId,idx){
   state._mealEditing=null;
   persist();
   renderMeals();
+}
+
+function showLoggedToast(name, kcal, protein){
+  document.querySelectorAll('.logged-toast').forEach(e=>e.remove());
+  const t=document.createElement('div');
+  t.className='logged-toast';
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 20px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);white-space:nowrap;letter-spacing:0.5px';
+  t.innerHTML=`✓ Logged — ${kcal} kcal · ${protein}g P`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2000);
 }
 
 function flashBtn(btn,ms){
