@@ -1320,7 +1320,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">This Week</div>
-          <div style="font-size:11px;color:var(--soft);line-height:1.8">Incline Walk ×2<br>Reformer Pilates<br>Lagree<br>PT Strength<br>Own Strength</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Flat Walk ×2–3<br>Home Incline ×2<br>Gym Incline ×1<br>Reformer / Lagree<br>PT Strength<br>Own Strength</div>
         </div>
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Substitutes</div>
@@ -1974,7 +1974,7 @@ const ROUTINE_SECTIONS=[
     {id:"m2",label:"Ice face 60 sec",note:"Face & neck · <a href='https://youtu.be/Js2rgq_va3Q?si=YFoy77aiYOhnNVmg' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"info",tick:false},
     {id:"m_physio",label:"Physio — ball release + marching drill",note:"Left glute · left lower back · then march 5kg",tag:"physio",tick:true},
     {id:"m4",label:"Fasted morning walk",note:"",tag:"info",tick:false},
-    {id:"m_walk_w",label:"Incline walks this week",note:"6% · 5.5 km/h · 30–35 min · fasted",tag:"weekly",tick:true,weeklyId:"inchwalk",weeklyTarget:2},
+    {id:"m_walk_w",label:"Walks this week",note:"Flat 2–3× (4.5–4.8mph · 15–20min · fasted) · Home incline 2× (6% · 4.5mph · 25–30min · fasted/pre-workout/2hrs after) · Gym incline 1× (8–10% · 4.3–4.5mph · 20–25min · fasted/pre-workout/2hrs after)",tag:"weekly",tick:true,weeklyId:"inchwalk",weeklyTarget:5},
     {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
     {id:"m5",label:"Kefir shake post-walk",note:"Kefir, flax, chia, protein, creatine",tag:"info",tick:false},
     {id:"sup3",label:"💊 Creatine",note:"In kefir shake",tag:"supp",tick:true},
@@ -5385,8 +5385,9 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_walk1",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · fasted · fat burn zone"},
-    {id:"ex_walk2",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · fasted · fat burn zone"},
+    {id:"ex_walk_flat", label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
+    {id:"ex_walk_home", label:"Home Incline Walk",     type:"cardio", color:"#4a6a8a", sub:"Evening or morning",   note:"6% · 4.5 mph · 25–30 min · fasted / before workout / 2hrs after meal"},
+    {id:"ex_walk_gym",  label:"Gym Incline Walk",      type:"cardio", color:"#5a7a9a", sub:"Daytime · before workout OK", note:"8–10% · 4.3–4.5 mph · 20–25 min · fasted / before workout / 2hrs after meal"},
     {id:"ex_pilates1", label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",                                    note:"Inner thigh · waist · glutes · posture"},
     {id:"ex_lagree",   label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates",                    note:"High intensity · lean muscle · glutes"},
     {id:"ex_pt",       label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",                                    note:"Compound lifts · upper body + core · kefir shake first"},
@@ -5438,7 +5439,7 @@ function renderExerciseTab(){
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">This Week</div>
-          <div style="font-size:11px;color:var(--soft);line-height:1.8">Incline Walk ×2<br>Reformer Pilates<br>Lagree<br>PT Strength<br>Own Strength</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Flat Walk ×2–3<br>Home Incline ×2<br>Gym Incline ×1<br>Reformer / Lagree<br>PT Strength<br>Own Strength</div>
         </div>
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Substitutes</div>
@@ -5458,7 +5459,9 @@ function renderExerciseTab(){
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">This Week</div>
 
       ${[
-        {label:"Incline Walks",       target:2, ids:["ex_walk1","ex_walk2"],    color:"#4a6a8a"},
+        {label:"Flat Walks (2–3×)",    target:3, ids:["ex_walk_flat","ex_walk_flat","ex_walk_flat"], color:"#4a6a8a"},
+        {label:"Home Incline (2×)",     target:2, ids:["ex_walk_home","ex_walk_home"], color:"#4a6a8a"},
+        {label:"Gym Incline (1×)",      target:1, ids:["ex_walk_gym"], color:"#5a7a9a"},
         {label:"Sculpt (Pilates/Lagree)", target:2, ids:["ex_pilates1","ex_lagree"], color:"#4a8c6a"},
         {label:"Strength",            target:2, ids:["ex_pt","ex_strength"],    color:"#b8934a"},
       ].map(group=>{
