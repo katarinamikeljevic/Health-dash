@@ -1989,7 +1989,7 @@ const ROUTINE_SECTIONS=[
   {id:"evening",title:"Evening Protocol",items:[
     {id:"e0",label:"Dinner 3h before bed · no carbs · no cruciferous veg",note:"",tag:"info",tick:false},
     {id:"sup6",label:"💊 Berberine",note:"10–20 min before dinner",tag:"supp",tick:true},
-    {id:"e0b",label:"Evening walk 20 min",note:"After dinner",tag:"info",tick:false},
+    {id:"e0b",label:"Evening walk 20 min",note:"After dinner · flat · steps + digestion",tag:"daydots",tick:false,color:"#4a8c6a"},
     {id:"e1",label:"Dry brush",note:"3 min on dry skin · <a href='https://youtu.be/1YnVb9Ie-r0?si=V8CZC-8htDUwLm9Z' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"weekly",tick:true,weeklyId:"drybr",weeklyTarget:4},
     {id:"e2",label:"Red light therapy",note:"30 min before bed · clean skin",tag:"info",tick:false},
     {id:"e3",label:"Legs up wall 10–15 min",note:"Point/flex feet · ankle circles · <a href='https://youtu.be/7UyhQ88ZOSU?si=-T1VyGiDH8pmu6jR' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"info",tick:false},
@@ -2510,6 +2510,31 @@ function renderRoutine(){
             return `<div class="check-item${isSupp?" supp":""}${chk?" checked":""}" onclick="toggleCheck('${item.id}','${sec.id}')">
               <div class="check-box">${chk?"✓":""}</div>
               <div style="flex:1"><div class="check-lbl">${item.label}</div>${item.note?`<div class="check-note">${item.note}</div>`:""}</div>
+            </div>`;
+          }
+
+          // ── DAYDOTS ITEM: label + 7 day circles ──
+          if(item.tag==="daydots"){
+            const c=item.color||"#4a8c6a";
+            const dayNames=["M","T","W","T","F","S","S"];
+            const dots=dayNames.map((d,i)=>{
+              const dk=`checks-${wk}-${i}`;
+              const ticked=!!((state.checks||{})[dk]||{})[item.id];
+              return `<div onclick="toggleCheckDay('${item.id}',${i})" style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${ticked?c:"var(--border)"};background:${ticked?c:"none"};color:${ticked?"white":"var(--muted)"};font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">${d}</div>`;
+            }).join("");
+            const wDone=Array.from({length:7},(_,i)=>{
+              const dk=`checks-${wk}-${i}`;
+              return !!((state.checks||{})[dk]||{})[item.id];
+            }).filter(Boolean).length;
+            return `<div style="padding:8px 0;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                <div>
+                  <div style="font-size:13px;color:var(--text)">${item.label}</div>
+                  ${item.note?`<div style="font-size:10px;color:var(--muted);margin-top:1px">${item.note}</div>`:""}
+                </div>
+                <span style="font-size:11px;color:${wDone>=5?c:"var(--muted)"};flex-shrink:0;margin-left:8px">${wDone}/7</span>
+              </div>
+              <div style="display:flex;gap:4px">${dots}</div>
             </div>`;
           }
 
