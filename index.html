@@ -5410,9 +5410,12 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_walk_flat", label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
-    {id:"ex_walk_home", label:"Home Incline Walk",     type:"cardio", color:"#4a6a8a", sub:"Evening or morning",   note:"6% · 4.5 mph · 25–30 min · fasted / before workout / 2hrs after meal"},
-    {id:"ex_walk_gym",  label:"Gym Incline Walk",      type:"cardio", color:"#5a7a9a", sub:"Daytime · before workout OK", note:"8–10% · 4.3–4.5 mph · 20–25 min · fasted / before workout / 2hrs after meal"},
+    {id:"ex_walk_flat",  label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
+    {id:"ex_walk_flat2", label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
+    {id:"ex_walk_flat3", label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
+    {id:"ex_walk_home",  label:"Home Incline Walk",     type:"cardio", color:"#4a6a8a", sub:"Evening or morning",   note:"6% · 4.5 mph · 25–30 min · fasted / before workout / 2hrs after meal"},
+    {id:"ex_walk_home2", label:"Home Incline Walk",     type:"cardio", color:"#4a6a8a", sub:"Evening or morning",   note:"6% · 4.5 mph · 25–30 min · fasted / before workout / 2hrs after meal"},
+    {id:"ex_walk_gym",   label:"Gym Incline Walk",      type:"cardio", color:"#5a7a9a", sub:"Daytime · before workout OK", note:"8–10% · 4.3–4.5 mph · 20–25 min · fasted / before workout / 2hrs after meal"},
     {id:"ex_pilates1", label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",                                    note:"Inner thigh · waist · glutes · posture"},
     {id:"ex_lagree",   label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates",                    note:"High intensity · lean muscle · glutes"},
     {id:"ex_pt",       label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",                                    note:"Compound lifts · upper body + core · kefir shake first"},
@@ -5484,8 +5487,8 @@ function renderExerciseTab(){
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">This Week</div>
 
       ${[
-        {label:"Flat Walks (2–3×)",    target:3, ids:["ex_walk_flat","ex_walk_flat","ex_walk_flat"], color:"#4a6a8a"},
-        {label:"Home Incline (2×)",     target:2, ids:["ex_walk_home","ex_walk_home"], color:"#4a6a8a"},
+        {label:"Flat Walks (2–3×)",    target:3, ids:["ex_walk_flat","ex_walk_flat2","ex_walk_flat3"], color:"#4a6a8a"},
+        {label:"Home Incline (2×)",     target:2, ids:["ex_walk_home","ex_walk_home2"], color:"#4a6a8a"},
         {label:"Gym Incline (1×)",      target:1, ids:["ex_walk_gym"], color:"#5a7a9a"},
         {label:"Sculpt (Pilates/Lagree)", target:2, ids:["ex_pilates1","ex_lagree"], color:"#4a8c6a"},
         {label:"Strength",            target:2, ids:["ex_pt","ex_strength"],    color:"#b8934a"},
