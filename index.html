@@ -87,11 +87,8 @@ button,input,textarea,select{font-family:inherit}
 .tag-pm{background:#f0ecf8;color:#7060a8}
 /* WATER */
 .glasses{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.glass{width:34px;height:42px;border:none;background:none;cursor:pointer;font-size:15px;border-radius:0;transition:all .15s;padding:0;position:relative;display:flex;align-items:center;justify-content:center}
-.glass svg .drop-body{fill:none;stroke:var(--border);stroke-width:1.5;transition:all .15s}
-.glass svg .drop-num{fill:var(--muted);font-size:11px;font-weight:700;font-family:inherit;transition:all .15s}
-.glass.filled svg .drop-body{fill:#dbeeff;stroke:#6aaad4}
-.glass.filled svg .drop-num{fill:#4a8ab0}
+.glass{width:34px;height:42px;border:1.5px solid var(--border);background:none;cursor:pointer;font-size:15px;border-radius:2px;transition:all .15s}
+.glass.filled{background:#dbeeff;border-color:#6aaad4}
 /* YOLK TRACKER */
 .yolk-eggs{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
 .yolk-egg{width:26px;height:32px;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07)}
@@ -1320,7 +1317,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">This Week</div>
-          <div style="font-size:11px;color:var(--soft);line-height:1.8">Flat Walk ×2–3<br>Home Incline ×2<br>Gym Incline ×1<br>Reformer / Lagree<br>PT Strength<br>Own Strength</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Incline Walk ×2<br>Reformer Pilates<br>Lagree<br>PT Strength<br>Own Strength</div>
         </div>
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Substitutes</div>
@@ -1370,14 +1367,14 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
           <div style="width:22px;height:22px;border:1.5px solid #4a6a8a;background:#4a6a8a;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s">✓</div>
           <div style="flex:1">
             <span style="font-size:13px;color:var(--muted);text-decoration:line-through">Incline Walk</span>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">6% · 5.5 km/h · 30–35 min · fasted · fat burn zone</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed</div>
             <div style="font-size:10px;color:var(--soft);margin-top:2px">↔ Sub: Infrared Sculpt · Infrared Strength</div>
           </div>
         </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_walk2')">
           <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
           <div style="flex:1">
             <span style="font-size:13px;color:var(--text);">Incline Walk</span>
-            <div style="font-size:10px;color:var(--muted);margin-top:2px">6% · 5.5 km/h · 30–35 min · fasted · fat burn zone</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed</div>
             <div style="font-size:10px;color:var(--soft);margin-top:2px">↔ Sub: Infrared Sculpt · Infrared Strength</div>
           </div>
         </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_pilates1')">
@@ -1973,8 +1970,7 @@ const ROUTINE_SECTIONS=[
     {id:"sup1",label:"💊 Iron",note:"Empty stomach",tag:"supp",tick:true},
     {id:"m2",label:"Ice face 60 sec",note:"Face & neck · <a href='https://youtu.be/Js2rgq_va3Q?si=YFoy77aiYOhnNVmg' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"info",tick:false},
     {id:"m_physio",label:"Physio — ball release + marching drill",note:"Left glute · left lower back · then march 5kg",tag:"physio",tick:true},
-    {id:"m4",label:"Fasted morning walk",note:"",tag:"info",tick:false},
-    {id:"m_walk_w",label:"Walks this week",note:"Flat 2–3× (4.5–4.8mph · 15–20min · fasted) · Home incline 2× (6% · 4.5mph · 25–30min · fasted/pre-workout/2hrs after) · Gym incline 1× (8–10% · 4.3–4.5mph · 20–25min · fasted/pre-workout/2hrs after)",tag:"weekly",tick:true,weeklyId:"inchwalk",weeklyTarget:5},
+    {id:"m_walk_daily",label:"Morning Fasted Walk",note:"6% · 5.5 km/h · 30–35 min · <a href='#' onclick='showTab(\"exercise\");return false;' style='color:var(--gold);text-decoration:none'>→ Exercise tab</a>",tag:"weekly",tick:true,weeklyId:"walksday",weeklyTarget:7},
     {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
     {id:"m5",label:"Kefir shake post-walk",note:"Kefir, flax, chia, protein, creatine",tag:"info",tick:false},
     {id:"sup3",label:"💊 Creatine",note:"In kefir shake",tag:"supp",tick:true},
@@ -1989,7 +1985,7 @@ const ROUTINE_SECTIONS=[
   {id:"evening",title:"Evening Protocol",items:[
     {id:"e0",label:"Dinner 3h before bed · no carbs · no cruciferous veg",note:"",tag:"info",tick:false},
     {id:"sup6",label:"💊 Berberine",note:"10–20 min before dinner",tag:"supp",tick:true},
-    {id:"e0b",label:"Evening walk 20 min",note:"After dinner · flat · steps + digestion",tag:"daydots",tick:false,color:"#4a8c6a"},
+    {id:"e0b",label:"Evening walk 20 min",note:"After dinner · flat · fat oxidation",tag:"weekly",tick:true,weeklyId:"evewalk",weeklyTarget:7},
     {id:"e1",label:"Dry brush",note:"3 min on dry skin · <a href='https://youtu.be/1YnVb9Ie-r0?si=V8CZC-8htDUwLm9Z' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"weekly",tick:true,weeklyId:"drybr",weeklyTarget:4},
     {id:"e2",label:"Red light therapy",note:"30 min before bed · clean skin",tag:"info",tick:false},
     {id:"e3",label:"Legs up wall 10–15 min",note:"Point/flex feet · ankle circles · <a href='https://youtu.be/7UyhQ88ZOSU?si=-T1VyGiDH8pmu6jR' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"info",tick:false},
@@ -2429,17 +2425,7 @@ function renderRoutine(){
   // Water card
   document.getElementById("waterCard").innerHTML=`
     <div class="card-label">Daily Water · Target 2.5–3L</div>
-    <div class="glasses">${Array.from({length:11},(_,i)=>{
-      const n=i+1;
-      const active=i<water;
-      const onclick=n===water?i:n;
-      return `<button class="glass${active?' filled':''}" onclick="setWater(${onclick})" title="${n*250}ml">
-        <svg width="34" height="42" viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg">
-          <path class="drop-body" d="M17 4 C17 4 5 18 5 27 a12 12 0 0 0 24 0 C29 18 17 4 17 4 Z"/>
-          <text class="drop-num" x="17" y="30" text-anchor="middle">${n}</text>
-        </svg>
-      </button>`;
-    }).join("")}</div>
+    <div class="glasses">${Array.from({length:11},(_,i)=>`<button class="glass${i<water?" filled":""}" onclick="setWater(${i+1===water?i:i+1})">💧</button>`).join("")}</div>
     <div style="font-size:12px;color:var(--soft);margin-bottom:8px"><strong style="color:#6aaad4">${water*250}ml</strong> of 2,750ml</div>
     <div style="font-size:10px;color:var(--muted);line-height:1.6">Each 💧 = 250ml · <strong style="color:var(--text)">What counts:</strong> plain water ✓ · sparkling water ✓ · herbal teas (dandelion, peppermint, ginger) ✓ · green/black tea ✓ · electrolyte water ✓ · <span style="color:var(--red)">coffee, alcohol, fruit juice</span> ✗</div>`;
   // Yolk
@@ -2510,31 +2496,6 @@ function renderRoutine(){
             return `<div class="check-item${isSupp?" supp":""}${chk?" checked":""}" onclick="toggleCheck('${item.id}','${sec.id}')">
               <div class="check-box">${chk?"✓":""}</div>
               <div style="flex:1"><div class="check-lbl">${item.label}</div>${item.note?`<div class="check-note">${item.note}</div>`:""}</div>
-            </div>`;
-          }
-
-          // ── DAYDOTS ITEM: label + 7 day circles ──
-          if(item.tag==="daydots"){
-            const c=item.color||"#4a8c6a";
-            const dayNames=["M","T","W","T","F","S","S"];
-            const dots=dayNames.map((d,i)=>{
-              const dk=`checks-${wk}-${i}`;
-              const ticked=!!((state.checks||{})[dk]||{})[item.id];
-              return `<div onclick="toggleCheckDay('${item.id}',${i})" style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${ticked?c:"var(--border)"};background:${ticked?c:"none"};color:${ticked?"white":"var(--muted)"};font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0">${d}</div>`;
-            }).join("");
-            const wDone=Array.from({length:7},(_,i)=>{
-              const dk=`checks-${wk}-${i}`;
-              return !!((state.checks||{})[dk]||{})[item.id];
-            }).filter(Boolean).length;
-            return `<div style="padding:8px 0;border-bottom:1px solid var(--border)">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                <div>
-                  <div style="font-size:13px;color:var(--text)">${item.label}</div>
-                  ${item.note?`<div style="font-size:10px;color:var(--muted);margin-top:1px">${item.note}</div>`:""}
-                </div>
-                <span style="font-size:11px;color:${wDone>=5?c:"var(--muted)"};flex-shrink:0;margin-left:8px">${wDone}/7</span>
-              </div>
-              <div style="display:flex;gap:4px">${dots}</div>
             </div>`;
           }
 
@@ -2857,6 +2818,12 @@ const FOOD_DB=[
   ["0% Greek yogurt",57,10,4,0.2,0,46,150,"150g serving"],
   ["Biotiful Kefir Plain",62,3.2,4.8,3.3,0,55,150,"150ml serving"],
   ["Biotiful Kefir 0 Fat",38,4.4,5.4,0.1,0,60,150,"150ml serving"],
+  ["Fix8 Kefir Natural",72,4.5,5.2,3.5,0,60,250,"1 bottle (250ml)"],
+  ["Fix8 Kefir Strawberry",78,4.2,8.5,3.2,0,58,250,"1 bottle (250ml)"],
+  ["Fix8 Kefir Mango",76,4.2,8.2,3.1,0,58,250,"1 bottle (250ml)"],
+  ["Fix8 Kombucha Original",12,0,3,0,0,5,250,"1 bottle (250ml)"],
+  ["Fix8 Kombucha Ginger Lemon",14,0,3.5,0,0,5,250,"1 bottle (250ml)"],
+  ["Fix8 Kombucha Raspberry",14,0,3.5,0,0,5,250,"1 bottle (250ml)"],
   ["Lifeway Kefir Plain",60,3.5,4.6,3.2,0,50,150,"150ml serving"],
   ["Kefir plain",60,3.4,4.7,3.2,0,50,150,"150ml serving"],
   ["Cottage cheese low fat",79,12,3.4,1,0,314,150,"150g serving"],
@@ -3070,15 +3037,15 @@ const FOOD_DB=[
   ["Form Protein Bar Vanilla",180,15,7.5,8,12,100,50,"1 bar (50g)"],
   ["Form Tiramisu Pea Protein",378,75,6.5,5.5,3,380,30,"1 scoop (30g)"],
   // ── KOMBUCHA ──
-  ["Remedy Kombucha Ginger Lemon",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Raspberry Lemonade",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Wild Berry",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Peach",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Mango Passion",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Cherry Plum",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Apple Crisp",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha Watermelon",4,0,4,0,0,1,250,"1 can (250ml)"],
-  ["Remedy Kombucha",4,0,4,0,0,1,250,"1 can (250ml)"],
+  ["Remedy Kombucha Ginger Lemon",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
+  ["Remedy Kombucha Raspberry Lemonade",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
+  ["Remedy Kombucha Wild Berry",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
+  ["Remedy Kombucha Peach",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
+  ["Remedy Kombucha Mango Passion",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
+  ["Remedy Kombucha Cherry Plum",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Apple Crisp",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha Watermelon",3,0,0.5,0,0,4,250,"1 bottle (250ml)"],
+  ["Remedy Kombucha",3,0,0.5,0,0,4,330,"1 can (330ml)"],
   // ── PLANT MILKS ──
   ["Alpro Almond Milk Unsweetened",13,0.5,1.1,0.3,0.3,10,200,"200ml"],
   ["Alpro Almond Milk Unsweetened",13,0.5,1.1,0.3,0.3,10,100,"100ml"],
@@ -3230,7 +3197,11 @@ const FOOD_DB=[
   ["Pickled onions",22,0.8,4.5,0.1,0.8,1400,30,"3-4 onions (30g)"],
   ["Pickled red cabbage",18,1,3.5,0.1,1.5,560,40,"2 tbsp (40g)"],
   ["Pickled gherkins",11,0.4,1.8,0.2,0.8,1200,30,"2 gherkins (30g)"],
-  ["Caramelised onions",85,1.2,18,1.5,1.5,200,60,"60g"],
+  ["Garlic clove",4,0.2,1,0,0.1,0,3,"1 clove (3g)"],
+  ["Garlic clove",4,0.2,1,0,0.1,0,6,"2 cloves (6g)"],
+  ["Garlic clove",4,0.2,1,0,0.1,0,9,"3 cloves (9g)"],
+  ["Garlic powder",32,1.5,7,0.1,0.5,2,10,"1 tsp (10g)"],
+  ["Garlic minced",149,6.4,33,0.5,2.1,17,100,"per 100g"],
   // ── DELI MEATS ──
   ["Lean turkey breast slice",105,22,0,1.2,0,680,20,"1 slice (20g)"],
   ["Lean turkey breast slice",105,22,0,1.2,0,680,40,"2 slices (40g)"],
@@ -3526,30 +3497,35 @@ function clearFoodSearch(){
 }
 function buildFoodResultHTML(f,idx,prefix){
   const [name,kcal,protein,carbs,fat,fibre,salt,servG,servLabel]=f;
+  // Apply any saved override
+  const ov=(state.foodOverrides||{})[idx];
+  const k=ov?ov.kcal:kcal, p=ov?ov.protein:protein, c=ov?ov.carbs:carbs,
+        fa=ov?ov.fat:fat, fi=ov?ov.fibre:fibre, sl=ov?ov.salt:(salt||0);
   const isTbsp=servLabel.toLowerCase().includes('tbsp');
   const isTsp=servLabel.toLowerCase().includes('tsp');
   const isSpoon=isTbsp||isTsp;
   const favs=state.favFoods||[];
   const isFav=favs.includes(idx);
-  return `<div style="background:var(--bg);border:1px solid var(--border);${isFav?'border-left:3px solid var(--gold);':''}padding:10px 12px;margin-bottom:6px;border-radius:2px" id="${prefix}_${idx}" data-name="${name.replace(/"/g,'&quot;')}">
+  return `<div style="background:var(--bg);border:1px solid var(--border);${ov?'border-left:3px solid #e07030;':isFav?'border-left:3px solid var(--gold);':''}padding:10px 12px;margin-bottom:6px;border-radius:2px" id="${prefix}_${idx}" data-name="${name.replace(/"/g,'&quot;')}">
     <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
       <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0">
         <button onclick="toggleFavFood(${idx})" style="background:none;border:none;cursor:pointer;font-size:16px;padding:0;flex-shrink:0;line-height:1">${isFav?'★':'☆'}</button>
         <div style="font-size:13px;font-weight:400;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+        ${ov?`<span style="font-size:9px;color:#e07030;letter-spacing:1px">EDITED</span>`:''}
       </div>
       <div style="font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${servLabel}</div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap" id="${prefix}_macros_${idx}">
-      <span style="font-size:11px;color:var(--ink);font-weight:500">${Math.round(kcal*servG/100)} kcal</span>
-      <span style="font-size:11px;color:#b8934a">${(protein*servG/100).toFixed(1)}g P</span>
-      <span style="font-size:11px;color:#4a8c6a">${(carbs*servG/100).toFixed(1)}g C</span>
-      <span style="font-size:11px;color:#6a9898">${(fat*servG/100).toFixed(1)}g F</span>
-      <span style="font-size:11px;color:#9a7060">${(fibre*servG/100).toFixed(1)}g fibre</span>
-      ${salt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(salt*servG/100)}mg salt</span>`:''}
+      <span style="font-size:11px;color:var(--ink);font-weight:500">${Math.round(k*servG/100)} kcal</span>
+      <span style="font-size:11px;color:#b8934a">${(p*servG/100).toFixed(1)}g P</span>
+      <span style="font-size:11px;color:#4a8c6a">${(c*servG/100).toFixed(1)}g C</span>
+      <span style="font-size:11px;color:#6a9898">${(fa*servG/100).toFixed(1)}g F</span>
+      <span style="font-size:11px;color:#9a7060">${(fi*servG/100).toFixed(1)}g fibre</span>
+      ${sl?`<span style="font-size:11px;color:#7a7aaa">${Math.round(sl*servG/100)}mg salt</span>`:''}
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">per 100g: ${kcal} kcal · ${protein}g P · ${fat}g F · ${carbs}g C</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">per 100g: ${k} kcal · ${p}g P · ${fa}g F · ${c}g C${ov?' <span style="color:#e07030">(your values)</span>':''}</div>
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <select id="${prefix}_unit_${idx}" onchange="switchFoodUnit('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})"
+      <select id="${prefix}_unit_${idx}" onchange="switchFoodUnit('${prefix}',${idx},${k},${p},${c},${fa},${fi},${sl})"
         style="padding:5px 6px;border:1px solid var(--border);background:var(--white);font-size:12px;color:var(--text);border-radius:2px;font-family:inherit">
         <option value="g" ${!isSpoon?'selected':''}>g</option>
         <option value="tsp" ${isTsp?'selected':''}>tsp (~5g)</option>
@@ -3558,17 +3534,39 @@ function buildFoodResultHTML(f,idx,prefix){
       </select>
       <input type="number" inputmode="decimal" value="${servG}" id="${prefix}_srv_${idx}"
         style="width:60px;padding:5px 8px;border:1px solid var(--border);background:var(--white);font-size:13px;color:var(--text);border-radius:2px;text-align:center"
-        oninput="updateSearchMacros('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0})">
-      <button onclick="addSearchFoodToLog('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0},this)"
+        oninput="updateSearchMacros('${prefix}',${idx},${k},${p},${c},${fa},${fi},${sl})">
+      <button onclick="addSearchFoodToLog('${prefix}',${idx},${k},${p},${c},${fa},${fi},${sl},this)"
         style="flex:1;min-width:80px;padding:7px 8px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">
         + Log to Today
       </button>
-      <button onclick="addToMealCart('${prefix}',${idx},${kcal},${protein},${carbs},${fat},${fibre},${salt||0},this)"
+      <button onclick="addToMealCart('${prefix}',${idx},${k},${p},${c},${fa},${fi},${sl},this)"
         style="flex:1;min-width:80px;padding:7px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">
         + Add to Meal
       </button>
     </div>
     ${GUT_BOOSTERS.some(g=>g.l.toLowerCase().includes(f[0].toLowerCase().split(' ')[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green)"> Tick gut booster?</label>`:''}
+    <!-- Edit macros toggle -->
+    <div style="margin-top:6px">
+      <button onclick="toggleMacroEdit('${prefix}',${idx})" style="background:none;border:none;font-family:inherit;font-size:10px;color:var(--muted);cursor:pointer;padding:0;letter-spacing:1px">✏️ ${ov?'Edit / Reset macros':'Macros wrong? Edit'}</button>
+    </div>
+    <div id="${prefix}_macroedit_${idx}" style="display:none;margin-top:8px;padding:10px;background:var(--white);border:1px solid var(--border);border-left:3px solid #e07030;border-radius:2px">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#e07030;margin-bottom:8px">Edit per 100g values — saved for next time</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
+        <div><div style="font-size:9px;color:var(--muted);margin-bottom:2px">Kcal</div><input id="${prefix}_ov_k_${idx}" type="number" value="${k}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:12px;color:var(--text);border-radius:2px;box-sizing:border-box"></div>
+        <div><div style="font-size:9px;color:#b8934a;margin-bottom:2px">Protein g</div><input id="${prefix}_ov_p_${idx}" type="number" value="${p}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:12px;color:var(--text);border-radius:2px;box-sizing:border-box"></div>
+        <div><div style="font-size:9px;color:#4a8c6a;margin-bottom:2px">Carbs g</div><input id="${prefix}_ov_c_${idx}" type="number" value="${c}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:12px;color:var(--text);border-radius:2px;box-sizing:border-box"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+        <div><div style="font-size:9px;color:#6a9898;margin-bottom:2px">Fat g</div><input id="${prefix}_ov_f_${idx}" type="number" value="${fa}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:12px;color:var(--text);border-radius:2px;box-sizing:border-box"></div>
+        <div><div style="font-size:9px;color:#9a7060;margin-bottom:2px">Fibre g</div><input id="${prefix}_ov_fi_${idx}" type="number" value="${fi}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:12px;color:var(--text);border-radius:2px;box-sizing:border-box"></div>
+        <div><div style="font-size:9px;color:#7a7aaa;margin-bottom:2px">Salt mg</div><input id="${prefix}_ov_sl_${idx}" type="number" value="${sl}" style="width:100%;padding:5px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:12px;color:var(--text);border-radius:2px;box-sizing:border-box"></div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button onclick="saveMacroOverride('${prefix}',${idx},this)" style="flex:1;padding:7px;background:#e07030;color:#fff;border:none;font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save</button>
+        ${ov?`<button onclick="resetMacroOverride(${idx},'${prefix}')" style="padding:7px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Reset to original</button>`:''}
+        <button onclick="toggleMacroEdit('${prefix}',${idx})" style="padding:7px 10px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Cancel</button>
+      </div>
+    </div>
     <div id="${prefix}_status_${idx}" style="font-size:11px;margin-top:4px;min-height:16px;color:var(--green)"></div>
   </div>`;
 }
@@ -4713,7 +4711,7 @@ function renderRestaurantCalc(container, which){
   const cart = state._restCart||{};
   const cartKey = which;
   const items = cart[cartKey]||[];
-  const totals = items.reduce((t,i)=>({kcal:t.kcal+i.kcal,p:t.p+i.p,c:t.c+i.c,f:t.f+i.f}),{kcal:0,p:0,c:0,f:0});
+  const totals = items.reduce((t,i)=>({kcal:t.kcal+i.kcal,p:t.p+i.p,c:t.c+i.c,f:t.f+i.f,fi:t.fi+(i.fi||0)}),{kcal:0,p:0,c:0,f:0,fi:0});
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--ink);margin-bottom:4px">${name}</div>
@@ -4755,7 +4753,7 @@ function renderRestaurantCalc(container, which){
       ${items.map((it,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)">
         <span style="font-size:12px;color:rgba(255,255,255,.7)">${it.name}</span>
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:11px;color:rgba(255,255,255,.4)">${it.kcal} kcal · ${it.p}g P</span>
+          <span style="font-size:10px;color:rgba(255,255,255,.4)">${it.kcal} kcal · ${it.p}g P · ${it.c}g C · ${it.f}g F${it.fi?` · ${it.fi}g fi`:''}</span>
           <button onclick="removeRestItem('${cartKey}',${i})" style="background:none;border:none;color:rgba(255,255,255,.3);cursor:pointer;font-size:14px;padding:0 4px">×</button>
         </div>
       </div>`).join("")}
@@ -4764,6 +4762,7 @@ function renderRestaurantCalc(container, which){
         <span style="font-size:12px;color:#b8934a">${totals.p}g P</span>
         <span style="font-size:12px;color:#4a8c6a">${totals.c}g C</span>
         <span style="font-size:12px;color:#6a9898">${totals.f}g F</span>
+        ${totals.fi?`<span style="font-size:12px;color:#9a7060">${totals.fi}g fibre</span>`:''}
       </div>
       <div style="display:flex;gap:8px;margin-top:10px">
         <button onclick="logRestOrder('${cartKey}','${name}');flashBtn(this)" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
@@ -4788,7 +4787,7 @@ function renderRestaurantCalc(container, which){
                 ${item.tags?`<span style="font-size:9px;color:var(--muted)">${item.tags}</span>`:''}
                 ${tags.badges.map(b=>`<span style="font-size:9px;padding:1px 5px;border-radius:10px;background:${b.bg};color:${b.color};white-space:nowrap">${b.label}</span>`).join('')}
               </div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">${item.kcal} kcal · ${item.p}g P · ${item.c}g C · ${item.f}g F</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">${item.kcal} kcal · ${item.p}g P · ${item.c}g C · ${item.f}g F${item.fi?` · ${item.fi}g fibre`:''}</div>
             </div>
             <button onclick="addRestItemByKey('${cartKey}','${sec.key}',${(data[sec.key]||[]).indexOf(item)})" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap;flex-shrink:0">+ Add</button>
           </div>`;
@@ -4801,10 +4800,10 @@ function saveRestOrder(cartKey, restName, btn){
   if(!items.length){showMealStatus('Add items first',false);return;}
   const nameEl=document.getElementById(`restOrderName_${cartKey}`);
   const orderName=nameEl?.value.trim()||(restName+' order');
-  const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f}),{kcal:0,p:0,c:0,f:0});
+  const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f,fi:s.fi+(i.fi||0)}),{kcal:0,p:0,c:0,f:0,fi:0});
   if(!state._savedRestOrders)state._savedRestOrders={};
   if(!state._savedRestOrders[cartKey])state._savedRestOrders[cartKey]=[];
-  state._savedRestOrders[cartKey].push({orderName,kcal:t.kcal,p:t.p,c:t.c,f:t.f,items:JSON.parse(JSON.stringify(items))});
+  state._savedRestOrders[cartKey].push({orderName,kcal:t.kcal,p:t.p,c:t.c,f:t.f,fi:t.fi,items:JSON.parse(JSON.stringify(items))});
   persist();
   flashBtn(btn);
   showMealStatus(`💾 "${orderName}" saved`,true);
@@ -5061,6 +5060,30 @@ function saveMealEntry(catId,idx){
   state._mealEditing=null;
   persist();
   renderMeals();
+}
+
+function toggleMacroEdit(prefix,idx){
+  const el=document.getElementById(`${prefix}_macroedit_${idx}`);
+  if(el)el.style.display=el.style.display==='none'?'block':'none';
+}
+
+function saveMacroOverride(prefix,idx,btn){
+  const k=parseFloat(document.getElementById(`${prefix}_ov_k_${idx}`)?.value)||0;
+  const p=parseFloat(document.getElementById(`${prefix}_ov_p_${idx}`)?.value)||0;
+  const c=parseFloat(document.getElementById(`${prefix}_ov_c_${idx}`)?.value)||0;
+  const fa=parseFloat(document.getElementById(`${prefix}_ov_f_${idx}`)?.value)||0;
+  const fi=parseFloat(document.getElementById(`${prefix}_ov_fi_${idx}`)?.value)||0;
+  const sl=parseFloat(document.getElementById(`${prefix}_ov_sl_${idx}`)?.value)||0;
+  if(!state.foodOverrides)state.foodOverrides={};
+  state.foodOverrides[idx]={kcal:k,protein:p,carbs:c,fat:fa,fibre:fi,salt:sl};
+  persist();
+  if(btn){btn.style.background='#4a8c6a';btn.textContent='✓ Saved';}
+  renderFood();
+}
+
+function resetMacroOverride(idx,prefix){
+  if(state.foodOverrides)delete state.foodOverrides[idx];
+  persist();renderFood();
 }
 
 function showLoggedToast(name, kcal, protein){
@@ -5410,12 +5433,8 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_walk_flat",  label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
-    {id:"ex_walk_flat2", label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
-    {id:"ex_walk_flat3", label:"Flat Morning Walk",     type:"cardio", color:"#4a6a8a", sub:"Before work · quick", note:"4.5–4.8 mph · 15–20 min · fasted"},
-    {id:"ex_walk_home",  label:"Home Incline Walk",     type:"cardio", color:"#4a6a8a", sub:"Evening or morning",   note:"6% · 4.5 mph · 25–30 min · fasted / before workout / 2hrs after meal"},
-    {id:"ex_walk_home2", label:"Home Incline Walk",     type:"cardio", color:"#4a6a8a", sub:"Evening or morning",   note:"6% · 4.5 mph · 25–30 min · fasted / before workout / 2hrs after meal"},
-    {id:"ex_walk_gym",   label:"Gym Incline Walk",      type:"cardio", color:"#5a7a9a", sub:"Daytime · before workout OK", note:"8–10% · 4.3–4.5 mph · 20–25 min · fasted / before workout / 2hrs after meal"},
+    {id:"ex_walk1",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed · fat burn zone"},
+    {id:"ex_walk2",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed · fat burn zone"},
     {id:"ex_pilates1", label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",                                    note:"Inner thigh · waist · glutes · posture"},
     {id:"ex_lagree",   label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates",                    note:"High intensity · lean muscle · glutes"},
     {id:"ex_pt",       label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",                                    note:"Compound lifts · upper body + core · kefir shake first"},
@@ -5467,7 +5486,7 @@ function renderExerciseTab(){
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px">This Week</div>
-          <div style="font-size:11px;color:var(--soft);line-height:1.8">Flat Walk ×2–3<br>Home Incline ×2<br>Gym Incline ×1<br>Reformer / Lagree<br>PT Strength<br>Own Strength</div>
+          <div style="font-size:11px;color:var(--soft);line-height:1.8">Incline Walk ×2<br>Reformer Pilates<br>Lagree<br>PT Strength<br>Own Strength</div>
         </div>
         <div>
           <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Substitutes</div>
@@ -5487,9 +5506,7 @@ function renderExerciseTab(){
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">This Week</div>
 
       ${[
-        {label:"Flat Walks (2–3×)",    target:3, ids:["ex_walk_flat","ex_walk_flat2","ex_walk_flat3"], color:"#4a6a8a"},
-        {label:"Home Incline (2×)",     target:2, ids:["ex_walk_home","ex_walk_home2"], color:"#4a6a8a"},
-        {label:"Gym Incline (1×)",      target:1, ids:["ex_walk_gym"], color:"#5a7a9a"},
+        {label:"Incline Walks",       target:2, ids:["ex_walk1","ex_walk2"],    color:"#4a6a8a"},
         {label:"Sculpt (Pilates/Lagree)", target:2, ids:["ex_pilates1","ex_lagree"], color:"#4a8c6a"},
         {label:"Strength",            target:2, ids:["ex_pt","ex_strength"],    color:"#b8934a"},
       ].map(group=>{
@@ -5529,7 +5546,7 @@ function renderExerciseTab(){
     <div style="margin-bottom:20px">
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Daily Walks · This Week</div>
       ${[
-        {label:"Morning fasted walk",id:"m4",color:"#4a6a8a",target:7,note:"Fasted · before kefir"},
+        {label:"Morning fasted walk",id:"m_walk_daily",color:"#4a6a8a",target:7,note:"6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed"},
         {label:"Evening walk",id:"e0b",color:"#4a8c6a",target:7,note:"After dinner · flat · 20 min"},
       ].map(w=>{
         // Count how many days this week the item is ticked
