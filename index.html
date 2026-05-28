@@ -5077,8 +5077,26 @@ function saveMacroOverride(prefix,idx,btn){
   if(!state.foodOverrides)state.foodOverrides={};
   state.foodOverrides[idx]={kcal:k,protein:p,carbs:c,fat:fa,fibre:fi,salt:sl};
   persist();
-  if(btn){btn.style.background='#4a8c6a';btn.textContent='✓ Saved';}
-  renderFood();
+  // Flash button green
+  if(btn){btn.style.background='#4a8c6a';btn.style.borderColor='#4a8c6a';btn.textContent='✓ Saved';}
+  // Update displayed macros in-place without re-rendering
+  const srvEl=document.getElementById(`${prefix}_srv_${idx}`);
+  const servG=parseFloat(srvEl?.value)||100;
+  const macroEl=document.getElementById(`${prefix}_macros_${idx}`);
+  if(macroEl){
+    macroEl.innerHTML=`
+      <span style="font-size:11px;color:var(--ink);font-weight:500">${Math.round(k*servG/100)} kcal</span>
+      <span style="font-size:11px;color:#b8934a">${(p*servG/100).toFixed(1)}g P</span>
+      <span style="font-size:11px;color:#4a8c6a">${(c*servG/100).toFixed(1)}g C</span>
+      <span style="font-size:11px;color:#6a9898">${(fa*servG/100).toFixed(1)}g F</span>
+      <span style="font-size:11px;color:#9a7060">${(fi*servG/100).toFixed(1)}g fibre</span>
+      ${sl?`<span style="font-size:11px;color:#7a7aaa">${Math.round(sl*servG/100)}mg salt</span>`:''}`;
+  }
+  // Close the edit panel after 800ms
+  setTimeout(()=>{
+    const editEl=document.getElementById(`${prefix}_macroedit_${idx}`);
+    if(editEl)editEl.style.display='none';
+  },800);
 }
 
 function resetMacroOverride(idx,prefix){
