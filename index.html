@@ -1352,10 +1352,12 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
             <span style="font-size:10px;color:var(--muted);margin-left:5px;min-width:28px">0/2</span>
           </div>
         </div><div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
-          <div style="flex:1;font-size:13px;color:var(--text)">Strength</div>
-          <div style="display:flex;gap:5px;align-items:center">
-            <div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_pt')"></div><div style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s" onclick="toggleExerciseCheck('ex_strength')"></div>
-            <span style="font-size:10px;color:var(--muted);margin-left:5px;min-width:28px">0/2</span>
+          <div style="flex:1;font-size:13px;color:var(--text)">Strength <span style="font-size:10px;color:var(--muted)">PT · Upper+Core · Lower</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent" onclick="toggleExerciseCheck('ex_pt')"></div>
+            <div style="width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent" onclick="toggleExerciseCheck('ex_strength_upper')"></div>
+            <div style="width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border);background:none;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent" onclick="toggleExerciseCheck('ex_strength_lower')"></div>
+            <span style="font-size:10px;color:var(--muted);margin-left:4px;min-width:28px">0/3</span>
           </div>
         </div>
     </div>
@@ -5451,12 +5453,15 @@ function renderExerciseTab(){
 
   // Weekly exercise sessions — each has a checkbox id
   const sessions=[
-    {id:"ex_walk1",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed · fat burn zone"},
-    {id:"ex_walk2",    label:"Incline Walk",          type:"cardio",   color:"#4a6a8a", sub:"Infrared Sculpt · Infrared Strength", note:"6% · 5.5 km/h · 30–35 min · morning fasted OR after dinner if missed · fat burn zone"},
-    {id:"ex_pilates1", label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",                                    note:"Inner thigh · waist · glutes · posture"},
-    {id:"ex_lagree",   label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates",                    note:"High intensity · lean muscle · glutes"},
-    {id:"ex_pt",       label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",                                    note:"Compound lifts · upper body + core · kefir shake first"},
-    {id:"ex_strength", label:"Own Strength Session",  type:"strength", color:"#b8934a", sub:"",                                    note:"Follow PT programme independently"},
+    {id:"ex_walk_flat",  label:"Flat Morning Walk",     type:"cardio",   color:"#4a6a8a", sub:"",          note:"4.5–4.8 mph · 15–20 min · fasted · lower impact on heavy training days · 30–40% less efficient than incline but steps count is identical"},
+    {id:"ex_walk1",      label:"Home Incline Walk",     type:"cardio",   color:"#3a5a7a", sub:"",          note:"6% (treadmill max) · 4.5 mph · 25–30 min · fasted, before workout, or 2h after a meal · fat burn zone"},
+    {id:"ex_walk2",      label:"Home Incline Walk",     type:"cardio",   color:"#3a5a7a", sub:"",          note:"6% (treadmill max) · 4.5 mph · 25–30 min · fasted, before workout, or 2h after a meal · fat burn zone"},
+    {id:"ex_walk_gym",   label:"Gym Incline Walk",      type:"cardio",   color:"#2a4a6a", sub:"",          note:"8–10% · 4.3–4.5 mph · 20–25 min · same timing rules · higher incline shifts work to glutes and hamstrings — key for lower body reshaping"},
+    {id:"ex_pilates1",   label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",          note:"Inner thigh · waist · glutes · posture"},
+    {id:"ex_lagree",     label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates", note:"High intensity · lean muscle · glutes"},
+    {id:"ex_pt",         label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",          note:"Compound lifts · upper body + core · kefir shake first"},
+    {id:"ex_strength_upper", label:"Own Strength — Upper Body + Core", type:"strength", color:"#c8a45a", sub:"", note:"Shoulders · arms · chest · core · Pallof press · dead bug · side-lying leg lift"},
+    {id:"ex_strength_lower", label:"Own Strength — Lower Body",        type:"strength", color:"#c8a45a", sub:"", note:"Glutes · hamstrings · inner thigh · Romanian deadlift · sumo squat · donkey kick"},
   ];
 
   // HIIT guidance based on phase
@@ -5524,9 +5529,11 @@ function renderExerciseTab(){
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">This Week</div>
 
       ${[
-        {label:"Incline Walks",       target:2, ids:["ex_walk1","ex_walk2"],    color:"#4a6a8a"},
+        {label:"Flat Morning Walk",   target:3, ids:["ex_walk_flat","ex_walk_flat2","ex_walk_flat3"], color:"#4a6a8a"},
+    {label:"Home Incline Walk",    target:2, ids:["ex_walk1","ex_walk2"],    color:"#3a5a7a"},
+    {label:"Gym Incline Walk",     target:1, ids:["ex_walk_gym"],            color:"#2a4a6a"},
         {label:"Sculpt (Pilates/Lagree)", target:2, ids:["ex_pilates1","ex_lagree"], color:"#4a8c6a"},
-        {label:"Strength",            target:2, ids:["ex_pt","ex_strength"],    color:"#b8934a"},
+        {label:"Strength (PT · Upper+Core · Lower)", target:3, ids:["ex_pt","ex_strength_upper","ex_strength_lower"], color:"#b8934a"},
       ].map(group=>{
         const doneCount=group.ids.filter(id=>exChecks[id]).length;
         const dots=Array.from({length:group.target},(_,i)=>`<div
@@ -5560,6 +5567,24 @@ function renderExerciseTab(){
       }).join("")}
     </div>
 
+    <!-- Walk guide -->
+    <div style="margin-bottom:16px;padding:14px;background:rgba(42,74,106,.08);border:1px solid rgba(42,74,106,.2);border-left:3px solid #3a5a7a;border-radius:2px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#4a6a8a;margin-bottom:10px">🚶 Your 3 Walk Types · 4–5× per week total</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="padding:8px 10px;background:rgba(74,106,138,.08);border-radius:2px">
+          <div style="font-size:12px;font-weight:500;color:var(--text)">1 · Flat Morning Walk <span style="font-size:10px;font-weight:400;color:var(--muted)">2–3× per week</span></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">4.5–4.8 mph · 15–20 min · fasted · best on heavy training days · 30–40% less efficient than incline but steps count is identical</div>
+        </div>
+        <div style="padding:8px 10px;background:rgba(58,90,122,.08);border-radius:2px">
+          <div style="font-size:12px;font-weight:500;color:var(--text)">2 · Home Incline Walk <span style="font-size:10px;font-weight:400;color:var(--muted)">2× per week</span></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">6% (treadmill max) · 4.5 mph · 25–30 min · fasted, before a workout, or 2h after a meal</div>
+        </div>
+        <div style="padding:8px 10px;background:rgba(42,74,106,.08);border-radius:2px">
+          <div style="font-size:12px;font-weight:500;color:var(--text)">3 · Gym Incline Walk <span style="font-size:10px;font-weight:400;color:var(--muted)">1× per week</span></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">8–10% · 4.3–4.5 mph · 20–25 min · same timing rules · higher incline shifts work to glutes and hamstrings — key for lower body reshaping</div>
+        </div>
+      </div>
+    </div>
     <!-- Daily walks — weekly trackers linked to routine -->
     <div style="margin-bottom:20px">
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Daily Walks · This Week</div>
