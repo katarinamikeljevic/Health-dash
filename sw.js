@@ -1,24 +1,23 @@
-const CACHE = 'health-dash-v1';
-const ASSETS = [
-  '/Health-dash/',
-  '/Health-dash/index.html',
-  '/Health-dash/manifest.json'
-];
+const CACHE = 'health-dash-v2';
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys =>
-    Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    Promise.all(keys.map(k => caches.delete(k)))
   ));
   self.clients.claim();
 });
 
+// Network first, cache fallback for offline only
 self.addEventListener('fetch', e => {
   e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request))
+    fetch(e.request).then(res => {
+      const clone = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, clone));
+      return res;
+    }).catch(() => caches.match(e.request))
   );
 });
