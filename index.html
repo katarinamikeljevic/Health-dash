@@ -1844,6 +1844,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
 <!-- CYCLE TAB -->
 <div id="tab-cycle" class="panel">
   <div id="cycleContainer" style="padding:16px 16px 40px">
+    <div id="cycleTabBanner" style="margin-bottom:14px"></div>
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:16px">Cycle Guide</div>
     <div class="card" style="margin:0 0 14px">
     <div class="card-label">Your Cycle Settings</div>
@@ -2721,9 +2722,11 @@ function getCyclePhase() {
   today.setHours(0,0,0,0);
   start.setHours(0,0,0,0);
   const diffDays = Math.floor((today - start) / 86400000);
-  const cycleDay = (diffDays % CYCLE_LENGTH) + 1;
+  // Never auto-roll into a new cycle — cap at CYCLE_LENGTH so phase stays
+  // in late luteal until user manually updates their period start date
+  const cycleDay = Math.min(diffDays + 1, CYCLE_LENGTH);
   const phase = CYCLE_PHASES.find(p => cycleDay >= p.days[0] && cycleDay <= p.days[1]);
-  return { phase: phase || CYCLE_PHASES[3], cycleDay };
+  return { phase: phase || CYCLE_PHASES[3], cycleDay, overdue: diffDays + 1 > CYCLE_LENGTH };
 }
 
 function setCycleStart(val) {
@@ -2739,7 +2742,36 @@ function renderCycleBanner() {
   const result = getCyclePhase();
 
   if (!result) {
-    el.innerHTML = `<div style="margin:10px 16px 0;padding:14px 16px;background:var(--white);border:1px solid var(--border)">
+    el.innerHTML = `<div style="margin:10px 16px 0;padding:10px 16px;background:var(--white);border:1px solid var(--border)">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">🌙 Cycle Phase</div>
+      <div style="font-size:12px;color:var(--soft)">Set your last period start date in the Cycle tab to get personalised food recommendations.</div>
+    </div>`;
+    return;
+  }
+
+  const { phase, cycleDay, overdue } = result;
+  const isLateLuteal = cycleDay >= 24;
+
+  // Food log shows compact version — phase name + prioritise foods only, no overdue notice
+  el.innerHTML = `<div class="cycle-banner" style="background:${phase.bg};border-color:${phase.border}">
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">
+      <div class="cycle-day" style="color:${phase.color}">${phase.emoji} Day ${cycleDay} of ${CYCLE_LENGTH}</div>
+      <div class="cycle-phase-name" style="color:var(--ink);font-size:15px">${phase.name}<span style="font-size:12px;color:var(--muted);margin-left:6px">Phase${isLateLuteal?' · Late luteal':''}</span></div>
+    </div>
+    <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${phase.color};margin-bottom:5px">✓ Prioritise now</div>
+    <div class="cycle-foods">
+      ${phase.prioritiseNames.map(n=>`<span class="cycle-food-tag" style="background:${phase.tagBg};color:${phase.color};border-color:${phase.border}">${n}</span>`).join("")}
+    </div>
+  </div>`;
+}
+
+function renderCycleTabBanner(el) {
+  // Full detail banner used in cycle tab — includes overdue notice, tips, avoid foods, date input
+  if (!el) return;
+  const result = getCyclePhase();
+
+  if (!result) {
+    el.innerHTML = `<div style="padding:14px 16px;background:var(--white);border:1px solid var(--border)">
       <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">🌙 Cycle Phase · Food Guide</div>
       <div style="font-size:12px;color:var(--soft);margin-bottom:10px">Set your last period start date to get personalised food recommendations for each phase.</div>
       <div style="display:flex;align-items:center;gap:8px">
@@ -2750,17 +2782,18 @@ function renderCycleBanner() {
     return;
   }
 
-  const { phase, cycleDay } = result;
+  const { phase, cycleDay, overdue } = result;
   const daysLeft = phase.days[1] - cycleDay + 1;
   const isLateLuteal = cycleDay >= 24;
 
   el.innerHTML = `<div class="cycle-banner" style="background:${phase.bg};border-color:${phase.border}">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
       <div>
-        <div class="cycle-day" style="color:${phase.color}">${phase.emoji} Day ${cycleDay} of ${CYCLE_LENGTH} · ${daysLeft} day${daysLeft!==1?"s":""} left in phase${isLateLuteal?" · Late luteal — expect cravings & fatigue":""}</div>
+        <div class="cycle-day" style="color:${phase.color}">${phase.emoji} Day ${cycleDay} of ${CYCLE_LENGTH}${overdue?'':` · ${daysLeft} day${daysLeft!==1?"s":""} left in phase`}${isLateLuteal&&!overdue?" · Late luteal — expect cravings &amp; fatigue":""}</div>
         <div class="cycle-phase-name" style="color:var(--ink)">${phase.name}<span style="font-size:14px;color:var(--muted);margin-left:8px">Phase</span></div>
       </div>
     </div>
+    ${overdue?`<div style="font-size:11px;color:#c07030;margin-bottom:8px;padding:8px 12px;background:rgba(192,112,48,.08);border-radius:2px;border-left:3px solid #c07030">⏳ Period is late — staying in late luteal until you update your period start date below. Food suggestions reflect where you are hormonally right now.</div>`:''}
     <div style="font-size:11px;color:var(--soft);margin-bottom:10px;line-height:1.6">${phase.tips}</div>
     <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:${phase.color};margin-bottom:6px">✓ Prioritise now</div>
     <div class="cycle-foods">
@@ -2772,7 +2805,7 @@ function renderCycleBanner() {
       ${phase.avoidNames.map(n=>`<span class="cycle-food-tag" style="background:rgba(224,112,112,.1);color:var(--red);border-color:rgba(224,112,112,.3)">${n}</span>`).join("")}
     </div>`:""}
     <div class="cycle-settings">
-      <label style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase">Last period:</label>
+      <label style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase">Last period started:</label>
       <input type="date" value="${state.cycleStart||""}" onchange="setCycleStart(this.value)" style="background:rgba(255,255,255,.6);border:1px solid ${phase.border};color:var(--ink);padding:5px 8px;font-size:12px;border-radius:2px;font-family:inherit">
     </div>
   </div>`;
@@ -3204,7 +3237,45 @@ const FOOD_DB=[
   ["Garlic clove",4,0.2,1,0,0.1,0,9,"3 cloves (9g)"],
   ["Garlic powder",32,1.5,7,0.1,0.5,2,10,"1 tsp (10g)"],
   ["Garlic minced",149,6.4,33,0.5,2.1,17,100,"per 100g"],
-  // ── DELI MEATS ──
+  // ── CHEESE ──
+  ["Parmesan (grated)",431,38,0,29,0,1600,10,"1 tbsp (10g)"],
+  ["Parmesan (grated)",431,38,0,29,0,1600,20,"2 tbsp (20g)"],
+  ["Parmesan (grated)",431,38,0,29,0,1600,30,"30g serving"],
+  ["Mozzarella (light)",149,21,0,7,0,400,125,"1 ball (125g)"],
+  ["Mozzarella (full fat)",253,19,0,19,0,390,125,"1 ball (125g)"],
+  ["Feta cheese",264,14,0,21,0,1116,30,"30g crumbled"],
+  ["Feta cheese",264,14,0,21,0,1116,50,"50g serving"],
+  ["Cheddar",416,25,0,34,0,670,30,"30g slice"],
+  ["Cheddar reduced fat",261,32,0,13,0,680,30,"30g slice"],
+  ["Cottage cheese (plain)",98,11,3.4,4.3,0,363,100,"100g serving"],
+  ["Ricotta",174,11,3,13,0,103,100,"100g serving"],
+  ["Brie",319,20,0,26,0,630,30,"30g slice"],
+  ["Camembert",297,20,0,23,0,650,30,"30g slice"],
+  ["Goat cheese",230,18,0,17,0,370,30,"30g serving"],
+  ["Halloumi",321,22,1,25,0,2190,80,"2 slices (80g)"],
+  ["Halloumi light",224,25,1,13,0,1800,80,"2 slices (80g)"],
+  ["Cream cheese",342,6,4,33,0,330,30,"1 tbsp (30g)"],
+  ["Cream cheese light",167,7,5,13,0,430,30,"1 tbsp (30g)"],
+  ["Gruyère",413,30,0,32,0,670,30,"30g slice"],
+  ["Manchego",392,26,0,32,0,600,30,"30g slice"],
+  ["Philadelphia Original",258,6,4,24,0,490,30,"1 tbsp (30g)"],
+  ["Philadelphia Lightest",108,12,5,4,0,510,30,"1 tbsp (30g)"],
+  // ── H&B HIGH PROTEIN PASTA (per 100g dry) ──
+  ["H&B Green Pea Tagliatelle",347,22,52,3,8,30,80,"1 portion dry (80g)"],
+  ["H&B Green Pea Tagliatelle",347,22,52,3,8,30,100,"per 100g dry"],
+  ["H&B Red Lentil Fusilli",350,25,55,2,8,10,80,"1 portion dry (80g)"],
+  ["H&B Red Lentil Fusilli",350,25,55,2,8,10,100,"per 100g dry"],
+  ["H&B Chickpea Penne",350,20,53,5,10,20,80,"1 portion dry (80g)"],
+  ["H&B Chickpea Penne",350,20,53,5,10,20,100,"per 100g dry"],
+  // ── PESTO (per 100g, use tbsp serving) ──
+  ["Sacla Classic Basil Pesto",347,4.4,6.9,33,2.4,3000,20,"1 tbsp (20g) — 69 kcal"],
+  ["Sacla Classic Basil Pesto",347,4.4,6.9,33,2.4,3000,40,"2 tbsp (40g)"],
+  ["Sacla Reduced Fat Pesto",236,3.3,4.8,22,0,1200,20,"1 tbsp (20g) — 47 kcal"],
+  ["Sacla Vegan Basil Pesto",342,2.8,9.6,32,2.4,1200,20,"1 tbsp (20g) — 68 kcal"],
+  ["Barilla Basil Pesto",454,6,6,45,1.5,1100,20,"1 tbsp (20g) — 91 kcal"],
+  ["Napolina Basil Pesto",430,5,5,43,2,900,20,"1 tbsp (20g) — 86 kcal"],
+  ["Waitrose Essential Pesto",380,5,7,37,2,1400,20,"1 tbsp (20g) — 76 kcal"],
+  ["Red Pesto (Sacla)",390,4,8,38,2,1500,20,"1 tbsp (20g) — 78 kcal"],
   ["Lean turkey breast slice",105,22,0,1.2,0,680,20,"1 slice (20g)"],
   ["Lean turkey breast slice",105,22,0,1.2,0,680,40,"2 slices (40g)"],
   ["Lean turkey breast slice",105,22,0,1.2,0,680,60,"3 slices (60g)"],
@@ -5337,6 +5408,9 @@ function setCycleLen(val){state.cycleLength=parseInt(val)||27;persist();renderCy
 function renderCycleTab(){
   const container=document.getElementById("cycleContainer");
   if(!container)return;
+  // Render full detail banner in cycle tab
+  const cycleDetailEl=document.getElementById("cycleTabBanner");
+  if(cycleDetailEl)renderCycleTabBanner(cycleDetailEl);
   const result=getCyclePhase();
   const savedDate=state.cycleStart||state.cycleLastPeriod||"";
   const cycleLen=state.cycleLength||27;
