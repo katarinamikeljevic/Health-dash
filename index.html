@@ -737,21 +737,29 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
     <div class="card-label">🍵 Teas — When to Drink</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
       <div style="padding:10px;background:#f0f8f0;border:1px solid rgba(122,184,122,.3);border-left:3px solid #7ab87a">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a8c6a;margin-bottom:4px">AM</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a8c6a;margin-bottom:4px">AM / Anytime</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400">Green tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Antioxidant · fat oxidation</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Green Mint tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Antioxidant + digestion · refreshing</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Ginger tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Anti-inflammatory · digestion</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Rooibos tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Caffeine-free · antioxidant · any time</div>
       </div>
       <div style="padding:10px;background:#f4f0f8;border:1px solid rgba(138,120,192,.3);border-left:3px solid #8a78c0">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7060a8;margin-bottom:4px">PM</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7060a8;margin-bottom:4px">PM / Evening</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400">Dandelion tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Diuretic · reduces puffiness</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Peppermint tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Digestion · bloat relief</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Pukka After Dinner</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Fennel + cardamom · post-meal digestion</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Pukka Nighttime</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Valerian + lavender · 30 min before bed</div>
       </div>
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:8px">Herbal teas count toward your daily water target ✓</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">Herbal teas count toward your daily water target ✓ · Pukka Nighttime: caffeine-free, supports sleep</div>
   </div></div>
   <div id="gutSection" style="padding:0 16px">
     <div class="gut-intro">
@@ -2903,13 +2911,15 @@ const FOOD_DB=[
   ["Almonds",579,21,22,50,12.5,1,12,"10 almonds (12g)"],
   ["Pistachios shelled",562,20,28,45,10,0,25,"small handful (25g)"],
   ["Flaxseeds ground",534,18,29,42,27,30,10,"1 tbsp (10g)"],
+  ["Linwood Milled Flaxseed",534,19,29,42,27,30,15,"1 tbsp (15g)"],
   ["Chia seeds",486,17,42,31,34,16,5,"1 tsp (5g)"],
   ["Chia seeds",486,17,42,31,34,16,10,"1 tbsp (10g)"],
+  ["Naturya Organic Chia Seeds",486,16.5,7.7,30.7,34.4,16,12,"1 tbsp (12g)"],
   ["Pumpkin seeds",559,19,18,49,18,9,10,"1 tbsp (10g)"],
   ["Almond butter",614,21,20,56,7,4,16,"1 tbsp (16g)"],
   ["Meridian Almond Butter",614,24.7,9.6,56.5,8.5,4,16,"1 tbsp (16g)"],
   ["Peanut butter natural",588,25,20,50,6,8,16,"1 tbsp (16g)"],
-  ["Meridian Peanut Butter",623,26.5,13.4,51.2,5.3,8,16,"1 tbsp (16g)"],
+  ["Meridian Crunchy PB",614,25.4,13.1,49.7,6.2,8,16,"1 tbsp (16g)"],
   ["Whole Earth Peanut Butter",617,27,13,52,6,8,16,"1 tbsp (16g)"],
   // ── VEGETABLES ──
   ["Spinach raw",23,2.9,3.6,0.4,2.2,79,80,"large handful (80g)"],
@@ -3026,6 +3036,7 @@ const FOOD_DB=[
   ["Black tea with skimmed milk",12,0.9,1.6,0.1,0,18,200,"1 mug + splash"],
   ["Black tea with semi-skimmed milk",18,0.9,1.8,0.5,0,18,200,"1 mug + splash"],
   ["Black coffee",5,0.3,0,0.1,0,5,200,"1 mug (200ml)"],
+  ["Lor Espresso Capsule",2,0.1,0,0,0,2,30,"1 shot (30ml)"],
   ["Cappuccino oat milk",54,1.8,7.2,2.1,0.4,50,200,"1 regular cup"],
   ["Oat milk barista Oatly",52,1,6.5,3,0.8,80,200,"200ml"],
   ["Almond milk unsweetened",13,0.5,0.4,1.1,0.2,75,200,"200ml"],
@@ -4225,21 +4236,29 @@ function renderFood(){
     <div class="card-label">🍵 Teas — When to Drink</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
       <div style="padding:10px;background:#f0f8f0;border:1px solid rgba(122,184,122,.3);border-left:3px solid #7ab87a">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a8c6a;margin-bottom:4px">AM</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a8c6a;margin-bottom:4px">AM / Anytime</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400">Green tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Antioxidant · fat oxidation</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Green Mint tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Antioxidant + digestion · refreshing</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Ginger tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Anti-inflammatory · digestion</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Rooibos tea</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Caffeine-free · antioxidant · any time</div>
       </div>
       <div style="padding:10px;background:#f4f0f8;border:1px solid rgba(138,120,192,.3);border-left:3px solid #8a78c0">
-        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7060a8;margin-bottom:4px">PM</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7060a8;margin-bottom:4px">PM / Evening</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400">Dandelion tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Diuretic · reduces puffiness</div>
         <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Peppermint tea</div>
         <div style="font-size:10px;color:var(--muted);margin-top:1px">Digestion · bloat relief</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Pukka After Dinner</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Fennel + cardamom · post-meal digestion</div>
+        <div style="font-size:12.5px;color:var(--text);font-weight:400;margin-top:6px">Pukka Nighttime</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">Valerian + lavender · 30 min before bed</div>
       </div>
     </div>
-    <div style="font-size:10px;color:var(--muted);margin-top:8px">Herbal teas count toward your daily water target ✓</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:8px">Herbal teas count toward your daily water target ✓ · Pukka Nighttime: caffeine-free, supports sleep</div>
   </div>
   <div class="card" style="margin-bottom:4px">
     <div class="card-label">🍵 Bone Broth & Miso — When to Have</div>
