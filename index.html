@@ -556,7 +556,7 @@ button,input,textarea,select{font-family:inherit}
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
         <div><div class="meal-field-lbl">Fibre (g)</div><input id="efi0" class="meal-input" type="number" inputmode="decimal" value="1.3"></div>
         <div><div class="meal-field-lbl">Calories</div><input id="ek0" class="meal-input" type="number" inputmode="decimal" value="32"></div>
-        <div><div class="meal-field-lbl">Salt (mg)</div><input id="es0" class="meal-input" type="number" inputmode="decimal" value="20"></div>
+        <div><div class="meal-field-lbl">Salt (g)</div><input id="es0" class="meal-input" type="number" inputmode="decimal" value="20"></div>
       </div>
       <div style="display:flex;gap:6px">
         <button onclick="saveMealEdit(0)" style="flex:1;padding:8px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer">Save</button>
@@ -649,7 +649,7 @@ button,input,textarea,select{font-family:inherit}
       <div class="meal-grid-3">
         <div><div class="meal-field-lbl">Fibre (g)</div><input id="mFi" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
         <div><div class="meal-field-lbl">Calories</div><input id="mK" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
-        <div><div class="meal-field-lbl">Salt (mg)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Salt (g)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:4px">
         <button class="btn-primary" style="flex:1" onclick="addMeal()">+ Log Today</button>
@@ -1229,7 +1229,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
                 <span style="font-size:11px;color:#4a8c6a">9.1g C</span>
                 <span style="font-size:11px;color:#6a9898">8.0g F</span>
                 <span style="font-size:11px;color:#9a7060">2.2g fibre</span>
-                <span style="font-size:11px;color:#7a7aaa">149mg salt</span>
+                <span style="font-size:11px;color:#7a7aaa">0.15g salt</span>
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
@@ -1258,7 +1258,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
                 <span style="font-size:11px;color:#4a8c6a">2.1g C</span>
                 <span style="font-size:11px;color:#6a9898">0.7g F</span>
                 
-                <span style="font-size:11px;color:#7a7aaa">2235mg salt</span>
+                <span style="font-size:11px;color:#7a7aaa">2.24g salt</span>
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
@@ -1287,7 +1287,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
                 <span style="font-size:11px;color:#4a8c6a">7.8g C</span>
                 <span style="font-size:11px;color:#6a9898">12.3g F</span>
                 <span style="font-size:11px;color:#9a7060">3.2g fibre</span>
-                <span style="font-size:11px;color:#7a7aaa">280mg salt</span>
+                <span style="font-size:11px;color:#7a7aaa">0.28g salt</span>
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
@@ -2016,7 +2016,7 @@ const MACROS=[
   {id:"carbs",label:"Carbs",target:130,unit:"g",color:"#4a8c6a",max:200},
   {id:"fibre",label:"Fibre",target:32,unit:"g",color:"#9a7060",max:55},
   {id:"kcal",label:"Calories",target:1550,unit:"kcal",color:"#9a7878",max:2200},
-  {id:"salt",label:"Salt (Sodium)",target:1500,unit:"mg",color:"#7a7aaa",max:3000},
+  {id:"salt",label:"Salt (Sodium)",target:1500,unit:"mg",color:"#7a7aaa",max:3000,displayUnit:"g",displayScale:0.001},
 ];
 
 const FOOD_CATS=[
@@ -2855,7 +2855,7 @@ const FOOD_DB=[
   ["Chobani Plain 0% Greek Yogurt",59,10,4,0.3,0,36,170,"1 pot (170g)"],
   ["Arla Skyr Plain",63,11,4.5,0.2,0,45,150,"1 pot (150g)"],
   ["0% Greek yogurt",57,10,4,0.2,0,46,150,"150g serving"],
-  ["Biotiful Kefir Plain",62,3.2,4.8,3.3,0,55,150,"150ml serving"],
+  ["Biotiful Kefir Plain",59,3.5,4.6,2.9,0,100,150,"150ml serving"],
   ["Biotiful Kefir 0 Fat",38,4.4,5.4,0.1,0,60,150,"150ml serving"],
   ["Fix8 Kefir Natural",72,4.5,5.2,3.5,0,60,250,"1 bottle (250ml)"],
   ["Fix8 Kefir Strawberry",78,4.2,8.5,3.2,0,58,250,"1 bottle (250ml)"],
@@ -3528,7 +3528,7 @@ async function lookupBarcode(code){
     st.textContent="✓ Found";
     res.innerHTML=`<div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px;border-radius:2px;margin-top:8px">
       <div style="font-size:13px;font-weight:400;color:var(--text);margin-bottom:6px">${name}</div>
-      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">per 100g: ${kcal} kcal · ${protein}g P · ${fat}g F · ${carbs}g C${fibre?" · "+fibre+"g fibre":""}${salt?" · "+salt+"mg salt":""}</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:6px">per 100g: ${kcal} kcal · ${protein}g P · ${fat}g F · ${carbs}g C${fibre?" · "+fibre+"g fibre":""}${salt?" · "+(salt/1000).toFixed(2)+"g salt":""}</div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <div style="font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Serving (g):</div>
         <input type="number" inputmode="decimal" value="${servG}" id="barcode_srv"
@@ -3615,7 +3615,7 @@ function buildFoodResultHTML(f,idx,prefix){
       <span style="font-size:11px;color:#4a8c6a">${(c*servG/100).toFixed(1)}g C</span>
       <span style="font-size:11px;color:#6a9898">${(fa*servG/100).toFixed(1)}g F</span>
       <span style="font-size:11px;color:#9a7060">${(fi*servG/100).toFixed(1)}g fibre</span>
-      ${sl?`<span style="font-size:11px;color:#7a7aaa">${Math.round(sl*servG/100)}mg salt</span>`:''}
+      ${sl?`<span style="font-size:11px;color:#7a7aaa">${(sl*servG/100/1000).toFixed(2)}g salt</span>`:''}
     </div>
     <div style="font-size:10px;color:var(--muted);margin-bottom:8px">per 100g: ${k} kcal · ${p}g P · ${fa}g F · ${c}g C${ov?' <span style="color:#e07030">(your values)</span>':''}</div>
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
@@ -3700,7 +3700,7 @@ function updateSearchMacrosWithFactor(prefix,idx,kcal,protein,carbs,fat,fibre,sa
     <span style="font-size:11px;color:#4a8c6a">${(carbs*g/100).toFixed(1)}g C</span>
     <span style="font-size:11px;color:#6a9898">${(fat*g/100).toFixed(1)}g F</span>
     <span style="font-size:11px;color:#9a7060">${(fibre*g/100).toFixed(1)}g fibre</span>
-    ${salt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(salt*g/100)}mg salt</span>`:''}`;
+    ${salt?`<span style="font-size:11px;color:#7a7aaa">${(salt*g/100/1000).toFixed(2)}g salt</span>`:''}`;
 }
 
 function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
@@ -3878,7 +3878,7 @@ async function scanLabel(input){
         <span style="font-size:11px;color:#4a8c6a">${(p.carbs*g/100).toFixed(1)}g C</span>
         <span style="font-size:11px;color:#6a9898">${(p.fat*g/100).toFixed(1)}g F</span>
         <span style="font-size:11px;color:#9a7060">${(p.fibre*g/100).toFixed(1)}g fibre</span>
-        ${p.salt_mg?`<span style="font-size:11px;color:#7a7aaa">${Math.round(p.salt_mg*g/100)}mg salt</span>`:""}
+        ${p.salt_mg?`<span style="font-size:11px;color:#7a7aaa">${(p.salt_mg*g/100/1000).toFixed(2)}g salt</span>`:""}
       </div>
       <div style="font-size:10px;color:var(--muted);margin-bottom:8px">per 100g: ${p.kcal} kcal · ${p.protein}g P · ${p.fat}g F · ${p.carbs}g C · Serving: ${label.servingLabel||g+"g"}</div>
       <div style="display:flex;align-items:center;gap:8px">
@@ -3905,7 +3905,7 @@ function updateLabelMacros(kcal,protein,carbs,fat,fibre,salt){
     <span style="font-size:11px;color:#4a8c6a">${(carbs*g/100).toFixed(1)}g C</span>
     <span style="font-size:11px;color:#6a9898">${(fat*g/100).toFixed(1)}g F</span>
     <span style="font-size:11px;color:#9a7060">${(fibre*g/100).toFixed(1)}g fibre</span>
-    ${salt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(salt*g/100)}mg salt</span>`:""}`;
+    ${salt?`<span style="font-size:11px;color:#7a7aaa">${(salt*g/100/1000).toFixed(2)}g salt</span>`:""}`;
 }
 
 function addLabelToLog(name,kcal,protein,carbs,fat,fibre,salt){
@@ -3961,7 +3961,7 @@ function renderFoodLogger(){
       <div class="meal-grid-3">
         <div><div class="meal-field-lbl">Fibre (g)</div><input id="mFi" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
         <div><div class="meal-field-lbl">Calories</div><input id="mK" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
-        <div><div class="meal-field-lbl">Salt (mg)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Salt (g)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:4px">
         <button class="btn-primary" style="flex:1" onclick="addMeal()">+ Log Today</button>
@@ -4089,7 +4089,7 @@ All numbers must be integers (rounded). salt is in mg. If you cannot determine a
     const kcal=parsed.kcal||0,protein=parsed.protein||0,carbs=parsed.carbs||0,fat=parsed.fat||0,fibre=parsed.fibre||0,salt=parsed.salt||0;
     if(preview)preview.innerHTML=`<div style="padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:2px">
       <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px">✨ ${name}</div>
-      <div style="font-size:11px;color:var(--soft)">${kcal} kcal · ${protein}g P · ${carbs}g C · ${fat}g F${fibre?' · '+fibre+'g fibre':''}${salt?' · '+salt+'mg salt':''}</div>
+      <div style="font-size:11px;color:var(--soft)">${kcal} kcal · ${protein}g P · ${carbs}g C · ${fat}g F${fibre?' · '+fibre+'g fibre':''}${salt?' · '+(salt/1000).toFixed(2)+'g salt':''}</div>
       <div style="display:flex;gap:6px;margin-top:8px">
         <button onclick="logAIParsed('${name.replace(/'/g,"\\'")}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="flex:1;padding:7px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">+ Log Today</button>
         <button onclick="saveAIParsed('${name.replace(/'/g,"\\'")}',${kcal},${protein},${fat},${carbs},${fibre},${salt})" style="flex:1;padding:7px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save</button>
@@ -4137,9 +4137,11 @@ function renderFood(){
     const cur=parseFloat(ms[m.id])||0,pct=Math.min(cur/m.max*100,100),tPct=Math.min(m.target/m.max*100,100);
     const over=cur>m.target,rem=m.target-cur;
     const col=over&&(m.id==="kcal"||m.id==="fat")?"var(--red)":m.color;
+    const sc=m.displayScale||1,du=m.displayUnit||m.unit;
+    const dCur=(cur*sc).toFixed(sc<1?1:0),dTgt=(m.target*sc).toFixed(sc<1?1:0),dRem=(Math.abs(rem)*sc).toFixed(sc<1?1:0);
     return `<div class="macro-row">
       <div class="macro-top"><span class="macro-name">${m.label}</span>
-      <span class="macro-vals"><strong>${cur}</strong>${m.unit} / ${m.target}${m.unit} <span style="color:${over?"var(--red)":"var(--muted)"};font-size:10px">${over?"↑ "+Math.abs(rem)+m.unit+" over":rem+m.unit+" left"}</span></span></div>
+      <span class="macro-vals"><strong>${dCur}</strong>${du} / ${dTgt}${du} <span style="color:${over?"var(--red)":"var(--muted)"};font-size:10px">${over?"↑ "+dRem+du+" over":dRem+du+" left"}</span></span></div>
       <div class="macro-bar-bg"><div class="macro-bar-fill" style="width:${pct}%;background:${col}"></div><div class="macro-target" style="left:${tPct}%"></div></div>
     </div>`;
   }).join("");
@@ -4154,7 +4156,7 @@ function renderFood(){
     <div class="meal-entry" id="meal-entry-${i}">
       <div style="flex:1">
         <div class="meal-entry-name">${m.name}</div>
-        <div class="meal-entry-macros">${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F${m.fibre?" · "+(+m.fibre||0).toFixed(1)+"g fibre":""}${m.salt?" · "+Math.round(+m.salt||0)+"mg salt":""} · ${m.time}</div>
+        <div class="meal-entry-macros">${m.kcal} kcal · ${(+m.protein||0).toFixed(1)}g P · ${(+m.carbs||0).toFixed(1)}g C · ${(+m.fat||0).toFixed(1)}g F${m.fibre?" · "+(+m.fibre||0).toFixed(1)+"g fibre":""}${m.salt?" · "+(((+m.salt||0)/1000).toFixed(2))+"g salt":""} · ${m.time}</div>
       </div>
       <button onclick="editMeal(${i})" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:10px;cursor:pointer;padding:4px 8px;margin-right:4px;border-radius:2px;letter-spacing:1px">Edit</button>
       <button class="meal-remove" onclick="removeMeal(${i})">×</button>
@@ -4172,7 +4174,7 @@ function renderFood(){
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
         <div><div class="meal-field-lbl">Fibre (g)</div><input id="efi${i}" class="meal-input" type="number" inputmode="decimal" value="${m.fibre||0}"></div>
         <div><div class="meal-field-lbl">Calories</div><input id="ek${i}" class="meal-input" type="number" inputmode="decimal" value="${m.kcal||0}"></div>
-        <div><div class="meal-field-lbl">Salt (mg)</div><input id="es${i}" class="meal-input" type="number" inputmode="decimal" value="${m.salt||0}"></div>
+        <div><div class="meal-field-lbl">Salt (g)</div><input id="es${i}" class="meal-input" type="number" inputmode="decimal" value="${m.salt||0}"></div>
       </div>
       <div style="display:flex;gap:6px">
         <button onclick="saveMealEdit(${i})" style="flex:1;padding:8px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer">Save</button>
@@ -4211,7 +4213,7 @@ function renderFood(){
       <div class="meal-grid-3">
         <div><div class="meal-field-lbl">Fibre (g)</div><input id="mFi" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
         <div><div class="meal-field-lbl">Calories</div><input id="mK" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
-        <div><div class="meal-field-lbl">Salt (mg)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
+        <div><div class="meal-field-lbl">Salt (g)</div><input id="mS" class="meal-input" type="number" inputmode="decimal" placeholder="0"></div>
       </div>
       <button class="btn-primary" onclick="addMeal()">+ Add to Today</button>
       <div class="hint">Salt in mg · e.g. 400mg per serving</div>
@@ -5037,7 +5039,7 @@ function renderSavedMeals(container){
                 <span style="font-size:11px;color:#4a8c6a">${(+m.carbs||0).toFixed(1)}g C</span>
                 <span style="font-size:11px;color:#6a9898">${(+m.fat||0).toFixed(1)}g F</span>
                 ${m.fibre?`<span style="font-size:11px;color:#9a7060">${(+m.fibre||0).toFixed(1)}g fibre</span>`:""}
-                ${m.salt?`<span style="font-size:11px;color:#7a7aaa">${Math.round(+m.salt||0)}mg salt</span>`:""}
+                ${m.salt?`<span style="font-size:11px;color:#7a7aaa">${((+m.salt||0)/1000).toFixed(2)}g salt</span>`:""}
               </div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
@@ -5075,7 +5077,7 @@ function renderMealEditForm(cat,m,idx){
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
       <div><div class="meal-field-lbl">Carbs (g)</div><input id="smCarbs" class="meal-input" type="number" inputmode="decimal" value="${(+m.carbs||0)||""}"></div>
       <div><div class="meal-field-lbl">Fibre (g)</div><input id="smFibre" class="meal-input" type="number" inputmode="decimal" value="${(+m.fibre||0)||""}"></div>
-      <div><div class="meal-field-lbl">Salt (mg)</div><input id="smSalt" class="meal-input" type="number" inputmode="decimal" value="${(+m.salt||0)||""}"></div>
+      <div><div class="meal-field-lbl">Salt (g)</div><input id="smSalt" class="meal-input" type="number" inputmode="decimal" value="${(+m.salt||0)||""}"></div>
     </div>
     <div style="display:flex;gap:8px">
       <button onclick="saveMealEntry('${cat.id}',${idx})" style="flex:1;padding:9px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">${isNew?"Save Meal":"Update Meal"}</button>
@@ -5204,7 +5206,7 @@ function saveMacroOverride(prefix,idx,btn){
       <span style="font-size:11px;color:#4a8c6a">${(c*servG/100).toFixed(1)}g C</span>
       <span style="font-size:11px;color:#6a9898">${(fa*servG/100).toFixed(1)}g F</span>
       <span style="font-size:11px;color:#9a7060">${(fi*servG/100).toFixed(1)}g fibre</span>
-      ${sl?`<span style="font-size:11px;color:#7a7aaa">${Math.round(sl*servG/100)}mg salt</span>`:''}`;
+      ${sl?`<span style="font-size:11px;color:#7a7aaa">${(sl*servG/100/1000).toFixed(2)}g salt</span>`:''}`;
   }
   // Close the edit panel after 800ms
   setTimeout(()=>{
@@ -5257,7 +5259,7 @@ async function interpretRecipe(btn){
           <span style="font-size:13px;color:#4a8c6a">${parsed.carbs}g C</span>
           <span style="font-size:13px;color:#6a9898">${parsed.fat}g F</span>
           <span style="font-size:13px;color:#9a7060">${parsed.fibre}g fibre</span>
-          ${parsed.salt?`<span style="font-size:12px;color:#7a7aaa">${Math.round(parsed.salt)}mg salt</span>`:''}
+          ${parsed.salt?`<span style="font-size:12px;color:#7a7aaa">${(parsed.salt/1000).toFixed(2)}g salt</span>`:''}
         </div>
         ${parsed.notes?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px">${parsed.notes}</div>`:''}
         <div style="display:flex;gap:8px;margin-top:8px">
@@ -6407,7 +6409,7 @@ function addMeal(){
   document.getElementById("mealName").value="";
   ["mP","mF","mC","mFi","mK","mS"].forEach(id=>document.getElementById(id).value="");
   renderFood();
-  showMealStatus(`✓ ${savedName} added · ${savedK} kcal · ${savedP}g protein${savedSl?" · "+savedSl+"mg salt":""}`,true);
+  showMealStatus(`✓ ${savedName} added · ${savedK} kcal · ${savedP}g protein${savedSl?" · "+(savedSl/1000).toFixed(2)+"g salt":""}`,true);
   showSavePrompt(savedName,savedP,savedF,savedC,savedFi,savedK,savedSl);
   setTimeout(()=>showZoePopup(savedName,detectZoeBoosters(savedName)),400);
 }
@@ -6738,7 +6740,7 @@ ${raw}`}]})});
         <span style="font-size:11px;color:#4a8c6a">${carbs}g C</span>
         <span style="font-size:11px;color:#6a9898">${fat}g F</span>
         ${fibre?`<span style="font-size:11px;color:#9a7060">${fibre}g fibre</span>`:''}
-        ${salt?`<span style="font-size:11px;color:#7a7aaa">${salt}mg salt</span>`:''}
+        ${salt?`<span style="font-size:11px;color:#7a7aaa">${(salt/1000).toFixed(2)}g salt</span>`:''}
       </div>
       ${boosterItems.length?`<div style="background:rgba(74,140,106,.08);border:1px solid rgba(74,140,106,.2);border-radius:2px;padding:8px 10px;margin-bottom:8px">
         <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px">🌿 Zoe Boosters in this meal</div>
