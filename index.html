@@ -1404,6 +1404,12 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
             <div style="font-size:10px;color:var(--muted);margin-top:2px">Compound lifts · upper body + core · kefir shake first</div>
             
           </div>
+        </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_trx')">
+          <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
+          <div style="flex:1">
+            <span style="font-size:13px;color:var(--text);">TRX Session</span>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px">Suspension training · full body · adjust intensity by phase</div>
+          </div>
         </div><div style="display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="toggleExerciseCheck('ex_strength')">
           <div style="width:22px;height:22px;border:1.5px solid var(--border);background:none;border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;color:#fff;font-size:12px;transition:all .15s"></div>
           <div style="flex:1">
@@ -5577,6 +5583,7 @@ function renderExerciseTab(){
     {id:"ex_pilates1",   label:"Reformer Pilates",      type:"pilates",  color:"#4a8c6a", sub:"",          note:"Inner thigh · waist · glutes · posture"},
     {id:"ex_lagree",     label:"Lagree",                type:"pilates",  color:"#4a8c6a", sub:"Reformer Pilates", note:"High intensity · lean muscle · glutes"},
     {id:"ex_pt",         label:"PT Strength",           type:"strength", color:"#b8934a", sub:"",          note:"Compound lifts · upper body + core · kefir shake first"},
+    {id:"ex_trx",        label:"TRX Session",           type:"strength", color:"#b8934a", sub:"",          note:"Suspension training · full body · adjust intensity by phase"},
     {id:"ex_strength_upper", label:"Own Strength — Upper Body + Core", type:"strength", color:"#c8a45a", sub:"", note:"Shoulders · arms · chest · core · Pallof press · dead bug · side-lying leg lift"},
     {id:"ex_strength_lower", label:"Own Strength — Lower Body",        type:"strength", color:"#c8a45a", sub:"", note:"Glutes · hamstrings · inner thigh · Romanian deadlift · sumo squat · donkey kick"},
   ];
@@ -5650,7 +5657,7 @@ function renderExerciseTab(){
     {label:"Home Incline Walk",    target:2, ids:["ex_walk1","ex_walk2"],    color:"#3a5a7a"},
     {label:"Gym Incline Walk",     target:1, ids:["ex_walk_gym"],            color:"#2a4a6a"},
         {label:"Sculpt (Pilates/Lagree)", target:2, ids:["ex_pilates1","ex_lagree"], color:"#4a8c6a"},
-        {label:"Strength (PT · Upper+Core · Lower)", target:3, ids:["ex_pt","ex_strength_upper","ex_strength_lower"], color:"#b8934a"},
+        {label:"Strength (PT · TRX · Upper+Core · Lower)", target:3, ids:["ex_pt","ex_trx","ex_strength_upper","ex_strength_lower"], color:"#b8934a"},
       ].map(group=>{
         const doneCount=group.ids.filter(id=>exChecks[id]).length;
         const dots=Array.from({length:group.target},(_,i)=>`<div
