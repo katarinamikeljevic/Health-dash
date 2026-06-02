@@ -3739,6 +3739,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+logItem[k]||0)));
   s.meals=[...(s.meals||[]),logItem];
   persist();
+  clearFoodSearch();
   // Show persistent toast that survives renderFood
   showLoggedToast(item.name, item.kcal, item.protein);
   renderFood();
@@ -3761,6 +3762,7 @@ function addToMealCart(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   if(!state._mealCart)state._mealCart=[];
   state._mealCart.push(item);
   persist();
+  clearFoodSearch();
   renderMealCart();
 }
 
