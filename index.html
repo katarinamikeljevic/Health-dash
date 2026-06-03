@@ -3763,9 +3763,10 @@ function saveMealCartPrompt(){
   const ingredients=cart.map(i=>i.name).join(", ");
   const meal={name,ingredients,protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,kcal:Math.round(t.kcal),salt:Math.round(t.salt)};
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
-  const cat=meal.kcal<350?'breakfast':meal.kcal<250?'snacks':meal.kcal<500?'lunch':'dinner';
+  const cat=meal.kcal<250?'snacks':meal.kcal<400?'breakfast':meal.kcal<600?'lunch':'dinner';
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
   persist();
+  renderFavouritesSection();
   showMealStatus(`💾 Saved "${name}" to ${cat}`,true);
 }
 
