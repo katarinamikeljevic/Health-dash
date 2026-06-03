@@ -1524,7 +1524,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
           <span style="font-size:13px;font-weight:500;color:var(--text)">Dead Bug</span>
           <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 10 each side · Bodyweight</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">3 sets × 10 each side · Bodyweight</div>
       </div>
       <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
     </div>
@@ -1537,7 +1537,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
           <span style="font-size:13px;font-weight:500;color:var(--text)">Hollow Body Hold</span>
           <span style="font-size:9px;padding:1px 6px;background:var(--gold);color:var(--ink);border-radius:10px;font-weight:600;margin-left:6px;flex-shrink:0">⭐ Do in solo</span>
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-top:1px">1 set × 20–30 sec · Bodyweight</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:1px">3 sets × 20–30 sec · Bodyweight</div>
       </div>
       <span style="font-size:11px;color:var(--gold);flex-shrink:0">▼</span>
     </div>
@@ -5829,8 +5829,38 @@ function renderExerciseTab(){
         </div>
         ${[
           {
+            name:"Plank",priority:true,
+            weight:"Bodyweight",sets:"3 sets × 1 min",
+            img:"plank exercise core form",
+            position:"Lie face down. Prop on forearms — elbows directly under shoulders. Toes on floor. Lift body into a straight line from head to heels.",
+            feel:"Deep core and whole anterior chain — NOT lower back or shoulders",
+            breathe:"Breathe steadily — don't hold your breath",
+            form:["Elbows directly under shoulders — not forward","Body in a straight line — hips level, not sagging or piking","Squeeze glutes and quads — engage everything","Neck neutral — look at a spot just in front of hands","If form breaks, stop and rest — quality over time"],
+            fix:"Hips sagging? Squeeze glutes harder. Hips piking? Lower them — your body should be a plank."
+          },
+          {
+            name:"Plank Up-Down",priority:true,
+            weight:"Bodyweight",sets:"3 sets × 1 min",
+            img:"plank up down exercise core shoulders",
+            position:"Start in a forearm plank. Alternately press up to a full plank one arm at a time, then return to forearms.",
+            feel:"Core stabilisers and shoulders together — functional strength",
+            breathe:"Exhale as you press up · inhale as you lower",
+            form:["Start in forearm plank — body straight","Press up one hand at a time to full plank","Return to forearms one arm at a time","Alternate which arm leads each rep","Hips stay level — don't rock side to side","Go slow — control is the point, not speed"],
+            fix:"Hips rocking? Widen your feet slightly and slow down"
+          },
+          {
+            name:"Lying Leg Raise",priority:true,
+            weight:"Bodyweight",sets:"3 sets × 1 min",
+            img:"lying leg raise lower abs exercise",
+            position:"Lie flat on your back. Arms by your sides or tucked under your lower back for support. Legs straight, feet together.",
+            feel:"Lower abs — no oblique risk, safe for waist preservation",
+            breathe:"Exhale as you lower legs toward floor · inhale as you lift",
+            form:["Lie flat · lower back pressed into mat","Raise legs to 90° — perpendicular to floor","Lower slowly — stop just before lower back lifts","If lower back lifts, raise your legs higher as the bottom point","Keep legs together and toes pointed throughout"],
+            fix:"Lower back lifting? Raise your bottom point — only go as low as you can hold the press"
+          },
+          {
             name:"Dead Bug",priority:true,
-            weight:"Bodyweight",sets:"1 set × 10 each side",
+            weight:"Bodyweight",sets:"3 sets × 10 each side",
             img:"dead bug exercise core form",
             position:"Lie on your back. Arms pointing straight up to ceiling. Hips and knees both at 90°, shins parallel to floor. Lower back pressed firmly into mat.",
             feel:"Deep core (transverse abdominis) — NOT hip flexors or neck",
@@ -5840,13 +5870,23 @@ function renderExerciseTab(){
           },
           {
             name:"Hollow Body Hold",priority:true,
-            weight:"Bodyweight",sets:"1 set × 20–30 sec",
+            weight:"Bodyweight",sets:"3 sets × 20–30 sec",
             img:"hollow body hold exercise gymnastics core",
             position:"Lie on your back. Press lower back flat into mat. Arms straight overhead by ears. Legs straight, feet together, toes pointed.",
             feel:"Entire front of core — deep abs, lower abs especially",
             breathe:"Exhale to create the hollow · breathe shallowly throughout",
             form:["Lie on back · press lower back flat","Arms straight overhead by ears · legs straight · toes pointed","Lift shoulders and legs just off floor — create a dish shape","Lower back stays pressed down — non-negotiable","Harder: lower legs. Easier: bend knees or arms by sides"],
             fix:"Lower back arching? Raise your legs higher until you can maintain the press"
+          },
+          {
+            name:"Bird Dog",priority:true,
+            weight:"Bodyweight",sets:"3 sets × 10 each side",
+            img:"bird dog exercise core stability",
+            position:"Start on all fours — hands directly under shoulders, knees under hips. Back flat, neck neutral. Brace your core before moving.",
+            feel:"Deep core stability and lower back — no bulk risk",
+            breathe:"Exhale as you extend · inhale as you return",
+            form:["Start on all fours · back flat · core braced","Extend opposite arm and leg simultaneously — keep them parallel to floor","Hold 2 sec at top — don't let your back rotate or sag","Return slowly and switch sides","Keep hips level throughout — imagine a glass of water on your lower back"],
+            fix:"Back rotating? Slow down and reduce range — only extend as far as you can keep hips level"
           },
           {
             name:"Side Plank",priority:true,
