@@ -1001,11 +1001,11 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
         <div class="gut-item-top" onclick="toggleGut('g_salmon')">
           <div class="gut-tick"></div>
           <div style="flex:1">
-            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🐟 Salmon <span style="font-size:10px;color:var(--muted);font-weight:400">/ Trout / Mackerel / Sardines</span></div>
-            <div class="gut-item-note">130–150g fillet · ~260 kcal · 2× week</div>
+            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🐟 Oily Fish <span style="font-size:10px;color:var(--muted);font-weight:400">Salmon · Trout · Sardines · Mackerel</span></div>
+            <div class="gut-item-note">130–150g · 4× week</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
-            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/2</span></div>
+            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/4</span></div>
             <div style="font-size:9px;color:var(--muted);">this wk</div>
           </div>
         </div>
@@ -1013,25 +1013,6 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
           <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
             <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
           </div>
-          
-        </div>
-      </div><div class="gut-item" style="cursor:pointer;">
-        <div class="gut-item-top" onclick="toggleGut('g_trout')">
-          <div class="gut-tick"></div>
-          <div style="flex:1">
-            <div class="gut-item-name" style="font-weight:700;color:var(--text);">🐟 Trout <span style="font-size:10px;color:var(--muted);font-weight:400">/ Salmon / Mackerel / Sardines</span></div>
-            <div class="gut-item-note">130–150g fillet · ~220 kcal · 2× week</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-size:18px;font-weight:500;color:var(--text);line-height:1">0<span style="font-size:11px;color:var(--muted)">/2</span></div>
-            <div style="font-size:9px;color:var(--muted);">this wk</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
-          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
-            <div style="height:100%;width:0%;background:#4a8c6a80;border-radius:2px;transition:width .3s"></div>
-          </div>
-          
         </div>
       </div><div class="gut-item" style="cursor:pointer;">
         <div class="gut-item-top" onclick="toggleGut('g_miso')">
@@ -2051,8 +2032,7 @@ const GUT_BOOSTERS=[
   {id:"g_pistachios",l:"Pistachios",e:"🟢",s:92,t:3,n:"25g shelled · ~140 kcal · 3× week",alts:[]},
   {id:"g_kimchi",l:"Kimchi",e:"🌶️",s:90,t:3,n:"2–3 tbsp · ~15 kcal · 3× week",alts:["Sauerkraut (add cold)","Kombucha 200ml low sugar"]},
   {id:"g_chickpeas",l:"Chickpeas",e:"🟡",s:88,t:3,n:"80g cooked · ~120 kcal · 3× week",alts:["Black beans","Butter beans"]},
-  {id:"g_salmon",l:"Salmon",e:"🐟",s:88,t:2,n:"130–150g fillet · ~260 kcal · 2× week",alts:["Trout","Mackerel","Sardines"]},
-  {id:"g_trout",l:"Trout",e:"🐟",s:88,t:2,n:"130–150g fillet · ~220 kcal · 2× week",alts:["Salmon","Mackerel","Sardines"]},
+  {id:"g_salmon",l:"Oily Fish",e:"🐟",s:88,t:4,n:"Salmon · Trout · Sardines · Mackerel · 130–150g · 4× week",alts:[],kw:["salmon","trout","sardine","mackerel","herring","anchovie"]},
   {id:"g_miso",l:"Miso Soup",e:"🍜",s:88,t:3,n:"1 tbsp paste in hot water · ~30 kcal · 3× week",alts:[]},
   {id:"g_blacktea",l:"Black Tea",e:"🍵",s:86,t:5,n:"1–2 cups · ~2 kcal · 5× week",alts:[]},
   {id:"g_greentea",l:"Green Tea",e:"🍵",s:84,t:7,n:"1–2 cups · ~2 kcal · Daily",alts:["White tea","Matcha (1 tsp)"]},
@@ -2061,7 +2041,7 @@ const GUT_BOOSTERS=[
   {id:"g_strawberries",l:"Strawberries",e:"🍓",s:80,t:4,n:"100g · ~30 kcal · 4× week",alts:["Blackberries","Raspberries","Blueberries","Kiwi"]},
 ];
 
-const FOOD_TO_GUT={"f_avo":"g_avocado","f_lentils":"g_lentils","f_tofu":"g_tofu","f_peas":"g_peas","f_beansprouts":"g_beansprouts","f_kidney":"g_kidney","f_greenbeans":"g_greenbeans","f_grapefruit":"g_grapefruit","f_leeks":"g_leeks","f_pistachios":"g_pistachios","f_chickpeas":"g_chickpeas","f_salmon":"g_salmon","f_trout":"g_trout","f_kefir":"g_kefir","f_kimchi":"g_kimchi","f_miso":"g_miso","f_greentea":"g_greentea","f_blacktea":"g_blacktea","f_garlic":"g_garlic","f_strawberries":"g_strawberries","f_orange":"g_oranges"};
+const FOOD_TO_GUT={"f_avo":"g_avocado","f_lentils":"g_lentils","f_tofu":"g_tofu","f_peas":"g_peas","f_beansprouts":"g_beansprouts","f_kidney":"g_kidney","f_greenbeans":"g_greenbeans","f_grapefruit":"g_grapefruit","f_leeks":"g_leeks","f_pistachios":"g_pistachios","f_chickpeas":"g_chickpeas","f_salmon":"g_salmon","f_trout":"g_salmon","f_sardines":"g_salmon","f_mackerel":"g_salmon","f_kefir":"g_kefir","f_kimchi":"g_kimchi","f_miso":"g_miso","f_greentea":"g_greentea","f_blacktea":"g_blacktea","f_garlic":"g_garlic","f_strawberries":"g_strawberries","f_orange":"g_oranges"};
 
 const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
@@ -5461,7 +5441,7 @@ function autoTickGutFromText(text){
   const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[fk])state.foods[fk]={};
   const lower=text.toLowerCase();
-  const keywords={"salmon":"g_salmon","trout":"g_trout","kefir":"g_kefir","avocado":"g_avocado",
+  const keywords={"salmon":"g_salmon","trout":"g_salmon","sardine":"g_salmon","mackerel":"g_salmon","herring":"g_salmon","kefir":"g_kefir","avocado":"g_avocado",
     "lentil":"g_lentils","chickpea":"g_chickpeas","kidney bean":"g_kidney","peas":"g_peas",
     "beansprout":"g_beansprouts","green bean":"g_greenbeans","leek":"g_leeks","garlic":"g_garlic",
     "grapefruit":"g_grapefruit","strawberr":"g_strawberries","orange":"g_oranges","clementine":"g_oranges","easy peeler":"g_oranges","satsuma":"g_oranges","mandarin":"g_oranges","tangerine":"g_oranges","kimchi":"g_kimchi",
