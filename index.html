@@ -3757,8 +3757,9 @@ function logMealCart(){
 
 function saveMealCartPrompt(){
   const name=document.getElementById("mealCartName")?.value.trim();
-  if(!name){showMealStatus("Enter a meal name first",false);return;}
-  const cart=state._mealCart||[];if(!cart.length)return;
+  if(!name){showMealStatus("⚠ Enter a meal name above first",false);return;}
+  const cart=state._mealCart||[];
+  if(!cart.length){showMealStatus("⚠ No items in meal cart",false);return;}
   const t=cart.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.protein,c:s.c+i.carbs,f:s.f+i.fat,fi:s.fi+(i.fibre||0),salt:s.salt+(i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
   const ingredients=cart.map(i=>i.name).join(", ");
   const meal={name,ingredients,protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,kcal:Math.round(t.kcal),salt:Math.round(t.salt)};
@@ -3767,6 +3768,7 @@ function saveMealCartPrompt(){
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
   persist();
   renderFavouritesSection();
+  renderMeals();
   showMealStatus(`💾 Saved "${name}" to ${cat}`,true);
 }
 
