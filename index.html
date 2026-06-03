@@ -1373,6 +1373,51 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
       <div style="font-size:10px;color:var(--muted);margin-top:8px">Tap a day to tick · linked to your Routine tab</div>
     </div>
 
+    <!-- Compex section -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Compex · EMS Sessions</div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a8a6a;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px">🚶 Reinforcement — Every Walk</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">Wear during your fasted morning or evening walk. Duration matches walk length.</div>
+        <div style="font-size:10px;color:var(--soft);line-height:1.7">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+            <div><span style="color:var(--gold);font-weight:600">Channel 1 · Left</span></div><div><span style="color:var(--gold);font-weight:600">Channel 2 · Right</span></div>
+            <div>Upper pad → upper glute</div><div>Upper pad → upper glute</div>
+            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px">🔥 Warm Up — Before Every Class · 10 min</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">Run before Pilates, Lagree, or PT. Start 10 min before class begins.</div>
+        <div style="font-size:10px;color:var(--soft);line-height:1.7">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+            <div><span style="color:var(--gold);font-weight:600">Channel 1 · Left</span></div><div><span style="color:var(--gold);font-weight:600">Channel 2 · Right</span></div>
+            <div>Upper pad → upper glute</div><div>Upper pad → upper glute</div>
+            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #8a4a6a;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text);margin-bottom:4px">💤 Rest Days — Reinforcement 15 min → Shape Your Buttocks</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">Back-to-back: Reinforcement first (15 min), then Shape Your Buttocks immediately after. Keep pads in place between sessions.</div>
+        <div style="font-size:10px;color:var(--soft);line-height:1.7">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+            <div><span style="color:var(--gold);font-weight:600">Channel 1 · Left</span></div><div><span style="color:var(--gold);font-weight:600">Channel 2 · Right</span></div>
+            <div>Upper pad → upper glute</div><div>Upper pad → upper glute</div>
+            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--gold-pale);border:1px solid rgba(184,147,74,.25);padding:10px 14px">
+        <div style="font-size:10px;color:var(--soft);line-height:1.6">📸 <strong style="color:var(--ink)">Track progress every 2 weeks</strong> — same lighting, same time of day, same angle. Front, side, and back. Compare side-by-side to see the gap closing.</div>
+      </div>
+    </div>
+
     <!-- Strength guide dropdown -->
     <div style="margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;cursor:pointer" onclick="toggleStrengthGuide()">
@@ -1912,9 +1957,11 @@ const ROUTINE_SECTIONS=[
     {id:"m2",label:"Ice face 60 sec",note:"Face & neck · <a href='https://youtu.be/Js2rgq_va3Q?si=YFoy77aiYOhnNVmg' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"info",tick:false},
     {id:"m_physio",label:"Physio — ball release + marching drill",note:"Left glute · left lower back · then march 5kg",tag:"physio",tick:true},
     {id:"m_walk_daily",label:"Morning Fasted Walk",note:"6% · 5.5 km/h · 30–35 min · <a href='#' onclick='showTab(\"exercise\");return false;' style='color:var(--gold);text-decoration:none'>→ Exercise tab</a>",tag:"weekly",tick:true,weeklyId:"walksday",weeklyTarget:7},
+    {id:"m_compex_walk",label:"⚡ Compex — Reinforcement on walk",note:"Wear every walk · upper pad → upper glute · lower pad → lower glute/hamstring · <a href='#' onclick='showTab(\"exercise\");return false;' style='color:var(--gold);text-decoration:none'>→ Exercise tab for placement</a>",tag:"info",tick:false},
     {id:"m_arms",label:"Arm exercises on walk",note:"1–2kg · alternate days",tag:"weekly",tick:true,weeklyId:"arms",weeklyTarget:3},
     {id:"m5",label:"Kefir shake post-walk",note:"Kefir, flax, chia, protein, creatine",tag:"info",tick:false},
     {id:"sup3",label:"💊 Creatine",note:"In kefir shake",tag:"supp",tick:true},
+    {id:"m_compex_class",label:"⚡ Compex — Warm Up before class · 10 min",note:"Before Pilates, Lagree, or PT · upper pad → upper glute · lower pad → lower glute/hamstring · <a href='#' onclick='showTab(\"exercise\");return false;' style='color:var(--gold);text-decoration:none'>→ Exercise tab for placement</a>",tag:"info",tick:false},
     {id:"train1",label:"🚇 Elizabeth line → Abbey Wood",note:"Paddington Plts A&B · 07:36 · 07:42 · 07:48 · 07:54 · 08:00 · 08:06",tag:"info"},
     {id:"m6",label:"Coffee after 45 min",note:"After kefir — not before",tag:"info",tick:false},
     {id:"sup2",label:"💊 Omega-3 + Ubiquinol + Vitamin D3+K2",note:"Omega-3: 5g fat · Ubiquinol: 5–10g fat · Vitamin D3: 10–15g fat · eat 15g+ fat at this meal",tag:"supp",tick:true},
