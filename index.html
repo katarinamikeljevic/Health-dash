@@ -2057,7 +2057,7 @@ const GUT_BOOSTERS=[
   {id:"g_blacktea",l:"Black Tea",e:"🍵",s:86,t:5,n:"1–2 cups · ~2 kcal · 5× week",alts:[]},
   {id:"g_greentea",l:"Green Tea",e:"🍵",s:84,t:7,n:"1–2 cups · ~2 kcal · Daily",alts:["White tea","Matcha (1 tsp)"]},
   {id:"g_garlic",l:"Garlic",e:"🧄",s:82,t:7,n:"1–2 cloves · Daily: add to cooking",alts:["Onions","Leeks","Spring onions"]},
-  {id:"g_oranges",l:"Oranges",e:"🍊",s:81,t:3,n:"1 medium · ~60 kcal · 3× week",alts:["Clementines","Tangerines","Mandarins — any citrus counts"]},
+  {id:"g_oranges",l:"Oranges",e:"🍊",s:81,t:3,n:"1 medium · ~60 kcal · 3× week",alts:["Clementines","Tangerines","Mandarins — any citrus counts"],kw:["orange","clementine","mandarin","tangerine","easy peeler","satsuma"]},
   {id:"g_strawberries",l:"Strawberries",e:"🍓",s:80,t:4,n:"100g · ~30 kcal · 4× week",alts:["Blackberries","Raspberries","Blueberries","Kiwi"]},
 ];
 
@@ -3646,7 +3646,7 @@ function buildFoodResultHTML(f,idx,prefix){
         + Add to Meal
       </button>
     </div>
-    ${GUT_BOOSTERS.some(g=>g.l.toLowerCase().includes(f[0].toLowerCase().split(' ')[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer" id="${prefix}_gut_label_${idx}"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green);width:16px;height:16px" onchange="this.closest('label').style.background=this.checked?'rgba(74,140,106,.15)':'';this.closest('label').style.borderRadius='4px';this.closest('label').style.padding=this.checked?'3px 6px':'0 0'"> 🌿 Tick as gut booster</label>`:''}
+    ${GUT_BOOSTERS.some(g=>gutMatchesFood(g,f[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer" id="${prefix}_gut_label_${idx}"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green);width:16px;height:16px" onchange="this.closest('label').style.background=this.checked?'rgba(74,140,106,.15)':'';this.closest('label').style.borderRadius='4px';this.closest('label').style.padding=this.checked?'3px 6px':'0 0'"> 🌿 Tick as gut booster</label>`:''}
     <!-- Edit macros toggle -->
     <div style="margin-top:6px">
       <button onclick="toggleMacroEdit('${prefix}',${idx})" style="background:none;border:none;font-family:inherit;font-size:10px;color:var(--muted);cursor:pointer;padding:0;letter-spacing:1px">✏️ ${ov?'Edit / Reset macros':'Macros wrong? Edit'}</button>
@@ -3729,7 +3729,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   if(gutCb&&gutCb.checked){
     const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
     if(!state.foods[fk])state.foods[fk]={};
-    const matchedGut=GUT_BOOSTERS.find(gb=>name.toLowerCase().includes(gb.l.toLowerCase()));
+    const matchedGut=GUT_BOOSTERS.find(gb=>gutMatchesFood(gb,name));
     if(matchedGut){
       state.foods[fk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
@@ -5450,6 +5450,13 @@ function copyMealToLog(name,protein,fat,carbs,fibre,kcal,salt,ingredientText){
   setTimeout(()=>t.remove(),eggsDetected>0?4000:2500);
 }
 
+function gutMatchesFood(gb, foodName){
+  const n=foodName.toLowerCase();
+  if(n.includes(gb.l.toLowerCase())) return true;
+  if(gb.kw) return gb.kw.some(k=>n.includes(k));
+  return false;
+}
+
 function autoTickGutFromText(text){
   const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[fk])state.foods[fk]={};
@@ -5457,7 +5464,7 @@ function autoTickGutFromText(text){
   const keywords={"salmon":"g_salmon","trout":"g_trout","kefir":"g_kefir","avocado":"g_avocado",
     "lentil":"g_lentils","chickpea":"g_chickpeas","kidney bean":"g_kidney","peas":"g_peas",
     "beansprout":"g_beansprouts","green bean":"g_greenbeans","leek":"g_leeks","garlic":"g_garlic",
-    "grapefruit":"g_grapefruit","strawberr":"g_strawberries","orange":"g_oranges","kimchi":"g_kimchi",
+    "grapefruit":"g_grapefruit","strawberr":"g_strawberries","orange":"g_oranges","clementine":"g_oranges","easy peeler":"g_oranges","satsuma":"g_oranges","mandarin":"g_oranges","tangerine":"g_oranges","kimchi":"g_kimchi",
     "miso":"g_miso","pistachio":"g_pistachios","tofu":"g_tofu","green tea":"g_greentea",
     "black tea":"g_blacktea"};
   Object.entries(keywords).forEach(([kw,gid])=>{
