@@ -3644,7 +3644,7 @@ function buildFoodResultHTML(f,idx,prefix){
         + Add to Meal
       </button>
     </div>
-    ${GUT_BOOSTERS.some(g=>g.l.toLowerCase().includes(f[0].toLowerCase().split(' ')[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green)"> Tick gut booster?</label>`:''}
+    ${GUT_BOOSTERS.some(g=>g.l.toLowerCase().includes(f[0].toLowerCase().split(' ')[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer" id="${prefix}_gut_label_${idx}"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green);width:16px;height:16px" onchange="this.closest('label').style.background=this.checked?'rgba(74,140,106,.15)':'';this.closest('label').style.borderRadius='4px';this.closest('label').style.padding=this.checked?'3px 6px':'0 0'"> 🌿 Tick as gut booster</label>`:''}
     <!-- Edit macros toggle -->
     <div style="margin-top:6px">
       <button onclick="toggleMacroEdit('${prefix}',${idx})" style="background:none;border:none;font-family:inherit;font-size:10px;color:var(--muted);cursor:pointer;padding:0;letter-spacing:1px">✏️ ${ov?'Edit / Reset macros':'Macros wrong? Edit'}</button>
@@ -3723,6 +3723,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   const label=unit==='g'||unit==='ml'?`${g}${unit}`:`${qty} ${unit}`;
   const item={name:`${name} (${label})`,protein:Math.round(protein*r*10)/10,fat:Math.round(fat*r*10)/10,carbs:Math.round(carbs*r*10)/10,fibre:Math.round(fibre*r*10)/10,kcal:Math.round(kcal*r),salt:Math.round(salt*r)};
   const gutCb=document.getElementById(`${prefix}_gut_${idx}`);
+  let loggedGutBooster=null;
   if(gutCb&&gutCb.checked){
     const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
     if(!state.foods[fk])state.foods[fk]={};
@@ -3731,6 +3732,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
       state.foods[fk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
       if(chipId)state.foods[fk][chipId]=true;
+      loggedGutBooster=matchedGut;
     }
   }
   if(btn){btn.style.background='#4a8c6a';btn.style.color='#fff';btn.style.borderColor='#4a8c6a';}
@@ -3743,7 +3745,7 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
   persist();
   clearFoodSearch();
   // Show persistent toast that survives renderFood
-  showLoggedToast(item.name, item.kcal, item.protein);
+  showLoggedToast(item.name, item.kcal, item.protein, loggedGutBooster);
   renderFood();
 }
 
@@ -5226,14 +5228,14 @@ function resetMacroOverride(idx,prefix){
   persist();renderFood();
 }
 
-function showLoggedToast(name, kcal, protein){
+function showLoggedToast(name, kcal, protein, gutBooster){
   document.querySelectorAll('.logged-toast').forEach(e=>e.remove());
   const t=document.createElement('div');
   t.className='logged-toast';
-  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 20px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);white-space:nowrap;letter-spacing:0.5px';
-  t.innerHTML=`✓ Logged — ${kcal} kcal · ${protein}g P`;
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 20px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:0.5px;max-width:90vw';
+  t.innerHTML=`✓ Logged — ${kcal} kcal · ${protein}g P${gutBooster?`<div style="margin-top:5px;font-size:11px;background:rgba(255,255,255,.2);border-radius:3px;padding:3px 8px">🌿 Gut booster ticked — ${gutBooster.e} ${gutBooster.l}</div>`:''}`;
   document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2000);
+  setTimeout(()=>t.remove(),gutBooster?3500:2000);
 }
 
 function flashBtn(btn,ms){
@@ -5269,7 +5271,7 @@ async function interpretRecipe(btn){
         </div>
         ${parsed.notes?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px">${parsed.notes}</div>`:''}
         <div style="display:flex;gap:8px;margin-top:8px">
-          <button onclick="copyMealToLog('${name}',${parsed.protein},${parsed.fat},${parsed.carbs},${parsed.fibre},${parsed.kcal},${parsed.salt||0});flashBtn(this)" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
+          <button onclick="copyMealToLog('${name}',${parsed.protein},${parsed.fat},${parsed.carbs},${parsed.fibre},${parsed.kcal},${parsed.salt||0},${JSON.stringify(input)});flashBtn(this)" style="flex:1;padding:8px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
         </div>
       </div>`;
   }catch(e){
@@ -5406,7 +5408,7 @@ function logAndClose(catId,idx){
 }
 
 
-function copyMealToLog(name,protein,fat,carbs,fibre,kcal,salt){
+function copyMealToLog(name,protein,fat,carbs,fibre,kcal,salt,ingredientText){
   salt=salt||0;
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
@@ -5419,17 +5421,31 @@ function copyMealToLog(name,protein,fat,carbs,fibre,kcal,salt){
   s.salt=Math.round((+s.salt||0)+(+salt||0));
   s.meals=[...(s.meals||[]),{name,protein,fat,carbs,fibre,kcal,salt,time:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}];
   persist();
+  // Detect eggs and auto-tick yolks
+  let eggsDetected=0;
+  if(ingredientText){
+    const lower=ingredientText.toLowerCase();
+    const m=lower.match(/(\d+)\s*(?:whole\s+)?eggs?\b/);
+    if(m) eggsDetected=parseInt(m[1]);
+    else if(/\begg\b/.test(lower)) eggsDetected=1;
+    if(eggsDetected>0){
+      const wk=getWeekKey();
+      if(!state.yolks[wk])state.yolks[wk]=0;
+      state.yolks[wk]=Math.min(state.yolks[wk]+eggsDetected,10);
+      persist();
+    }
+  }
   const foodTab=document.querySelector('.tab[onclick*="food"]');
   if(foodTab) showTab('food', foodTab);
   renderFood();
-  const banner=document.getElementById("cycleBanner");
-  if(banner){
-    const flash=document.createElement("div");
-    flash.style.cssText="margin:8px 16px 0;padding:10px 14px;background:var(--green-pale);border:1px solid rgba(74,140,106,.3);font-size:12px;color:var(--green);border-radius:2px;";
-    flash.textContent=`✓ ${name} added to today's food log (${kcal} kcal · ${protein}g protein)`;
-    banner.parentNode.insertBefore(flash,banner);
-    setTimeout(()=>flash.remove(),3000);
-  }
+  // Toast
+  document.querySelectorAll('.logged-toast').forEach(e=>e.remove());
+  const t=document.createElement('div');
+  t.className='logged-toast';
+  t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 20px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:0.5px;max-width:90vw';
+  t.innerHTML=`✓ ${name} logged — ${kcal} kcal · ${protein}g P${eggsDetected>0?`<div style="margin-top:5px;font-size:11px;background:rgba(255,255,255,.2);border-radius:3px;padding:3px 8px">🥚 ${eggsDetected} egg yolk${eggsDetected>1?'s':''} auto-ticked in your weekly count</div>`:''}`;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),eggsDetected>0?4000:2500);
 }
 
 function autoTickGutFromText(text){
