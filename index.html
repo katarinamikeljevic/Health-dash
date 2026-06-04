@@ -1373,51 +1373,6 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
       <div style="font-size:10px;color:var(--muted);margin-top:8px">Tap a day to tick · linked to your Routine tab</div>
     </div>
 
-    <!-- Compex section -->
-    <div style="margin-bottom:20px">
-      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">Compex · EMS Sessions</div>
-
-      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a8a6a;padding:12px 14px;margin-bottom:8px">
-        <div style="font-size:13px;color:var(--text);margin-bottom:4px">🚶 Reinforcement — Every Walk</div>
-        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">Wear during your fasted morning or evening walk. Duration matches walk length.</div>
-        <div style="font-size:10px;color:var(--soft);line-height:1.7">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
-            <div><span style="color:var(--gold);font-weight:600">Channel 1 · Left</span></div><div><span style="color:var(--gold);font-weight:600">Channel 2 · Right</span></div>
-            <div>Upper pad → upper glute</div><div>Upper pad → upper glute</div>
-            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;padding:12px 14px;margin-bottom:8px">
-        <div style="font-size:13px;color:var(--text);margin-bottom:4px">🔥 Warm Up — Before Every Class · 10 min</div>
-        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">Run before Pilates, Lagree, or PT. Start 10 min before class begins.</div>
-        <div style="font-size:10px;color:var(--soft);line-height:1.7">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
-            <div><span style="color:var(--gold);font-weight:600">Channel 1 · Left</span></div><div><span style="color:var(--gold);font-weight:600">Channel 2 · Right</span></div>
-            <div>Upper pad → upper glute</div><div>Upper pad → upper glute</div>
-            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #8a4a6a;padding:12px 14px;margin-bottom:8px">
-        <div style="font-size:13px;color:var(--text);margin-bottom:4px">💤 Rest Days — Reinforcement 15 min → Shape Your Buttocks</div>
-        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">Back-to-back: Reinforcement first (15 min), then Shape Your Buttocks immediately after. Keep pads in place between sessions.</div>
-        <div style="font-size:10px;color:var(--soft);line-height:1.7">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
-            <div><span style="color:var(--gold);font-weight:600">Channel 1 · Left</span></div><div><span style="color:var(--gold);font-weight:600">Channel 2 · Right</span></div>
-            <div>Upper pad → upper glute</div><div>Upper pad → upper glute</div>
-            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
-          </div>
-        </div>
-      </div>
-
-      <div style="background:var(--gold-pale);border:1px solid rgba(184,147,74,.25);padding:10px 14px">
-        <div style="font-size:10px;color:var(--soft);line-height:1.6">📸 <strong style="color:var(--ink)">Track progress every 2 weeks</strong> — same lighting, same time of day, same angle. Front, side, and back. Compare side-by-side to see the gap closing.</div>
-      </div>
-    </div>
-
     <!-- Strength guide dropdown -->
     <div style="margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;cursor:pointer" onclick="toggleStrengthGuide()">
@@ -6268,6 +6223,54 @@ function renderExerciseTab(){
           ["9. Bent over rows (end of walk)","Stop · 2–3kg · 12–15 reps × 2 sets"],
         ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid var(--border)"><div style="font-size:12.5px;color:var(--text)">${ex}</div><div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div></div>`).join("")}
       </div>`:''}
+    </div>
+
+    <!-- COMPEX -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:10px">⚡ Compex · EMS Sessions</div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a8a6a;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text);margin-bottom:6px">🚶 Reinforcement — Every Walk</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:10px">Wear during your fasted morning or evening walk. Programme: <strong style="color:var(--ink)">Reinforcement</strong>. Duration matches walk length.</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Pad Placement</div>
+        <div style="font-size:10px;color:var(--soft);line-height:1.8">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+            <div style="font-weight:600;color:var(--ink)">Channel 1 · Left</div><div style="font-weight:600;color:var(--ink)">Channel 2 · Right</div>
+            <div>Upper pad → upper glute (just below the hip)</div><div>Upper pad → upper glute (just below the hip)</div>
+            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text);margin-bottom:6px">🔥 Warm Up — Before Every Class · 10 min</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:10px">Run before Pilates, Lagree, or PT. Programme: <strong style="color:var(--ink)">Warm Up</strong>. Start 10 min before your class begins — you can wear it on the walk there.</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Pad Placement</div>
+        <div style="font-size:10px;color:var(--soft);line-height:1.8">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+            <div style="font-weight:600;color:var(--ink)">Channel 1 · Left</div><div style="font-weight:600;color:var(--ink)">Channel 2 · Right</div>
+            <div>Upper pad → upper glute (just below the hip)</div><div>Upper pad → upper glute (just below the hip)</div>
+            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--white);border:1px solid var(--border);border-left:3px solid #8a4a6a;padding:12px 14px;margin-bottom:8px">
+        <div style="font-size:13px;color:var(--text);margin-bottom:6px">💤 Rest Days — Reinforcement 15 min → Shape Your Buttocks</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:10px">Back-to-back on rest days. Programme 1: <strong style="color:var(--ink)">Reinforcement · 15 min</strong>. Programme 2: <strong style="color:var(--ink)">Shape Your Buttocks</strong> — start immediately after, keep pads in place.</div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px">Pad Placement — same for both programmes</div>
+        <div style="font-size:10px;color:var(--soft);line-height:1.8">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+            <div style="font-weight:600;color:var(--ink)">Channel 1 · Left</div><div style="font-weight:600;color:var(--ink)">Channel 2 · Right</div>
+            <div>Upper pad → upper glute (just below the hip)</div><div>Upper pad → upper glute (just below the hip)</div>
+            <div>Lower pad → lower glute / top of hamstring</div><div>Lower pad → lower glute / top of hamstring</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--gold-pale);border:1px solid rgba(184,147,74,.25);padding:10px 14px">
+        <div style="font-size:10px;color:var(--soft);line-height:1.6">📸 <strong style="color:var(--ink)">Track progress every 2 weeks</strong> — same lighting, same time of day, same angle. Front, side, and back. Compare side-by-side to see the gap closing.</div>
+      </div>
     </div>`;
 }
 
