@@ -5378,7 +5378,7 @@ function logAndClose(catId,idx){
   state._mealEditing=null;
   persist();
   // Log to food tab
-  copyMealToLog(meal.name,meal.protein,meal.fat,meal.carbs,meal.fibre,meal.kcal,meal.salt);
+  copyMealToLog(meal.name,meal.protein,meal.fat,meal.carbs,meal.fibre,meal.kcal,meal.salt,meal.ingredients);
   renderMeals();
 }
 
@@ -5421,6 +5421,11 @@ function copyMealToLog(name,protein,fat,carbs,fibre,kcal,salt,ingredientText){
   t.innerHTML=`✓ ${name} logged — ${kcal} kcal · ${protein}g P${eggsDetected>0?`<div style="margin-top:5px;font-size:11px;background:rgba(255,255,255,.2);border-radius:3px;padding:3px 8px">🥚 ${eggsDetected} egg yolk${eggsDetected>1?'s':''} auto-ticked in your weekly count</div>`:''}`;
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),eggsDetected>0?4000:2500);
+  // Gut booster prompt from ingredients
+  if(ingredientText){
+    const gutMatches=detectGutBoostersFromIngredients(ingredientText);
+    if(gutMatches.length) setTimeout(()=>showGutBoosterPrompt(gutMatches,name),600);
+  }
 }
 
 function gutMatchesFood(gb, foodName){
@@ -5428,6 +5433,88 @@ function gutMatchesFood(gb, foodName){
   if(n.includes(gb.l.toLowerCase())) return true;
   if(gb.kw) return gb.kw.some(k=>n.includes(k));
   return false;
+}
+
+function detectGutBoostersFromIngredients(text){
+  if(!text) return [];
+  const lower=text.toLowerCase();
+  const keywords={"salmon":"g_salmon","trout":"g_salmon","sardine":"g_salmon","mackerel":"g_salmon","herring":"g_salmon","anchovie":"g_salmon",
+    "kefir":"g_kefir","avocado":"g_avocado",
+    "lentil":"g_lentils","chickpea":"g_lentils","kidney bean":"g_lentils","black bean":"g_lentils","butter bean":"g_lentils","cannellini":"g_lentils","borlotti":"g_lentils","haricot":"g_lentils","legume":"g_lentils",
+    "peas":"g_peas","beansprout":"g_beansprouts","green bean":"g_greenbeans",
+    "leek":"g_leeks","garlic":"g_garlic",
+    "grapefruit":"g_grapefruit","strawberr":"g_strawberries","blueberr":"g_strawberries","raspberr":"g_strawberries","blackberr":"g_strawberries","kiwi":"g_strawberries",
+    "orange":"g_oranges","clementine":"g_oranges","easy peeler":"g_oranges","satsuma":"g_oranges","mandarin":"g_oranges","tangerine":"g_oranges",
+    "kimchi":"g_kimchi","sauerkraut":"g_kimchi","kombucha":"g_kimchi",
+    "miso":"g_miso","pistachio":"g_pistachios","tofu":"g_tofu",
+    "green tea":"g_greentea","matcha":"g_greentea",
+    "black tea":"g_blacktea"};
+  const found=new Set();
+  Object.entries(keywords).forEach(([kw,gid])=>{ if(lower.includes(kw)) found.add(gid); });
+  return [...found].map(gid=>GUT_BOOSTERS.find(g=>g.id===gid)).filter(Boolean);
+}
+
+function showGutBoosterPrompt(boosters, mealName){
+  if(!boosters.length) return;
+  document.querySelectorAll('.gut-prompt-overlay').forEach(e=>e.remove());
+  const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.foods[fk]) state.foods[fk]={};
+  const alreadyTicked=id=>!!state.foods[fk][id];
+
+  const overlay=document.createElement('div');
+  overlay.className='gut-prompt-overlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:700;display:flex;align-items:flex-end;justify-content:center';
+
+  const rows=boosters.map((gb,i)=>{
+    const ticked=alreadyTicked(gb.id);
+    return `<label style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer">
+      <input type="checkbox" id="gbp_${i}" ${ticked?'':'checked'} style="width:18px;height:18px;accent-color:#4a8c6a;flex-shrink:0">
+      <span style="font-size:18px">${gb.e}</span>
+      <div>
+        <div style="font-size:13px;color:var(--text)">${gb.l}</div>
+        <div style="font-size:10px;color:var(--muted)">${gb.n}</div>
+      </div>
+      ${ticked?'<span style="margin-left:auto;font-size:10px;color:#4a8c6a;flex-shrink:0">already ticked</span>':''}
+    </label>`;
+  }).join('');
+
+  overlay.innerHTML=`<div style="background:var(--white);width:100%;max-width:480px;padding:20px 16px 36px;border-radius:10px 10px 0 0;font-family:inherit;max-height:80vh;overflow-y:auto">
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Gut Boosters Detected</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">Found in "${mealName}"</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Tick any you had — or skip</div>
+    <div style="margin-bottom:16px">${rows}</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="confirmGutBoosterPrompt(${JSON.stringify(boosters.map(g=>g.id))})" style="flex:1;padding:12px;background:#4a8c6a;color:#fff;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:3px;font-weight:600">✓ Tick Selected</button>
+      <button onclick="document.querySelectorAll('.gut-prompt-overlay').forEach(e=>e.remove())" style="padding:12px 20px;background:none;color:var(--muted);border:1px solid var(--border);font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">Skip</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
+}
+
+function confirmGutBoosterPrompt(gutIds){
+  const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.foods[fk]) state.foods[fk]={};
+  let ticked=0;
+  gutIds.forEach((gid,i)=>{
+    const cb=document.getElementById(`gbp_${i}`);
+    if(cb&&cb.checked){
+      state.foods[fk][gid]=true;
+      const chipId=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===gid);
+      if(chipId) state.foods[fk][chipId]=true;
+      ticked++;
+    }
+  });
+  persist();
+  renderFood();
+  document.querySelectorAll('.gut-prompt-overlay').forEach(e=>e.remove());
+  if(ticked>0){
+    const t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 20px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:0.5px';
+    t.textContent=`✓ ${ticked} gut booster${ticked>1?'s':''} ticked`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2200);
+  }
 }
 
 function autoTickGutFromText(text){
