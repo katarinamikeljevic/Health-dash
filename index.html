@@ -5833,269 +5833,296 @@ function renderExerciseTab(){
     <div style="margin-bottom:12px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #b8934a;cursor:pointer" onclick="toggleStrengthGuide()">
         <div>
-          <div style="font-size:13px;color:var(--text)">💪 Solo Strength Session</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:2px">Mat + free weights · ⭐ = not in PT programme — prioritise these</div>
+          <div style="font-size:13px;color:var(--text)">💪 Solo Strength Session · 45 min</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">7 blocks · glutes · hamstrings · shoulders · back · waist · no quads</div>
         </div>
         <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">${strengthOpen?'▲':'▼'}</span>
       </div>
       ${strengthOpen?`<div style="border:1px solid var(--border);border-top:none">
 
         <div style="padding:10px 14px;background:var(--gold-pale);border-bottom:1px solid rgba(184,147,74,.2)">
-          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">⭐ = Your PT never programmes these.</strong> These are the exercises most important to do on your own — they target your specific goals (shoulder definition, deep core, waist preservation) that are missing from PT sessions.</div>
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Full body · 45 min · glutes, hamstrings, shoulders, back, waist, lower back · no quads.</strong> Complete blocks in order — all exercises on each side before moving to the next block. Rest 30–60 sec between blocks.</div>
         </div>
 
-        <!-- UPPER BODY -->
-        <div style="padding:10px 14px 4px;background:rgba(184,147,74,.06)">
-          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#b8934a">Upper Body · Every Solo Session</div>
+        <!-- WARM UP -->
+        <div style="padding:10px 14px 4px;background:rgba(42,106,138,.08)">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a8aaa">Warm Up · 5 min</div>
         </div>
+        <div style="padding:4px 14px 10px;border-bottom:1px solid var(--border)">
+          ${[
+            ["Head circles","2 × 5 · slow and controlled · both directions"],
+            ["Shoulder rolls back","10 reps · roll back and down · open the chest"],
+            ["Forward fold reaching each foot","16 reps · alternate sides · feet hip-width · soft knees"],
+            ["Elbow pulls back","10 reps · hands to shoulders · drive elbows back and open chest"],
+            ["Arms overhead lean back","5 reps · arms up · gentle arch back · breathe"],
+          ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid rgba(184,147,74,.1)">
+            <div style="font-size:12px;color:var(--text)">${ex}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div>
+          </div>`).join("")}
+        </div>
+
+        <!-- BLOCK 1 -->
+        <div style="padding:10px 14px 4px;background:rgba(184,147,74,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#b8934a">Block 1 — Lunge + Raises · Glutes · Hamstrings · Shoulders · 2–3kg</div>
+        </div>
+        <div style="padding:5px 14px 7px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(184,147,74,.04)">Complete Side 1 (palms down) then Side 2 (palms up). Inhale down, exhale rise and lift.</div>
         ${[
           {
-            name:"Lateral Raises",priority:true,
-            weight:"3–4kg",sets:"1 set × 15 reps",
-            img:"dumbbell lateral raise exercise",
-            position:"Stand feet hip-width, soft knees, slight forward lean from hips. Hold dumbbells at sides, palms facing inward. Shoulders relaxed down.",
-            feel:"Outer shoulder (medial deltoid) — NOT traps or neck",
-            breathe:"Exhale as you lift · Inhale on the slow 3-sec lower",
-            form:["Stand with slight forward lean — stops traps taking over","Lead with your elbows, not your hands","Stop at shoulder height — no higher","Thumbs slightly lower than pinkies","Shoulders DOWN — if they creep up, weight is too heavy"],
-            fix:"Shrugging? Drop 0.5kg and focus on outer shoulder only"
+            name:"Dip Lunge → Front Raise",priority:true,
+            weight:"2–3kg each hand",sets:"16 reps each side",
+            img:"dumbbell reverse lunge front raise combination exercise",
+            position:"Stand upright, feet together. Step one foot back into a deep reverse lunge. Hold dumbbells at sides. Side 1: palms facing down. Side 2: palms facing up.",
+            feel:"Glute of the front leg working on the dip · front shoulder (anterior deltoid) fires on the raise",
+            breathe:"Inhale as you dip into the lunge · exhale as you rise and lift arms forward",
+            form:["Step back — front knee stays over ankle, not past toes","Lower back knee toward floor — controlled descent","Rise and simultaneously raise both arms forward to shoulder height","Keep core braced — don't lean back as arms lift","Palms down on Side 1 · palms up on Side 2","Shoulders stay relaxed DOWN — not creeping up to ears"],
+            fix:"Wobbling on the raise? Lower the weight — balance challenge is intentional but control comes first"
           },
           {
-            name:"Bent Over Rows",priority:true,
-            weight:"5–6kg each hand",sets:"1 set × 12 reps",
-            img:"dumbbell bent over row exercise form",
-            position:"Feet hip-width, hinge at hips until torso is parallel to floor. Knees soft, back flat, core braced. Dumbbells hanging straight down, palms facing in.",
-            feel:"Mid-back (rhomboids, mid traps) — NOT lower back or biceps",
-            breathe:"Exhale as you row up · Inhale as you lower",
-            form:["Hinge at hips — back flat, parallel to floor","Pull elbows straight back past your hip","Squeeze shoulder blades together hard at top — hold 1 sec","Keep neck neutral — don't crane up","Core braced throughout — no rounding"],
-            fix:"Feel it in your lower back? Rounding — lighten weight and hinge deeper"
+            name:"Dip Lunge → Lateral Raise",priority:true,
+            weight:"2–3kg each hand",sets:"16 reps each side",
+            img:"dumbbell reverse lunge lateral raise combination exercise",
+            position:"Same reverse lunge position. Side 1: palms facing down. Side 2: palms facing up.",
+            feel:"Outer shoulder (medial deltoid) on the lateral raise · front glute isometrically holding the lunge",
+            breathe:"Inhale as you dip · exhale as you rise and raise arms out to sides",
+            form:["Step back into reverse lunge — same form as front raise","Rise and simultaneously lift arms out to sides — T shape","Lead with elbows, not hands","Stop at shoulder height — no higher","Thumbs slightly lower than pinkies","Shoulders DOWN throughout — if they creep up, drop 0.5kg"],
+            fix:"Traps firing? Pull shoulders down before each rep and consciously lead with the elbow, not the hand"
           },
           {
-            name:"Shoulder Press",priority:true,
-            weight:"4–5kg each hand",sets:"1 set × 12 reps",
-            img:"dumbbell overhead shoulder press form",
-            position:"Sit cross-legged on the floor or stand feet hip-width. Hold dumbbells at shoulder height, elbows at 90°, palms facing forward. Core braced.",
-            feel:"Front and top of shoulder — NOT lower back",
-            breathe:"Exhale as you press up · Inhale as you lower",
-            form:["Start with elbows at 90° at shoulder height","Press directly overhead — not forward","Core braced — no lower back arch at the top","Lower slowly — 2 sec down","Sit cross-legged on floor for stability if needed"],
-            fix:"Arching lower back? Core has switched off — brace harder before pressing"
-          },
-          {
-            name:"Tricep Overhead Extension",priority:true,
-            weight:"3–4kg single dumbbell, both hands",sets:"1 set × 15 reps",
-            img:"overhead tricep extension dumbbell exercise",
-            position:"Stand or sit upright. Hold one dumbbell with both hands, grip the top plate. Raise above head, upper arms close to ears, elbows pointing forward.",
-            feel:"Back of upper arm (tricep long head)",
-            breathe:"Exhale as you extend up · Inhale as you lower behind head",
-            form:["Hold one dumbbell with both hands — thumbs wrapped","Upper arms stay close to ears, vertical — no elbow flare","Lower until forearms touch biceps · full range","Keep core braced — don't sway"],
-            fix:"Elbows flaring? Too heavy — drop to 2.5kg, keep upper arms totally still"
-          },
-          {
-            name:"Band Pull-Aparts",priority:true,
-            weight:"Light resistance band",sets:"1 set × 20 reps",
-            img:"resistance band pull apart exercise posture",
-            position:"Stand tall. Hold band with both hands shoulder-width apart, arms straight out in front at shoulder height, palms facing down.",
-            feel:"Rear deltoid and mid-back — opens chest, fixes posture",
-            breathe:"Exhale as you pull apart · Inhale as you return",
-            form:["Hold band shoulder-width, arms straight in front","Pull band apart to chest, squeezing shoulder blades","Keep arms straight — don't bend elbows","2 sec pull, 2 sec return","Do after any pressing exercise to balance"],
-            fix:"Feeling it in forearms? Grip too wide — bring hands closer"
+            name:"Lunge Pulses",priority:true,
+            weight:"Bodyweight",sets:"30 reps each side",
+            img:"reverse lunge pulses glute burn exercise",
+            position:"Stay in the bottom position of the reverse lunge — back knee hovering just off the floor, front knee over ankle. Hold this position and pulse.",
+            feel:"Deep glute burn in the front leg · the longer you hold the harder it gets — this is correct",
+            breathe:"Short rhythmic exhales on each pulse · keep breathing steadily",
+            form:["Sink to the bottom of reverse lunge — hover back knee 2cm from floor","Small up/down pulses — only 2–3cm of movement","Keep front knee over ankle throughout — it should not drift forward","Weight stays in the heel of the front foot","30 pulses then switch sides"],
+            fix:"Knee pain? Check front knee is tracking over toes and not caving inward — push it gently outward"
           },
         ].map(e=>renderExCard(e)).join("")}
 
-        <!-- CORE -->
+        <!-- BLOCK 2 -->
+        <div style="padding:10px 14px 4px;background:rgba(184,147,74,.08);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#a07830">Block 2 — Romanian Deadlift + Row + Raises · Hamstrings · Glutes · Upper Back · Shoulders</div>
+        </div>
+        <div style="padding:5px 14px 7px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(184,147,74,.04)">RDL/Row: 5–6kg · Raises: 3–4kg · Inhale hinge, exhale stand and lift.</div>
+        ${[
+          {
+            name:"Hinge → Bent Over Row",priority:true,
+            weight:"5–6kg each hand",sets:"16 reps · palms neutral",
+            img:"romanian deadlift bent over row combination dumbbell exercise",
+            position:"Stand feet hip-width, soft knees. Dumbbells in front of thighs, palms facing body (neutral grip). Hinge at hips until torso is parallel to floor — back flat, core braced.",
+            feel:"Hamstrings deep-loading on the hinge · mid-back (rhomboids) on the row · NOT lower back",
+            breathe:"Inhale as you hinge down · exhale as you row elbows back",
+            form:["Hinge at hips — back flat · torso parallel to floor","Hold the hinge position — this is your row start","Pull elbows straight back past your hips","Squeeze shoulder blades hard together at the top — hold 1 sec","Lower arms with control","Drive hips forward to stand — squeeze glutes as you rise"],
+            fix:"Feeling it in lower back? You are rounding — lighten weight and only hinge as far as back stays flat"
+          },
+          {
+            name:"Hinge → Stand → Front + Lateral Raise",priority:true,
+            weight:"3–4kg each hand",sets:"16 reps palms down + 16 reps palms up",
+            img:"hinge stand front raise lateral raise dumbbell combination",
+            position:"Same hinge start. Drive hips forward to stand, then immediately flow into a front raise (arms forward) or lateral raise (arms to sides). First 16 reps: palms down. Repeat 16 reps: palms up.",
+            feel:"Hamstrings and glutes on the hinge · anterior deltoid on front raise · medial deltoid on lateral raise",
+            breathe:"Inhale on the hinge down · exhale as you drive hips forward and lift arms",
+            form:["Hinge at hips — back flat","Drive hips forward to stand with control","Flow straight into front or lateral raise as you arrive upright","Shoulders DOWN on the raises — not shrugging","Palms down first 16 reps · palms up next 16 reps","Keep a slight soft knee throughout — never lock out"],
+            fix:"Too much swinging? Slow the hip drive — the raise should follow the stand, not be launched by it"
+          },
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- BLOCK 3 -->
         <div style="padding:10px 14px 4px;background:rgba(74,140,106,.06);margin-top:8px">
-          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Core · Every Solo Session</div>
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Block 3 — Donkey Kick + Fire Hydrant + Pulses · Glutes · Glute Med · 6kg behind knee</div>
+        </div>
+        <div style="padding:5px 14px 7px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(74,140,106,.04)">Complete all on Side 1 before switching to Side 2. Exhale on lift, inhale return.</div>
+        ${[
+          {
+            name:"Donkey Kick + Fire Hydrant",priority:true,
+            weight:"6kg dumbbell held behind knee",sets:"16 reps each leg",
+            img:"donkey kick fire hydrant combination glute exercise",
+            position:"On all fours — wrists directly under shoulders, knees under hips. Back flat, pelvis very slightly tucked under. Place 6kg dumbbell behind working knee and grip it by bending knee to 90°.",
+            feel:"Donkey kick: upper glute max (you should feel the top of the glute). Fire hydrant: glute med, the outer glute just below the hip.",
+            breathe:"Exhale on every lift · inhale to return",
+            form:["On all fours · wrists under shoulders · back flat","Donkey kick: drive heel straight up toward ceiling · keep knee at 90°","Fire hydrant: open knee directly out to the side · maintain 90° bend","Squeeze hard at the top of both movements — full contraction","Alternate: kick → return → hydrant → return = 1 rep","Back stays flat throughout — no rotation, no sagging"],
+            fix:"Lower back arching on the kick? You are hyperextending — reduce height and brace core harder before each rep"
+          },
+          {
+            name:"Fire Hydrant Pulses",priority:true,
+            weight:"6kg dumbbell held behind knee",sets:"30 pulses each leg",
+            img:"fire hydrant pulses outer glute exercise",
+            position:"Same all-fours position. Knee open to side in fire hydrant position at hip height — hold at top and pulse from there.",
+            feel:"Outer glute (glute medius) burning — strong burn is correct and intentional",
+            breathe:"Short exhales on each upward pulse",
+            form:["Open knee to the side and hold at hip height","Small pulses upward — 2–3cm only","Hips stay square — the hip on the working side must NOT drop","Back stays flat and completely still throughout","30 pulses before switching sides"],
+            fix:"Hip dropping or rotating? Reduce pulse height and brace core — the hips must stay level"
+          },
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- BLOCK 4 -->
+        <div style="padding:10px 14px 4px;background:rgba(106,90,138,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Block 4 — Glute Bridge + Chest Press + Pulses · Glutes · Chest · Core</div>
+        </div>
+        <div style="padding:5px 14px 7px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Hips: 2 × 6kg · Press: 5kg each hand · Inhale lower, exhale press.</div>
+        ${[
+          {
+            name:"Bridge Hold + Chest Press",priority:true,
+            weight:"2 × 6kg on hips · 5kg each hand for press",sets:"16 reps · palms inward",
+            img:"glute bridge chest press dumbbell combination exercise",
+            position:"Lie on your back. Feet flat, hip-width apart, heels 20cm from glutes. Place 2×6kg weights on hip bones. Hold 5kg dumbbells with palms facing inward (neutral). Drive hips to full bridge and hold throughout.",
+            feel:"Glutes isometrically contracted the entire time · chest and triceps on the press · NOT lower back",
+            breathe:"Inhale as you lower dumbbells · exhale as you press up",
+            form:["Drive hips to full bridge before you begin — squeeze glutes hard","Keep bridge position for all 16 reps — hips must not drop","Start with dumbbells at chest, elbows at 45° to body, palms inward","Press up — stop before arms fully lock out","Lower slowly — 2 seconds down","If glutes fatigue during press, reset the bridge squeeze before continuing"],
+            fix:"Hips dropping on the press? You are losing the glute contraction — actively think SQUEEZE before every rep"
+          },
+          {
+            name:"Wide Stance Bridge Pulses",priority:true,
+            weight:"2 × 6kg on hips",sets:"30 pulses",
+            img:"wide stance glute bridge pulses exercise",
+            position:"Lie on your back. Feet wider than hip-width, toes slightly turned out. Place weights on hips. Drive up into bridge.",
+            feel:"Lower and inner fibres of the glute — different sensation from regular bridge width",
+            breathe:"Short exhales on each pulse upward",
+            form:["Feet wider than hip-width · toes slightly turned out","Drive to full bridge — start pulses from the top position","Small downward pulses — lower 2–3cm then press back to top","Squeeze glutes hard at the top of every pulse","Keep lower back in neutral — not hyperextended","30 steady pulses"],
+            fix:"Feeling hamstrings instead of glutes? Walk feet slightly further from your glutes"
+          },
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- BLOCK 5 -->
+        <div style="padding:10px 14px 4px;background:rgba(42,90,138,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a6a9a">Block 5 — Sumo Stance + Curls + Arm Pull-In · Inner Thigh · Glute Med · Biceps · Rear Delts · 4kg</div>
         </div>
         ${[
           {
-            name:"Plank",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 1 min",
-            img:"plank exercise core form",
-            position:"Lie face down. Prop on forearms — elbows directly under shoulders. Toes on floor. Lift body into a straight line from head to heels.",
-            feel:"Deep core and whole anterior chain — NOT lower back or shoulders",
-            breathe:"Breathe steadily — don't hold your breath",
-            form:["Elbows directly under shoulders — not forward","Body in a straight line — hips level, not sagging or piking","Squeeze glutes and quads — engage everything","Neck neutral — look at a spot just in front of hands","If form breaks, stop and rest — quality over time"],
-            fix:"Hips sagging? Squeeze glutes harder. Hips piking? Lower them — your body should be a plank."
+            name:"Sumo Pulses + Arms 90° Elbows Pull-In",priority:true,
+            weight:"4kg each hand",sets:"30 reps",
+            img:"sumo squat hold arm pull in exercise dumbbell",
+            position:"Feet wide, toes out 45°. Sink into sumo squat — thighs roughly parallel. Hold this position throughout. Raise arms to 90° goalpost at shoulder height, palms facing you.",
+            feel:"Inner thigh and glute med from the squat hold · rear delts as elbows pull in",
+            breathe:"Short exhales as elbows pull together",
+            form:["Sink to sumo position and hold it for all 30 reps","Raise elbows to shoulder height, 90° bent, palms facing you","Drive elbows together in front until they meet — or nearly","Open back to goalpost · repeat","Keep the sumo hold completely steady — legs stay put","You can add tiny sumo pulses as arms pull in"],
+            fix:"Back rounding in the sumo hold? Chest up, brace core, slight forward lean from hips — not from the waist"
           },
           {
-            name:"Plank Up-Down",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 1 min",
-            img:"plank up down exercise core shoulders",
-            position:"Start in a forearm plank. Alternately press up to a full plank one arm at a time, then return to forearms.",
-            feel:"Core stabilisers and shoulders together — functional strength",
-            breathe:"Exhale as you press up · inhale as you lower",
-            form:["Start in forearm plank — body straight","Press up one hand at a time to full plank","Return to forearms one arm at a time","Alternate which arm leads each rep","Hips stay level — don't rock side to side","Go slow — control is the point, not speed"],
-            fix:"Hips rocking? Widen your feet slightly and slow down"
+            name:"Sumo Hold + Bicep Curl",priority:true,
+            weight:"4kg each hand",sets:"16 reps · palms up",
+            img:"sumo squat hold bicep curl exercise",
+            position:"Same wide sumo stance, thighs parallel. Dumbbells hanging at arms' length, palms facing up (supinated grip). Hold sumo position throughout all 16 reps.",
+            feel:"Biceps on the curl · inner thigh and glute med working to hold the sumo position",
+            breathe:"Exhale as you curl up · inhale as you lower",
+            form:["Hold sumo throughout — this doubles as an isometric lower body hold","Palms fully supinated (facing up) throughout","Curl both dumbbells simultaneously to shoulders","Keep upper arms completely still — elbows pinned to sides","Full extension at the bottom — don't cut the range","Squeeze at the top for 1 sec"],
+            fix:"Upper arms swinging forward? Pin elbows tight to torso as your anchor — the forearm is the only thing moving"
           },
           {
-            name:"Lying Leg Raise",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 1 min",
-            img:"lying leg raise lower abs exercise",
-            position:"Lie flat on your back. Arms by your sides or tucked under your lower back for support. Legs straight, feet together.",
-            feel:"Lower abs — no oblique risk, safe for waist preservation",
-            breathe:"Exhale as you lower legs toward floor · inhale as you lift",
-            form:["Lie flat · lower back pressed into mat","Raise legs to 90° — perpendicular to floor","Lower slowly — stop just before lower back lifts","If lower back lifts, raise your legs higher as the bottom point","Keep legs together and toes pointed throughout"],
-            fix:"Lower back lifting? Raise your bottom point — only go as low as you can hold the press"
+            name:"Sumo Hold + Hammer Curl",priority:true,
+            weight:"4kg each hand",sets:"16 reps · palms in",
+            img:"sumo squat hold hammer curl exercise",
+            position:"Same sumo stance. Dumbbells hanging, palms facing each other (neutral hammer grip). Hold sumo throughout.",
+            feel:"Brachialis (outer upper arm) — works a different head than the supinated curl",
+            breathe:"Exhale curl up · inhale lower",
+            form:["Hold sumo position throughout","Palms face each other — maintain hammer grip the whole time","Curl to shoulder · keep thumbs up throughout","Upper arms still — elbows pinned to sides","Lower fully between reps","Alternate arms or curl together"],
+            fix:"Forearms working hard? That's correct — hammer curl loads brachialis and brachioradialis more than bicep curl. Different sensation is intentional."
+          },
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- BLOCK 6 -->
+        <div style="padding:10px 14px 4px;background:rgba(138,100,74,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#8a6a4a">Block 6 — Lower Back + Stability · 6 min · Face Down / All Fours</div>
+        </div>
+        <div style="padding:5px 14px 7px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(138,100,74,.04)">Exhale on every lift, inhale as you lower. Slow and controlled — this is rehabilitation as well as strength.</div>
+        ${[
+          {
+            name:"Prone Back Extension + Rotation",priority:true,
+            weight:"Bodyweight",sets:"16 reps",
+            img:"prone back extension rotation exercise superman",
+            position:"Lie face down. Arms extended in front, forehead hovering just above mat. Feet hip-width or together.",
+            feel:"Lower back extensors and upper glutes · NOT neck — chin stays tucked",
+            breathe:"Exhale as you lift chest and arms · inhale as you lower",
+            form:["Lie face down · arms forward · forehead just off mat","Lift chest and arms off floor — back extension","At the top: rotate right — right arm sweeps back, left extends forward","Return to centre with both arms forward","Rotate left — left arm sweeps back, right extends","Return to centre · lower · that is 1 rep","Feet stay on floor throughout"],
+            fix:"Neck straining? Keep chin tucked throughout — the lift must come from the back, not from craning the head upward"
           },
           {
-            name:"Dead Bug",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 10 each side",
-            img:"dead bug exercise core form",
-            position:"Lie on your back. Arms pointing straight up to ceiling. Hips and knees both at 90°, shins parallel to floor. Lower back pressed firmly into mat.",
-            feel:"Deep core (transverse abdominis) — NOT hip flexors or neck",
-            breathe:"Exhale fully before you move · hold out as you extend · inhale to reset",
-            form:["Lie on back · arms straight up · hips and knees at 90°","Brace core — press lower back INTO the mat (no gap)","Slowly extend opposite arm and leg toward floor","Return and switch — opposite arm/leg is one rep","Lower back must NOT lift off mat at any point"],
-            fix:"Lower back lifting? Reduce range of motion until strength catches up"
-          },
-          {
-            name:"Hollow Body Hold",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 20–30 sec",
-            img:"hollow body hold exercise gymnastics core",
-            position:"Lie on your back. Press lower back flat into mat. Arms straight overhead by ears. Legs straight, feet together, toes pointed.",
-            feel:"Entire front of core — deep abs, lower abs especially",
-            breathe:"Exhale to create the hollow · breathe shallowly throughout",
-            form:["Lie on back · press lower back flat","Arms straight overhead by ears · legs straight · toes pointed","Lift shoulders and legs just off floor — create a dish shape","Lower back stays pressed down — non-negotiable","Harder: lower legs. Easier: bend knees or arms by sides"],
-            fix:"Lower back arching? Raise your legs higher until you can maintain the press"
+            name:"Prone Flutter Kicks",priority:true,
+            weight:"Bodyweight",sets:"30 reps",
+            img:"prone flutter kicks lower back glute exercise",
+            position:"Lie face down, arms folded under forehead. Legs straight, feet just off the floor.",
+            feel:"Lower glutes and hamstrings working · lower back stabilisers holding position",
+            breathe:"Breathe steadily — short rhythmic exhales throughout",
+            form:["Lie face down · legs straight · feet hovering just above floor","Alternate flutter kicks — small rapid alternating leg lifts","Keep legs relatively straight — not a huge range of motion","Squeeze glutes to initiate each kick","Core braced · pubic bone gently pressed into mat","30 kicks total (15 each leg)"],
+            fix:"Lower back arching? Press pubic bone gently into mat throughout — this cue protects the lower back"
           },
           {
             name:"Bird Dog",priority:true,
-            weight:"Bodyweight",sets:"3 sets × 10 each side",
-            img:"bird dog exercise core stability",
-            position:"Start on all fours — hands directly under shoulders, knees under hips. Back flat, neck neutral. Brace your core before moving.",
-            feel:"Deep core stability and lower back — no bulk risk",
+            weight:"Bodyweight",sets:"16 each side",
+            img:"bird dog exercise core stability lower back",
+            position:"On all fours — hands directly under shoulders, knees under hips. Back completely flat, neck neutral. Brace core before moving.",
+            feel:"Deep core stability and lower back erectors — builds strength without bulk",
             breathe:"Exhale as you extend · inhale as you return",
-            form:["Start on all fours · back flat · core braced","Extend opposite arm and leg simultaneously — keep them parallel to floor","Hold 2 sec at top — don't let your back rotate or sag","Return slowly and switch sides","Keep hips level throughout — imagine a glass of water on your lower back"],
-            fix:"Back rotating? Slow down and reduce range — only extend as far as you can keep hips level"
-          },
-          {
-            name:"Side Plank",priority:true,
-            weight:"Bodyweight",sets:"1 set × 30–40 sec each side",
-            img:"side plank exercise oblique form",
-            position:"Lie on your side. Prop up on your elbow — elbow directly under shoulder. Stack feet or stagger front foot forward. Hip on the floor to start.",
-            feel:"Obliques (side waist) — NOT shoulder pain. Builds without widening.",
-            breathe:"Breathe steadily throughout",
-            form:["Elbow directly under shoulder — not forward","Stack feet or stagger front foot for easier version","Lift hip — body in straight line hip to head","Don't let hip sag or pike","Progress: raise top leg or add hip dips"],
-            fix:"Hip sagging? Drop to knee version — form beats duration every time"
-          },
-          {
-            name:"Side-Lying Double Leg Lift",priority:false,
-            weight:"Bodyweight (ankle weights optional)",sets:"3 sets × 12 reps each side",
-            img:"side lying double leg lift oblique waist exercise mat",
-            position:"Lie on your side in a straight line — hips stacked, bottom arm extended under your head, top hand lightly on floor in front for balance. Legs together, straight, feet stacked or slightly in front of hips.",
-            feel:"Obliques and QL (deep waist muscle) holding both legs up — NOT hip flexors. You should feel the indent between your hip and ribcage working.",
-            breathe:"Exhale as you lift legs · hold and breathe steadily at top · inhale as you lower",
-            form:["Lie on side · body in straight line · legs stacked together","Brace the side waist — draw ribs toward hip","Lift BOTH legs together off the mat — keep them glued","Hold 2–3 seconds at top · feel the QL squeeze","Lower slowly — don't let legs drop","Keep hips stacked throughout — don't roll back"],
-            fix:"Hips rolling back? Place top hand further forward for support and reduce lift height until QL is strong enough"
+            form:["On all fours · back flat · core braced","Extend opposite arm and leg simultaneously — parallel to floor","Hold 2 sec at top — don't let back rotate or sag","Return slowly · switch sides","Hips stay perfectly level throughout — imagine a glass of water on your lower back"],
+            fix:"Back rotating? Reduce the range — only extend as far as you can keep hips exactly level"
           },
         ].map(e=>renderExCard(e)).join("")}
 
-        <!-- LOWER BODY -->
-        <div style="padding:10px 14px 4px;background:rgba(106,90,138,.06);margin-top:8px">
-          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6a5a8a">Lower Body · Solo Day (skip if PT session same day)</div>
-        </div>
-        <div style="padding:6px 14px 8px;font-size:10px;color:var(--muted);font-style:italic;background:rgba(106,90,138,.04)">Only do lower body if you haven't had PT that day. Glute isolation only — if quads fire, stop and reset.</div>
-        <div style="padding:8px 14px 4px">
-          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#7a6aa0;padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:4px">🦵 Inner Thigh · 2× Week</div>
+        <!-- BLOCK 7 -->
+        <div style="padding:10px 14px 4px;background:rgba(74,140,106,.08);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green)">Block 7 — Obliques + Core · 6 min</div>
         </div>
         ${[
           {
-            name:"Side-Lying Inner Thigh Lift",priority:false,
-            weight:"Ankle weight optional",sets:"3 sets × 15 reps each side",
-            img:"side lying inner thigh lift adductor exercise mat",
-            position:"Lie on your side, body in a straight line. Bottom leg is the working leg. Cross top leg in front with foot flat on mat for support. Stack hips — don't let them roll back.",
-            feel:"Inner thigh (adductors) of the bottom leg — NOT hip flexor",
-            breathe:"Exhale as you lift · inhale as you lower",
-            form:["Lie on side · bottom leg straight · top foot flat in front","Keep hips stacked — don't roll back","Lift bottom leg toward ceiling — slow and controlled","Pause at top · squeeze inner thigh","Lower with full control — don't let it drop"],
-            fix:"Feeling hip flexor? Rotate leg so toes point slightly down toward floor"
+            name:"Side-Lying Oblique Crunch + Rotation",priority:true,
+            weight:"Bodyweight",sets:"16 reps each side",
+            img:"side lying oblique crunch rotation exercise mat",
+            position:"Lie on your side, knees slightly bent, bottom arm extended or folded under your head. Top hand behind your head. Hips stacked — don't roll back.",
+            feel:"Obliques (side waist) shortening on the crunch · rotation activates transverse abs · feel the indent between hip and ribcage working",
+            breathe:"Exhale as you crunch up and rotate · inhale to return and extend fully",
+            form:["Lie on side · hips stacked · knees slightly bent","Crunch top elbow toward hip — feel the side waist shorten","At the top: rotate torso toward the ceiling","Return with full control · extend fully between reps","The rotation is key — it adds oblique depth without adding width","16 reps on one side · switch"],
+            fix:"Neck pulling? Your top hand is gripping — fingertips only behind the ear, zero tension in the hand"
           },
           {
-            name:"Pilates Ball Inner Thigh Squeeze",priority:false,
-            weight:"Pilates ball between knees",sets:"3 sets × 15 reps",
-            img:"pilates ball inner thigh squeeze glute bridge exercise",
-            position:"Lie on your back. Knees bent, feet flat on mat hip-width apart. Place a Pilates ball or folded pillow between your inner knees. Arms flat by sides.",
-            feel:"Inner thighs squeezing together — also activates pelvic floor",
-            breathe:"Exhale on squeeze · inhale to release slightly",
-            form:["Lie on back · knees bent · ball between knees","Squeeze ball gently but firmly — hold 3 seconds","Option: add glute bridge — drive hips up while squeezing","Keep lower back pressed into mat","Release slowly — don't drop the ball"],
-            fix:"Only squeeze to about 70% effort — gripping too hard tenses the hip flexors"
-          },
-          {
-            name:"Lateral Lunge to Balance",priority:false,
-            weight:"Bodyweight or 4kg dumbbell",sets:"3 sets × 10 reps each side",
-            img:"lateral lunge to balance inner thigh exercise",
-            position:"Stand tall, feet together. Step one foot wide to the side — toes forward or slightly out. Keep the standing leg straight.",
-            feel:"Inner thigh of the lunging leg as you push back · also outer glute of the standing leg",
-            breathe:"Inhale as you step out · exhale as you push back to stand",
-            form:["Step wide to one side · toes forward","Sit into the hip of the bent leg — push it back","Keep chest up · bent knee tracks over toes","Inner thigh of the bent leg does the work pushing back","Drive through heel to return to standing · balance 1 sec"],
-            fix:"Knee caving in? Push it outward in line with your toes throughout"
-          },
-          {
-            name:"Standing Hip Adduction (Band)",priority:false,
-            weight:"Resistance band around ankles",sets:"3 sets × 12 reps each side",
-            img:"standing hip adduction resistance band inner thigh exercise",
-            position:"Stand side-on to a wall for balance. Band looped around both ankles. Working leg slightly lifted off floor. Keep pelvis square — don't tilt.",
-            feel:"Inner thigh of the working leg drawing across — NOT hip flexor or groin",
-            breathe:"Exhale as you draw leg across · inhale to return",
-            form:["Stand tall · band at ankles · hand on wall for balance","Draw working leg across in front of the standing leg","Keep both hips facing forward — don't twist","Slow controlled return — don't let band snap back","Keep core braced throughout"],
-            fix:"Hip tilting? Reduce the range until your pelvis stays square"
-          },
-        ].map(e=>renderExCard(e)).join("")}
-        <div style="margin:0 14px 14px;padding:10px 12px;background:rgba(106,90,138,.08);border-left:3px solid #7a6aa0">
-          <div style="font-size:10px;color:var(--soft);line-height:1.6">Sumo Squat Pulses already in the card list below ↓ · Reformer Pilates hits inner thigh deeply every session · Inner thigh fat driven by oestrogen — reduces with calorie deficit + targeted activation</div>
-        </div>
-        ${[
-          {
-            name:"Romanian Deadlift",priority:false,
-            weight:"5–6kg each hand",sets:"1 set × 12 reps",
-            img:"romanian deadlift dumbbell exercise form",
-            position:"Stand feet hip-width. Hold dumbbells in front of thighs, palms facing body. Soft bend in knees. Shoulders back, core braced.",
-            feel:"Hamstrings and glutes — deep stretch and squeeze · NOT lower back",
-            breathe:"Inhale before you hinge · exhale as you drive back up",
-            form:["Stand hip-width · soft bend in knees · dumbbells in front","Hinge at hips — push hips back as weights travel down shins","Back stays flat the whole way","Lower until deep hamstring stretch (mid-shin)","Drive hips forward to stand — squeeze glutes at top"],
-            fix:"Rounding your back? Only go as far as you can keep back flat"
-          },
-          {
-            name:"Donkey Kick + Fire Hydrant",priority:false,
-            weight:"6kg behind knee",sets:"1 set × 16 reps each leg",
-            img:"donkey kick fire hydrant glute exercise",
-            position:"On all fours — wrists directly under shoulders, knees under hips. Pelvis slightly tucked under. Place 6kg dumbbell behind the working knee and hold it by bending the knee.",
-            feel:"Donkey kick: top of glute. Fire hydrant: outer glute.",
-            breathe:"Exhale on lift · inhale to return",
-            form:["On all fours · wrists under shoulders · pelvis slightly tucked","Donkey kick: kick heel to ceiling, knee stays bent 90°","Fire hydrant: open knee to side, keep 90°","Squeeze hard at top of each rep","Keep back flat — no rotation or sagging"],
-            fix:"Lower back feeling it? You're hyperextending on the kick — reduce height and brace core"
-          },
-          {
-            name:"Supine Leg Open/Close",priority:false,
-            weight:"Ankle weights",sets:"1 set × 20 reps",
-            img:"supine leg raise open close inner thigh exercise",
-            position:"Lie on your back. Both legs raised straight up to the ceiling, feet together. Lower back pressed firmly into the mat. Ankle weights on if available.",
-            feel:"Inner thigh (adductors) — NOT hip flexors",
+            name:"Supine Leg Open/Close — Straight Legs",priority:true,
+            weight:"Bodyweight (ankle weights optional)",sets:"16 reps",
+            img:"supine leg open close straight legs inner thigh exercise",
+            position:"Lie on your back. Both legs raised straight up to the ceiling, feet together. Lower back pressed firmly into mat throughout.",
+            feel:"Inner thigh (adductors) — NOT hip flexors. The sensation should be a stretch on the way out and a squeeze on the way in.",
             breathe:"Exhale as legs close · inhale as they open",
-            form:["Lie on back · legs straight up · lower back pressed flat","Open legs wide — feel the inner thigh stretch","Close legs together with control — squeeze inner thighs","Keep lower back pressed down throughout","Option: 90° bent knee version is easier"],
-            fix:"Lower back lifting? Press it harder into the mat or reduce the range you open your legs"
+            form:["Lie on back · legs straight up · lower back pressed flat","Open legs wide — feel the inner thigh stretch fully","Close legs together — squeeze inner thighs hard","Keep lower back pressed down the entire time","Legs stay straight — no bending at knees"],
+            fix:"Lower back lifting off mat? Press it harder down or reduce how wide you open — never sacrifice the lower back position"
           },
           {
-            name:"Glute Bridge Hold",priority:false,
-            weight:"5–8kg on hips",sets:"1 set × 40–45 sec hold",
-            img:"glute bridge hold exercise mat",
-            position:"Lie on your back. Feet flat on mat, hip-width apart, heels 20–25cm from glutes. Arms flat by sides, palms down. Weight (5–8kg) resting on hip bones.",
-            feel:"Top of glutes — NOT lower back or hamstrings",
-            breathe:"Exhale as you drive up · breathe steadily during hold",
-            form:["Lie on back · feet flat · hip-width · heels close to glutes","Drive through HEELS — not toes","Squeeze glutes hard — actively contract throughout","Hips fully extended · slight pelvic tuck","No lower back hyperextension"],
-            fix:"Feeling hamstrings? Walk feet slightly further from body"
+            name:"Supine Leg Open/Close — 90° Legs",priority:true,
+            weight:"Bodyweight (ankle weights optional)",sets:"16 reps",
+            img:"supine bent knee leg open close exercise inner thigh",
+            position:"Same position but hips and knees both at 90° — shins parallel to floor. Lower back pressed into mat.",
+            feel:"Inner thigh from a different angle — also activates pelvic floor and lower abs",
+            breathe:"Exhale as legs close · inhale as they open",
+            form:["Hips and knees at 90° · shins parallel to floor","Open knees slowly out to sides — controlled throughout","Close knees — squeeze inner thighs hard at centre","Lower back stays pressed flat at all times","Slower and more controlled than straight-leg version"],
+            fix:"Hips rotating as you open? That is compensation — reduce the range until hips stay square"
           },
           {
-            name:"Sumo Squat Pulses",priority:false,
-            weight:"Bodyweight or light dumbbell",sets:"1 set × 30 pulses",
-            img:"sumo squat pulse inner thigh exercise",
-            position:"Stand with feet wider than shoulder-width, toes turned out 45°. Sink into a squat — thighs parallel to floor or just above. Weight in heels, chest up.",
-            feel:"Inner thigh and glutes — NOT quads",
-            breathe:"Short exhales on each pulse",
-            form:["Feet wide · toes turned out 45°","Sink into a wide squat — weight in heels","Small pulses up and down from the bottom position","Keep chest up and core braced","The wider the stance the more inner thigh involved"],
-            fix:"Knees caving in? Push them out in line with toes throughout"
+            name:"Bicycle Crunches",priority:true,
+            weight:"Bodyweight",sets:"30 reps",
+            img:"bicycle crunches oblique core exercise proper form",
+            position:"Lie on your back. Fingertips light behind head, elbows wide. Knees at 90°, shins parallel to floor. Lower back pressed into mat.",
+            feel:"Obliques on the rotation — NOT neck. You should feel a diagonal pull from one shoulder toward the opposite hip.",
+            breathe:"Exhale on every rotation · inhale to return",
+            form:["Fingertips behind ears — zero grip, zero pulling","Lift shoulders off mat and hold off for all 30 reps","Alternate: right elbow rotates toward left knee as left leg extends","Then left elbow toward right knee as right leg extends","Move slowly — the rotation is the work, not the speed","Lower back stays pressed down throughout"],
+            fix:"Neck straining? You are pulling with your hands — completely release any grip and only rest fingertips behind ears"
           },
         ].map(e=>renderExCard(e)).join("")}
+
+        <!-- COOL DOWN -->
+        <div style="padding:10px 14px 4px;background:rgba(42,74,106,.06);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a6a8a">Cool Down · 3 min</div>
+        </div>
+        <div style="padding:4px 14px 10px;border-bottom:1px solid var(--border)">
+          ${[
+            ["Figure 4 glute stretch","Lying on back · cross ankle over opposite knee · pull both legs toward chest · 30 sec each side · breathe into the stretch"],
+            ["Hip flexor stretch","Low lunge · back knee down · sink front hip forward and down · keep torso tall · 30 sec each side"],
+            ["Hamstring stretch","Lying: extend one leg up and gently pull toward you · or standing fold · 30 sec each side · never force"],
+            ["Chest stretch","Arms wide to sides or clasped behind back · open chest forward and breathe · 30 sec · also stretches the front shoulder"],
+          ].map(([ex,note])=>`<div style="padding:7px 0;border-bottom:1px solid rgba(42,74,106,.1)">
+            <div style="font-size:12px;color:var(--text)">${ex}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">${note}</div>
+          </div>`).join("")}
+        </div>
 
         <div style="margin:14px 14px 14px;padding:10px 12px;background:var(--gold-pale);border-left:3px solid var(--gold)">
-          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Key rule:</strong> ⭐ Upper body + core exercises are the most important to do on your own — PT doesn't programme them. Do all 5 upper + 4 core every solo session. Lower body only if no PT that day.</div>
+          <div style="font-size:10px;color:var(--soft);line-height:1.6"><strong style="color:var(--ink)">Session order:</strong> Warm Up → Blocks 1–7 in order → Cool Down. Complete all exercises on one side before switching. Rest 30–60 sec between blocks. If you only have 25 min, do Blocks 1–4 and Block 7.</div>
         </div>
       </div>`:''}
     </div>
