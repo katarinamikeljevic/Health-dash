@@ -5421,6 +5421,9 @@ function showGutBoosterPrompt(boosters, mealName){
   if(!state.foods[fk]) state.foods[fk]={};
   const alreadyTicked=id=>!!state.foods[fk][id];
 
+  // Store pending IDs globally so the button doesn't need inline JSON
+  window._pendingGutIds=boosters.map(g=>g.id);
+
   const overlay=document.createElement('div');
   overlay.className='gut-prompt-overlay';
   overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:700;display:flex;align-items:flex-end;justify-content:center';
@@ -5440,11 +5443,11 @@ function showGutBoosterPrompt(boosters, mealName){
 
   overlay.innerHTML=`<div style="background:var(--white);width:100%;max-width:480px;padding:20px 16px 36px;border-radius:10px 10px 0 0;font-family:inherit;max-height:80vh;overflow-y:auto">
     <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Gut Boosters Detected</div>
-    <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">Found in "${mealName}"</div>
+    <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px">Found in &ldquo;${mealName}&rdquo;</div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Tick any you had — or skip</div>
     <div style="margin-bottom:16px">${rows}</div>
     <div style="display:flex;gap:8px">
-      <button onclick="confirmGutBoosterPrompt(${JSON.stringify(boosters.map(g=>g.id))})" style="flex:1;padding:12px;background:#4a8c6a;color:#fff;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:3px;font-weight:600">✓ Tick Selected</button>
+      <button onclick="confirmGutBoosterPrompt()" style="flex:1;padding:12px;background:#4a8c6a;color:#fff;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:3px;font-weight:600">✓ Tick Selected</button>
       <button onclick="document.querySelectorAll('.gut-prompt-overlay').forEach(e=>e.remove())" style="padding:12px 20px;background:none;color:var(--muted);border:1px solid var(--border);font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">Skip</button>
     </div>
   </div>`;
@@ -5452,7 +5455,8 @@ function showGutBoosterPrompt(boosters, mealName){
   overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.remove(); });
 }
 
-function confirmGutBoosterPrompt(gutIds){
+function confirmGutBoosterPrompt(){
+  const gutIds=window._pendingGutIds||[];
   const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[fk]) state.foods[fk]={};
   let ticked=0;
