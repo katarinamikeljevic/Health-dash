@@ -3764,7 +3764,9 @@ function saveMealCartPrompt(){
   if(!cart.length){showMealStatus("⚠ No items in meal cart",false);return;}
   const t=cart.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.protein,c:s.c+i.carbs,f:s.f+i.fat,fi:s.fi+(i.fibre||0),salt:s.salt+(i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
   const ingredients=cart.map(i=>i.name).join(", ");
-  const meal={name,ingredients,protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,kcal:Math.round(t.kcal),salt:Math.round(t.salt)};
+  // Store structured items so each ingredient shows with weight and macros
+  const items=cart.map(i=>({name:i.name,kcal:i.kcal,protein:i.protein,fat:i.fat,carbs:i.carbs,fibre:i.fibre||0,salt:i.salt||0}));
+  const meal={name,ingredients,items,protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,kcal:Math.round(t.kcal),salt:Math.round(t.salt)};
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
   const cat=meal.kcal<250?'snacks':meal.kcal<400?'breakfast':meal.kcal<600?'lunch':'dinner';
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
@@ -4966,11 +4968,14 @@ function renderSavedMeals(container){
       ${meals.map((m,i)=>{
         const isEditing=editing&&editing.cat===cat.id&&editing.idx===i;
         if(isEditing) return renderMealEditForm(cat,m,i);
+        const ingredientList=m.items&&m.items.length
+          ?m.items.map(it=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(0,0,0,.04)"><span style="font-size:10px;color:var(--soft)">${it.name}</span><span style="font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${it.kcal} kcal · ${it.protein}g P</span></div>`).join("")
+          :(m.ingredients||"").split(",").filter(s=>s.trim()).map(s=>`<div style="font-size:10px;color:var(--soft);padding:2px 0;border-bottom:1px solid rgba(0,0,0,.04)">${s.trim()}</div>`).join("");
         return `<div style="background:var(--white);border:1px solid var(--border);border-left:3px solid ${cat.color};padding:12px 14px;margin-bottom:6px">
           <div style="display:flex;align-items:flex-start;gap:8px">
             <div style="flex:1">
-              <div style="font-size:13px;font-weight:400;color:var(--text)">${m.name}</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5">${m.ingredients||""}</div>
+              <div style="font-size:13px;font-weight:400;color:var(--text);margin-bottom:6px">${m.name}</div>
+              ${ingredientList?`<div style="margin-bottom:8px">${ingredientList}</div>`:""}
               <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
                 <span style="font-size:11px;color:var(--ink);font-weight:500">${m.kcal||0} kcal</span>
                 <span style="font-size:11px;color:#b8934a">${(+m.protein||0).toFixed(1)}g P</span>
@@ -5004,7 +5009,7 @@ function renderMealEditForm(cat,m,idx){
   return `<div style="background:var(--gold-pale);border:1px solid rgba(184,147,74,.3);border-left:3px solid ${cat.color};padding:14px;margin-bottom:6px">
     <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:${cat.color};margin-bottom:10px">${isNew?"New Meal":"Edit Meal"}</div>
     <input id="smName" class="meal-name-input" placeholder="Meal name e.g. Tuna cucumber boats" value="${(m.name||"").replace(/"/g,"&quot;")}">
-    <textarea id="smIngredients" style="width:100%;padding:8px 10px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:12px;color:var(--text);resize:none;height:70px;line-height:1.5;box-sizing:border-box;border-radius:2px;margin-bottom:6px" placeholder="Ingredients e.g. 150g cod, 80g asparagus, 1 tsp olive oil, garlic">${m.ingredients||""}</textarea>
+    <textarea id="smIngredients" style="width:100%;padding:8px 10px;border:1px solid var(--border);background:var(--white);font-family:inherit;font-size:12px;color:var(--text);resize:none;height:80px;line-height:1.5;box-sizing:border-box;border-radius:2px;margin-bottom:6px" placeholder="e.g. 3 eggs (150g), 20g butter, 50g spinach, 30g feta — include weights so you can repeat the meal exactly">${m.ingredients||""}</textarea>
     <button onclick="aiRecalcMealFromIngredients()" style="width:100%;padding:7px;background:rgba(184,147,74,.08);border:1px solid rgba(184,147,74,.3);color:var(--gold);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-bottom:10px">✨ Recalculate Macros from Ingredients</button>
     <div id="smAIStatus" style="font-size:11px;color:var(--muted);min-height:16px;margin-bottom:6px"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px">
