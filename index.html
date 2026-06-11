@@ -1989,6 +1989,7 @@ const GUT_BOOSTERS=[
 ];
 
 const FOOD_TO_GUT={"f_avo":"g_avocado","f_lentils":"g_lentils","f_chickpeas":"g_lentils","f_kidney":"g_lentils","f_tofu":"g_tofu","f_peas":"g_peas","f_beansprouts":"g_beansprouts","f_greenbeans":"g_greenbeans","f_grapefruit":"g_grapefruit","f_leeks":"g_leeks","f_pistachios":"g_pistachios","f_salmon":"g_salmon","f_trout":"g_salmon","f_sardines":"g_salmon","f_mackerel":"g_salmon","f_kefir":"g_kefir","f_kimchi":"g_kimchi","f_greentea":"g_greentea","f_blacktea":"g_blacktea","f_garlic":"g_garlic","f_strawberries":"g_strawberries","f_orange":"g_oranges","f_emmental":"g_emmental"};
+const GUT_BOOSTER_TO_GUT_FOOD={"g_avocado":"gf_avocado","g_lentils":"gf_legumes","g_tofu":"gf_tofu","g_peas":"gf_peas","g_beansprouts":"gf_beansprouts","g_greenbeans":"gf_greenbeans","g_grapefruit":"gf_citrus","g_kefir":"gf_fermented","g_leeks":"gf_alliums","g_pistachios":"gf_nuts","g_kimchi":"gf_fermented","g_salmon":"gf_oilyfish","g_emmental":"gf_fermented","g_blacktea":"gf_blacktea","g_greentea":"gf_greentea","g_garlic":"gf_alliums","g_oranges":"gf_oranges","g_strawberries":"gf_berries"};
 
 const GUT_FOODS=[
   {id:"gf_avocado",l:"Avocado / Guacamole",e:"🥑",bf:true,note:"½ avocado (~70g) or 2 tbsp guacamole",bugs:["b_emelia","b_kenneth","b_cora","b_wes","b_ted"]},
@@ -2411,15 +2412,11 @@ function renderRoutine(){
   const yolkMsg=over?`⚠️ ${yolks-limit} over — egg whites only`:atLimit?"✓ Limit reached — egg whites only":`${limit-yolks} yolk${limit-yolks!==1?"s":""} remaining`;
   document.getElementById("yolkCard")&&(document.getElementById("yolkCard").innerHTML=`
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div><div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">🥚 Egg Yolks This Week</div><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">Max 6 · LDL cholesterol limit</div></div>
+      <div><div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">🥚 Egg Yolks This Week</div><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">Max 6 · LDL cholesterol limit · tap to add or remove</div></div>
       <div class="serif" style="font-size:28px;color:${over?"var(--red)":atLimit?"var(--amber)":"white"}">${yolks}/6</div>
     </div>
-    <div class="yolk-eggs">${Array.from({length:Math.max(yolks,limit)},(_,i)=>`<div class="yolk-egg${i<yolks?(i>=limit?" over":" used"):""}">${i<yolks?"🥚":""}</div>`).join("")}</div>
-    <div class="yolk-btns">
-      <button class="yolk-add" onclick="addYolk()">+ Add Yolk</button>
-      <button class="yolk-undo" onclick="removeYolk()">− Undo</button>
-    </div>
-    <div style="font-size:10px;color:${over?"var(--red)":atLimit?"var(--amber)":"rgba(255,255,255,.3)"}">${yolkMsg}</div>`);
+    <div class="yolk-eggs">${Array.from({length:limit},(_,i)=>`<div class="yolk-egg${i<yolks?(i>=limit?" over":" used"):""}" onclick="toggleYolk(${i})" style="cursor:pointer;font-size:20px">${i<yolks?"🥚":"🩶"}</div>`).join("")}</div>
+    <div style="font-size:10px;color:${over?"var(--red)":atLimit?"var(--amber)":"rgba(255,255,255,.3)"};margin-top:6px">${yolkMsg}</div>`);
   // Weekly counts helper (uses current week checks)
   function weeklyCount(weeklyId){
     let n=0;
@@ -2594,6 +2591,7 @@ function setWater(n){
 }
 function addYolk(){const wk=getWeekKey();if(!state.yolks[wk])state.yolks[wk]=0;state.yolks[wk]=Math.min(state.yolks[wk]+1,10);persist();renderRoutine();}
 function removeYolk(){const wk=getWeekKey();if(!state.yolks[wk])state.yolks[wk]=0;state.yolks[wk]=Math.max(state.yolks[wk]-1,0);persist();renderRoutine();}
+function toggleYolk(i){const wk=getWeekKey();if(!state.yolks)state.yolks={};if(!state.yolks[wk])state.yolks[wk]=0;const cur=state.yolks[wk];state.yolks[wk]=i<cur?i:i+1;persist();renderRoutine();}
 
 // ── CYCLE PHASE ───────────────────────────────────────────────────
 const CYCLE_LENGTH = 27;
@@ -3622,7 +3620,7 @@ function buildFoodResultHTML(f,idx,prefix){
         + Add to Meal
       </button>
     </div>
-    ${GUT_BOOSTERS.some(g=>gutMatchesFood(g,f[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;color:var(--green);cursor:pointer" id="${prefix}_gut_label_${idx}"><input type="checkbox" id="${prefix}_gut_${idx}" style="accent-color:var(--green);width:16px;height:16px" onchange="this.closest('label').style.background=this.checked?'rgba(74,140,106,.15)':'';this.closest('label').style.borderRadius='4px';this.closest('label').style.padding=this.checked?'3px 6px':'0 0'"> 🌿 Tick as gut booster</label>`:''}
+    ${GUT_BOOSTERS.some(g=>gutMatchesFood(g,f[0]))?`<label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:11px;cursor:pointer;padding:5px 8px;border-radius:4px;border:1px solid var(--green);color:var(--green);transition:all .2s" id="${prefix}_gut_label_${idx}" onclick="const cb=document.getElementById('${prefix}_gut_${idx}');cb.checked=!cb.checked;this.style.background=cb.checked?'rgba(74,140,106,.25)':'';this.style.color=cb.checked?'#fff':'var(--green)';this.style.borderColor='var(--green)';this.querySelector('span').textContent=cb.checked?'✓ Gut booster logged':'🌿 Tick as gut booster"><input type="checkbox" id="${prefix}_gut_${idx}" style="display:none"><span>🌿 Tick as gut booster</span></label>`:''}
     <!-- Edit macros toggle -->
     <div style="margin-top:6px">
       <button onclick="toggleMacroEdit('${prefix}',${idx})" style="background:none;border:none;font-family:inherit;font-size:10px;color:var(--muted);cursor:pointer;padding:0;letter-spacing:1px">✏️ ${ov?'Edit / Reset macros':'Macros wrong? Edit'}</button>
@@ -3710,6 +3708,8 @@ function addSearchFoodToLog(prefix,idx,kcal,protein,carbs,fat,fibre,salt,btn){
       state.foods[fk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
       if(chipId)state.foods[fk][chipId]=true;
+      const gfId=GUT_BOOSTER_TO_GUT_FOOD[matchedGut.id];
+      if(gfId)state.foods[fk][gfId]=true;
       loggedGutBooster=matchedGut;
     }
   }
