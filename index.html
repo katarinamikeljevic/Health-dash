@@ -4659,6 +4659,7 @@ const SALAD_PROJECT_MEALS={
   proteins:[
     {name:"Cajun Chicken Thigh (120g)",kcal:248,p:28,c:1,f:14,fi:1,salt:1},
     {name:"Honey Mustard Chicken (120g)",kcal:198,p:23,c:2,f:11,fi:0,salt:1},
+    {name:"Black Pepper Chicken Breast",kcal:224,p:29.4,c:2.8,f:4.9,fi:0,salt:480},
     {name:"Roasted Salmon (120g)",kcal:280,p:28,c:0,f:18,fi:0,salt:0},
     {name:"Black Pepper Prawns (120g)",kcal:124,p:22,c:1,f:4,fi:0,salt:1},
     {name:"Sesame Chilli Tofu (110g)",kcal:188,p:17,c:7,f:11,fi:2,salt:1},
@@ -4666,7 +4667,6 @@ const SALAD_PROJECT_MEALS={
     {name:"Bold Bean Satay (80g)",kcal:180,p:9,c:18,f:7,fi:5,salt:1},
   ],
   bases:[
-    {name:"Black Pepper Chicken Breast",kcal:224,p:29.4,c:2.8,f:4.9,fi:0,salt:480},
     {name:"Cos",kcal:31,p:1,c:6,f:0,fi:2,salt:0},
     {name:"Spinach",kcal:16,p:2,c:2,f:0,fi:2,salt:0},
     {name:"Rocket",kcal:18,p:2,c:2,f:0,fi:2,salt:0},
@@ -4680,7 +4680,7 @@ const SALAD_PROJECT_MEALS={
     {name:"Cherry Tomatoes",kcal:8,p:0,c:1,f:0,fi:0,salt:0},
     {name:"Cucumber",kcal:5,p:0,c:0,f:0,fi:0,salt:0},
     {name:"Roasted Corn",kcal:69,p:2,c:10,f:1,fi:2,salt:0},
-    {name:"Broccoli + Peas",kcal:50,p:3,c:4,f:1,fi:3,salt:0},
+    {name:"Broccoli + Peas + Edamame",kcal:50,p:3,c:4,f:1,fi:3,salt:0},
     {name:"Sesame Slaw",kcal:12,p:0,c:2,f:1,fi:1,salt:0},
     {name:"Cucumber-Chilli Pickle",kcal:16,p:0,c:2,f:0,fi:0,salt:0},
     {name:"Pickled Onions",kcal:13,p:0,c:3,f:0,fi:1,salt:0},
@@ -4749,12 +4749,29 @@ function getRestItemTags(name, cartKey){
   const badges=[];
   let highlight=null;
 
-  // Zoe gut booster check
-  const gutMatch=GUT_BOOSTERS.find(g=>{
-    const gl=g.l.toLowerCase();
-    return n.includes(gl);
-  });
-  if(gutMatch){
+  // Zoe gut booster check — match against GUT_FOODS keywords
+  const gutFoodKeywords={
+    salmon:'🐟 Oily fish',trout:'🐟 Oily fish',mackerel:'🐟 Oily fish',sardine:'🐟 Oily fish',
+    avocado:'🥑 Avocado',
+    tofu:'🟨 Tofu / Tempeh',tempeh:'🟨 Tofu / Tempeh',
+    edamame:'🫘 Edamame',
+    pea:'🫛 Peas',
+    'green bean':'🫛 Green beans',asparagus:'🫛 Green beans / Asparagus',broccoli:'🫛 Green beans',
+    lentil:'🫘 Legumes',chickpea:'🫘 Legumes','bean satay':'🫘 Legumes',falafel:'🫘 Legumes',
+    kefir:'🧫 Fermented',kimchi:'🧫 Fermented',sauerkraut:'🧫 Fermented',miso:'🧫 Fermented',skyr:'🧫 Fermented',
+    pistachio:'🟢 Nuts',walnut:'🟢 Nuts',almond:'🟢 Nuts',
+    leek:'🧅 Alliums',garlic:'🧅 Alliums',onion:'🧅 Alliums',
+    'green tea':'🍵 Green tea',matcha:'🍵 Green tea',seaweed:'🍵 Green tea',
+    'black tea':'☕ Black tea',oolong:'☕ Black tea',
+    orange:'🍊 Citrus',grapefruit:'🍊 Citrus',kiwi:'🍊 Citrus',
+    strawberr:'🍓 Berries',raspberr:'🍓 Berries',blueberr:'🍓 Berries',
+  };
+  const gutFoodMatch=Object.entries(gutFoodKeywords).find(([kw])=>n.includes(kw));
+  const gutMatch=GUT_BOOSTERS.find(g=>n.includes(g.l.toLowerCase()));
+  if(gutFoodMatch){
+    badges.push({label:`🌿 Zoe · ${gutFoodMatch[1]}`,bg:'rgba(74,140,106,.15)',color:'#4a8c6a'});
+    highlight='#4a8c6a';
+  } else if(gutMatch){
     badges.push({label:`🌿 Zoe ${gutMatch.s}`,bg:'rgba(74,140,106,.15)',color:'#4a8c6a'});
     highlight='#4a8c6a';
   }
@@ -4986,7 +5003,8 @@ function logRestOrder(cartKey,restaurantName){
   if(!items.length)return;
   const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f,fi:s.fi+(i.fi||0),salt:s.salt+(i.salt||0)}),{kcal:0,p:0,c:0,f:0,fi:0,salt:0});
   const name=`${restaurantName}: ${items.map(i=>i.name).join(' + ')}`;
-  copyMealToLog(name,t.p,t.f,t.c,t.fi,t.kcal,Math.round(t.salt*1000));
+  const ingredientText=items.map(i=>i.name).join(' ');
+  copyMealToLog(name,t.p,t.f,t.c,t.fi,t.kcal,Math.round(t.salt*1000),ingredientText);
   clearRestCart(cartKey);
 }
 
