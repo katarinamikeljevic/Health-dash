@@ -4285,16 +4285,19 @@ function renderFood(){
       ${GUT_FOODS.map(f=>{
         const ticked=!!foods[f.id];
         const fedNames=f.bugs.map(bid=>{const b=BUGS.find(x=>x.id===bid);return b?b.l:''}).filter(Boolean);
-        return `<div onclick="toggleGutFood('${f.id}')" style="cursor:pointer;padding:8px 10px;background:${ticked?'rgba(74,140,106,.2)':'rgba(255,255,255,.03)'};border:1px solid ${ticked?'var(--green)':'var(--border)'};border-radius:4px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:18px;line-height:1">${f.e}</span>
+        return `<div style="background:${ticked?'rgba(74,140,106,.2)':'rgba(255,255,255,.03)'};border:1px solid ${ticked?'var(--green)':'var(--border)'};border-radius:4px;overflow:hidden">
+          <div onclick="toggleGutFood('${f.id}')" style="cursor:pointer;padding:7px 10px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:16px;line-height:1">${f.e}</span>
             <div style="flex:1;min-width:0">
-              <div style="font-size:12px;font-weight:${ticked?'600':'400'};color:${ticked?'var(--green)':'var(--text)'}">${f.l}${f.bf?' <span style="color:#b8934a;font-size:11px">⭐</span>':''}</div>
+              <div style="font-size:12px;font-weight:${ticked?'600':'400'};color:${ticked?'var(--green)':'var(--text)'}">${f.l}${f.bf?' <span style="color:#b8934a;font-size:10px">⭐</span>':''}</div>
               <div style="font-size:10px;color:var(--muted);margin-top:1px">feeds: ${fedNames.join(' · ')}</div>
             </div>
-            <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'};flex-shrink:0">${ticked?'✓':'+'}</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+              <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'}">${ticked?'✓':'+'}</div>
+              ${f.note?`<div onclick="event.stopPropagation();const d=document.getElementById('gfnote_${f.id}');d.style.display=d.style.display==='none'?'block':'none'" style="font-size:10px;color:var(--muted);padding:2px 5px;border:1px solid var(--border);border-radius:3px;cursor:pointer">ℹ</div>`:''}
+            </div>
           </div>
-          ${f.note?`<div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:5px;padding-top:5px;border-top:1px solid var(--border);line-height:1.5">${f.note}</div>`:''}
+          ${f.note?`<div id="gfnote_${f.id}" style="display:none;font-size:10px;color:rgba(255,255,255,.4);padding:5px 10px 7px;border-top:1px solid var(--border);line-height:1.5">${f.note}</div>`:''}
         </div>`;
       }).join('')}
     </div>
