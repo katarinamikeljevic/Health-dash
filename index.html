@@ -5005,7 +5005,39 @@ function logRestOrder(cartKey,restaurantName){
   const name=`${restaurantName}: ${items.map(i=>i.name).join(' + ')}`;
   const ingredientText=items.map(i=>i.name).join(' ');
   copyMealToLog(name,t.p,t.f,t.c,t.fi,t.kcal,Math.round(t.salt*1000),ingredientText);
+  // Show save prompt before clearing cart
+  showRestSavePrompt(cartKey,restaurantName,items,t);
   clearRestCart(cartKey);
+}
+
+function showRestSavePrompt(cartKey,restaurantName,items,t){
+  document.querySelectorAll('.rest-save-prompt').forEach(e=>e.remove());
+  const div=document.createElement('div');
+  div.className='rest-save-prompt';
+  div.style.cssText='position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:2px solid rgba(74,140,106,.4);padding:16px;z-index:400;box-shadow:0 -4px 24px rgba(0,0,0,.5)';
+  const summary=`${t.kcal} kcal · ${t.p}g P · ${t.c}g C · ${t.f}g F`;
+  div.innerHTML=`
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:4px">✓ Logged — ${restaurantName}</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:10px">${summary} · Save this order for next time?</div>
+    <input id="restSaveNameInput" class="meal-name-input" style="margin:0 0 10px" placeholder="Name this order e.g. My usual Salad Project" value="">
+    <div style="display:grid;grid-template-columns:1fr auto;gap:8px">
+      <button onclick="confirmRestSave('${cartKey}','${restaurantName}',${JSON.stringify(items).replace(/'/g,'&apos;')},this)" style="padding:10px;background:rgba(74,140,106,.2);border:1px solid rgba(74,140,106,.4);color:var(--green);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save order</button>
+      <button onclick="this.closest('.rest-save-prompt').remove()" style="padding:10px 16px;background:none;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">✕</button>
+    </div>`;
+  document.body.appendChild(div);
+  setTimeout(()=>document.querySelectorAll('.rest-save-prompt').forEach(e=>e.remove()),15000);
+}
+
+function confirmRestSave(cartKey,restaurantName,items,btn){
+  const nameEl=document.getElementById('restSaveNameInput');
+  const orderName=nameEl?.value.trim()||(restaurantName+' order');
+  const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+(i.p||0),c:s.c+(i.c||0),f:s.f+(i.f||0),fi:s.fi+(i.fi||0)}),{kcal:0,p:0,c:0,f:0,fi:0});
+  if(!state._savedRestOrders)state._savedRestOrders={};
+  if(!state._savedRestOrders[cartKey])state._savedRestOrders[cartKey]=[];
+  state._savedRestOrders[cartKey].push({orderName,kcal:t.kcal,p:t.p,c:t.c,f:t.f,fi:t.fi,items:JSON.parse(JSON.stringify(items))});
+  persist();
+  document.querySelectorAll('.rest-save-prompt').forEach(e=>e.remove());
+  showMealStatus(`💾 "${orderName}" saved`,true);
 }
 
 async function getRestSuggestion(cartKey, restName){
