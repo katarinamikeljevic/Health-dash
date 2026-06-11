@@ -4335,6 +4335,11 @@ function renderFood(){
       <div style="font-size:11px;color:rgba(255,255,255,.4);margin-bottom:10px;line-height:1.5">See which bugs you've been underfeeding over the last 4 weeks — so you know where to focus next month.</div>
       <button onclick="showMonthlyCheckin()" style="background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:11px;padding:7px 14px;border-radius:3px;cursor:pointer;letter-spacing:1px">View 4-week report →</button>
     </div>
+    ${!((state.imports||{})['2026-W23'])?`<div style="margin-top:16px;padding:12px;background:rgba(74,140,106,.1);border:1px solid var(--green);border-radius:4px">
+      <div style="font-size:10px;color:var(--green);font-weight:600;margin-bottom:4px">📥 Import Mon–Wed this week</div>
+      <div style="font-size:10px;color:rgba(255,255,255,.4);margin-bottom:10px;line-height:1.5">Tap to tick everything you've already eaten Mon–Wed 9–11 June based on your food diary.</div>
+      <button onclick="importWeekMon2026W23(this)" style="background:var(--green);border:none;color:#fff;font-family:inherit;font-size:11px;padding:7px 14px;border-radius:3px;cursor:pointer;letter-spacing:1px">✓ Tick Mon–Wed foods</button>
+    </div>`:''}
   `;
   // Food chips — with cycle phase highlighting
   const cycleResult=getCyclePhase();
@@ -6573,6 +6578,25 @@ function toggleGut(id){
   const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
   if(chip)state.foods[k][chip]=true;
   persist();renderFood();
+}
+
+function importWeekMon2026W23(btn){
+  if(!state.foods) state.foods={};
+  if(!state.imports) state.imports={};
+  const days={
+    0:['gf_fermented','gf_berries','gf_greentea','gf_edamame','gf_peas','gf_legumes','gf_avocado','gf_oranges','gf_alliums','gf_greenbeans'],
+    1:['gf_fermented','gf_oranges','gf_alliums','gf_greenbeans','gf_beansprouts'],
+    2:['gf_fermented','gf_edamame','gf_peas','gf_legumes','gf_avocado','gf_oilyfish','gf_greentea','gf_greenbeans','gf_oranges','gf_alliums']
+  };
+  Object.entries(days).forEach(([d,ids])=>{
+    const k=`foods-2026-W23-${d}`;
+    if(!state.foods[k]) state.foods[k]={};
+    ids.forEach(id=>state.foods[k][id]=true);
+  });
+  state.imports['2026-W23']=true;
+  persist();
+  btn.closest('div[style*="border:1px solid var(--green)"]').innerHTML='<div style="font-size:11px;color:var(--green)">✓ Mon–Wed foods imported</div>';
+  setTimeout(()=>renderFood(),400);
 }
 
 function showMonthlyCheckin(){
