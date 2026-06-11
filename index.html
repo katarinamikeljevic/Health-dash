@@ -4292,11 +4292,9 @@ function renderFood(){
               <div style="font-size:12px;font-weight:${ticked?'600':'400'};color:${ticked?'var(--green)':'var(--text)'}">${f.l}${f.bf?' <span style="color:#b8934a;font-size:10px">⭐</span>':''}</div>
               <div style="font-size:10px;color:var(--muted);margin-top:1px">feeds: ${fedNames.join(' · ')}</div>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-              <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'}">${ticked?'✓':'+'}</div>
-              ${f.note?`<div onclick="event.stopPropagation();const d=document.getElementById('gfnote_${f.id}');d.style.display=d.style.display==='none'?'block':'none'" style="font-size:10px;color:var(--muted);padding:2px 5px;border:1px solid var(--border);border-radius:3px;cursor:pointer">ℹ</div>`:''}
-            </div>
+            <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'};flex-shrink:0;padding:4px 8px">${ticked?'✓':'+'}</div>
           </div>
+          ${f.note?`<div onclick="const d=document.getElementById('gfnote_${f.id}');d.style.display=d.style.display==='none'?'block':'none';this.querySelector('span').textContent=d.style.display==='none'?'ℹ Serving size & notes ▾':'ℹ Serving size & notes ▴'" style="cursor:pointer;padding:4px 10px;border-top:1px solid var(--border);background:rgba(255,255,255,.03);display:flex;align-items:center"><span style="font-size:10px;color:var(--muted);letter-spacing:.5px">ℹ Serving size & notes ▾</span></div>`:''}
           ${f.note?`<div id="gfnote_${f.id}" style="display:none;font-size:11px;color:rgba(255,255,255,.85);padding:7px 10px 9px;border-top:1px solid var(--border);line-height:1.6;background:rgba(0,0,0,.35)">${f.note}</div>`:''}
         </div>`;
       }).join('')}
