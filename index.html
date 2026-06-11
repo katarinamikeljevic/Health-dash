@@ -2695,11 +2695,11 @@ function getCyclePhase() {
   today.setHours(0,0,0,0);
   start.setHours(0,0,0,0);
   const diffDays = Math.floor((today - start) / 86400000);
-  // Never auto-roll into a new cycle — cap at CYCLE_LENGTH so phase stays
-  // in late luteal until user manually updates their period start date
-  const cycleDay = Math.min(diffDays + 1, CYCLE_LENGTH);
-  const phase = CYCLE_PHASES.find(p => cycleDay >= p.days[0] && cycleDay <= p.days[1]);
-  return { phase: phase || CYCLE_PHASES[3], cycleDay, overdue: diffDays + 1 > CYCLE_LENGTH };
+  // Show actual day count even if overdue — phase stays late luteal until user updates
+  const cycleDay = diffDays + 1;
+  const clampedDay = Math.min(cycleDay, CYCLE_LENGTH);
+  const phase = CYCLE_PHASES.find(p => clampedDay >= p.days[0] && clampedDay <= p.days[1]);
+  return { phase: phase || CYCLE_PHASES[3], cycleDay, overdue: cycleDay > CYCLE_LENGTH };
 }
 
 function setCycleStart(val) {
