@@ -1990,6 +1990,45 @@ const GUT_BOOSTERS=[
 
 const FOOD_TO_GUT={"f_avo":"g_avocado","f_lentils":"g_lentils","f_chickpeas":"g_lentils","f_kidney":"g_lentils","f_tofu":"g_tofu","f_peas":"g_peas","f_beansprouts":"g_beansprouts","f_greenbeans":"g_greenbeans","f_grapefruit":"g_grapefruit","f_leeks":"g_leeks","f_pistachios":"g_pistachios","f_salmon":"g_salmon","f_trout":"g_salmon","f_sardines":"g_salmon","f_mackerel":"g_salmon","f_kefir":"g_kefir","f_kimchi":"g_kimchi","f_greentea":"g_greentea","f_blacktea":"g_blacktea","f_garlic":"g_garlic","f_strawberries":"g_strawberries","f_orange":"g_oranges","f_emmental":"g_emmental"};
 
+const GUT_FOODS=[
+  {id:"gf_avocado",l:"Avocado / Guacamole",e:"🥑",bugs:["b_emelia","b_kenneth","b_cora","b_wes","b_ted"]},
+  {id:"gf_legumes",l:"Lentils / Chickpeas / Kidney beans",e:"🫘",bugs:["b_alberto","b_skye","b_dale","b_christopher","b_ted","b_molly","b_bethan"]},
+  {id:"gf_tofu",l:"Tofu / Tempeh",e:"🟨",bugs:["b_alberto","b_skye","b_aron","b_new_strains"]},
+  {id:"gf_peas",l:"Peas / Broad beans",e:"🫛",bugs:["b_molly","b_meghan"]},
+  {id:"gf_edamame",l:"Edamame",e:"🫘",bugs:["b_alberto","b_skye","b_aron","b_molly","b_meghan"]},
+  {id:"gf_beansprouts",l:"Beansprouts / Mangetout",e:"🌱",bugs:["b_alberto","b_skye"]},
+  {id:"gf_greenbeans",l:"Green beans / Asparagus",e:"🫛",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
+  {id:"gf_citrus",l:"Grapefruit / Citrus / Kiwi",e:"🍊",bugs:["b_ronan","b_leon"]},
+  {id:"gf_alliums",l:"Leeks / Garlic / Onions",e:"🧅",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
+  {id:"gf_nuts",l:"Pistachios / Walnuts / Almonds",e:"🟢",bugs:["b_leon","b_aron","b_wes","b_kenneth"]},
+  {id:"gf_oilyfish",l:"Salmon / Trout / Mackerel / Sardines",e:"🐟",bugs:["b_ronan","b_leon","b_ted","b_emelia","b_kenneth"]},
+  {id:"gf_blacktea",l:"Black Tea / Oolong",e:"☕",bugs:["b_ronan","b_leon"]},
+  {id:"gf_greentea",l:"Green Tea / Matcha",e:"🍵",bugs:["b_ronan","b_leon","b_kenneth"]},
+  {id:"gf_berries",l:"Strawberries / Raspberries / Blueberries",e:"🍓",bugs:["b_leon","b_ronan","b_meghan"]},
+  {id:"gf_oranges",l:"Oranges / Clementines",e:"🍊",bugs:["b_ronan","b_leon","b_meghan"]},
+  {id:"gf_fermented",l:"Kefir / Kimchi / Sauerkraut / Live yogurt",e:"🧫",bugs:["b_new_strains"]},
+  {id:"gf_emmental",l:"Emmental / Aged cheese",e:"🧀",bugs:["b_new_strains"]},
+];
+
+const BUGS=[
+  {id:"b_alberto",l:"Alberto",e:"🔬",species:"Lachnospiraceae",label:"Heart · Inflammation · Blood sugar · Body fat",t:7,bf:true,g:"generalist"},
+  {id:"b_meghan",l:"Meghan",e:"🔬",species:"Firmicutes",label:"Heart · Inflammation · Blood sugar · Body fat",t:7,bf:true,g:"generalist"},
+  {id:"b_skye",l:"Skye",e:"🔬",species:"Lachnospiraceae",label:"Heart · Inflammation · Blood sugar · Body fat",t:7,bf:true,g:"generalist"},
+  {id:"b_molly",l:"Molly",e:"🔬",species:"Intestinimonas gabonensis",label:"Heart · Inflammation · Blood sugar · Body fat",t:7,bf:true,g:"generalist"},
+  {id:"b_ted",l:"Ted",e:"🔬",species:"Lawsonibacter hominis",label:"Heart · Blood sugar · Body fat",t:5,bf:true,g:"bodyfat"},
+  {id:"b_kenneth",l:"Kenneth",e:"🔬",species:"Firmicutes",label:"Heart & cholesterol · Body fat",t:4,bf:true,g:"bodyfat"},
+  {id:"b_emelia",l:"Emelia",e:"🔬",species:"Firmicutes",label:"Body fat distribution",t:4,bf:true,g:"bodyfat"},
+  {id:"b_cora",l:"Cora",e:"🔬",species:"Clostridiaceae",label:"Body fat distribution",t:3,bf:true,g:"bodyfat"},
+  {id:"b_aron",l:"Aron",e:"🔬",species:"Lachnospiraceae",label:"Body fat distribution",t:3,bf:true,g:"bodyfat"},
+  {id:"b_wes",l:"Wes",e:"🔬",species:"Firmicutes",label:"Body fat distribution",t:3,bf:true,g:"bodyfat"},
+  {id:"b_dale",l:"Dale",e:"🔬",species:"Clostridium",label:"Blood sugar control",t:4,g:"bloodsugar"},
+  {id:"b_christopher",l:"Christopher",e:"🔬",species:"Clostridium",label:"Inflammation · Blood sugar",t:3,g:"bloodsugar"},
+  {id:"b_bethan",l:"Bethan",e:"🔬",species:"Oscillibacter valericigenes",label:"Blood sugar control",t:3,g:"bloodsugar"},
+  {id:"b_leon",l:"Leon",e:"🔬",species:"Lachnospira",label:"Inflammation & immune health",t:3,g:"inflam"},
+  {id:"b_ronan",l:"Ronan",e:"🔬",species:"Oscillospiraceae",label:"Heart & cholesterol · Inflammation",t:3,g:"inflam"},
+  {id:"b_new_strains",l:"New Strains",e:"🧫",species:"Bifidobacterium · Lactobacillus · Akkermansia",label:"Recruiting missing good bugs · gut diversity · crowds out bad bugs",t:7,g:"diversity"},
+];
+
 const DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 
 // ── STATE ────────────────────────────────────────────────────────
@@ -4220,50 +4259,73 @@ function renderFood(){
       </div>
     </div>
   </div>`;
-  // Gut boosters
-  const total=GUT_BOOSTERS.reduce((s,g)=>s+g.t,0);
-  const done=GUT_BOOSTERS.reduce((s,g)=>s+Math.min(gutWeekCount(g.id),g.t),0);
-  const todayDone=GUT_BOOSTERS.filter(g=>foods[g.id]).length;
-  const groups=[
-    {lbl:"Score 100 — Daily Priority",items:GUT_BOOSTERS.filter(g=>g.s===100)},
-    {lbl:"Score 88–99 — Weekly Targets",items:GUT_BOOSTERS.filter(g=>g.s<100&&g.s>=88)},
-    {lbl:"Score 80–87 — Regular Rotation",items:GUT_BOOSTERS.filter(g=>g.s<88)},
+  // Bug-first gut tracker
+  const bugWeekFed=(bid)=>{let n=0;for(let i=0;i<7;i++){const k=`foods-${getWeekKey()}-${i}`;const df=(state.foods||{})[k]||{};if(GUT_FOODS.some(f=>f.bugs.includes(bid)&&df[f.id]))n++;}return n;};
+  const totalBugTarget=BUGS.reduce((s,b)=>s+b.t,0);
+  const totalBugDone=BUGS.reduce((s,b)=>s+Math.min(bugWeekFed(b.id),b.t),0);
+  const todayBugsDone=BUGS.filter(b=>GUT_FOODS.some(f=>f.bugs.includes(b.id)&&foods[f.id])).length;
+  const bugGroups=[
+    {lbl:"The 4 Generalists — all 4 clusters",bugs:BUGS.filter(b=>b.g==="generalist")},
+    {lbl:"Body Fat Distribution ⭐",bugs:BUGS.filter(b=>b.g==="bodyfat")},
+    {lbl:"Blood Sugar Control",bugs:BUGS.filter(b=>b.g==="bloodsugar")},
+    {lbl:"Heart & Inflammation",bugs:BUGS.filter(b=>b.g==="inflam")},
+    {lbl:"Missing Strain Diversity",bugs:BUGS.filter(b=>b.g==="diversity")},
   ];
   document.getElementById("gutSection").innerHTML=`
     <div class="gut-intro">
-      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:4px">🌿 Zoe Gut Boosters · Weekly Tracker</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit · <span style="color:#b8934a">⭐ = body fat priority</span></div>
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:4px">🌿 Zoe Gut Tracker · Bug-First View</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap foods you ate today → bugs auto-tick · <span style="color:#b8934a">⭐ = body fat priority</span></div>
       <div class="gut-stats">
-        <div><div class="gut-stat-val">${todayDone}</div><div class="gut-stat-lbl">Today</div></div>
-        <div><div class="gut-stat-val">${done}</div><div class="gut-stat-lbl">This week</div></div>
-        <div><div class="gut-stat-val">${Math.round(done/total*100)}%</div><div class="gut-stat-lbl">Week score</div></div>
+        <div><div class="gut-stat-val">${todayBugsDone}</div><div class="gut-stat-lbl">Bugs fed today</div></div>
+        <div><div class="gut-stat-val">${totalBugDone}</div><div class="gut-stat-lbl">This week</div></div>
+        <div><div class="gut-stat-val">${Math.round(totalBugDone/totalBugTarget*100)}%</div><div class="gut-stat-lbl">Week score</div></div>
       </div>
     </div>
-    ${groups.map(g=>`<div style="margin-bottom:16px"><div class="gut-section-hdr">${g.lbl}</div>${g.items.map(item=>{
-      const wc=gutWeekCount(item.id),todayCount=typeof foods[item.id]==="number"?foods[item.id]:(foods[item.id]?1:0),ticked=todayCount>0,met=wc>=item.t;
-      const pct=Math.min(wc/item.t,1)*100;
-      const nameStyle=met?'color:var(--muted);font-weight:400;':'font-weight:700;color:var(--text);';
-      const itemStyle=met?'opacity:0.55;background:#f7f5f2;':'';
-      return `<div class="gut-item${met?" met":""}" style="cursor:pointer;${itemStyle}">
-        <div class="gut-item-top" onclick="toggleGut('${item.id}')">
-          <div class="gut-tick${ticked?" ticked":""}" style="font-size:${todayCount>1?"11px":"13px"}">${todayCount>1?todayCount+"×":"✓"}</div>
-          <div style="flex:1">
-            <div class="gut-item-name" style="${nameStyle}">${item.e} ${item.l}${item.bf?` <span style="font-size:10px;color:#b8934a;font-weight:700" title="Helps with body fat distribution">⭐</span>`:''}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:400">/ ${item.alts.join(' / ')}</span>`:''}</div>
-            <div class="gut-item-note">${item.n}</div>
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin:4px 0 8px">🍽️ Log Today's Gut Foods</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px">
+      ${GUT_FOODS.map(f=>{
+        const ticked=!!foods[f.id];
+        const fedNames=f.bugs.map(bid=>{const b=BUGS.find(x=>x.id===bid);return b?b.l:''}).filter(Boolean);
+        return `<div onclick="toggleGutFood('${f.id}')" style="cursor:pointer;padding:8px 10px;background:${ticked?'rgba(74,140,106,.2)':'rgba(255,255,255,.03)'};border:1px solid ${ticked?'var(--green)':'var(--border)'};border-radius:4px;display:flex;align-items:center;gap:8px">
+          <span style="font-size:18px;line-height:1">${f.e}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:${ticked?'600':'400'};color:${ticked?'var(--green)':'var(--text)'}">${f.l}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">feeds: ${fedNames.join(' · ')}</div>
           </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-size:18px;font-weight:500;color:${met?'var(--green)':'var(--text)'};line-height:1">${wc}<span style="font-size:11px;color:var(--muted)">/${item.t}</span></div>
-            <div style="font-size:9px;color:${met?'var(--green)':'var(--muted)'};">${met?'✓ done':ticked?'✓ today':'this wk'}</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
-          <div style="flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden">
-            <div style="height:100%;width:${pct}%;background:${met?'var(--green)':'#4a8c6a80'};border-radius:2px;transition:width .3s"></div>
-          </div>
-          ${ticked?`<button onclick="event.stopPropagation();undoGut('${item.id}')" style="padding:2px 8px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:9px;cursor:pointer;border-radius:2px;white-space:nowrap;line-height:1.5">↩ Undo</button>`:''}
-        </div>
-      </div>`;
-    }).join("")}</div>`).join("")}`;
+          <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'};flex-shrink:0">${ticked?'✓':'+'}</div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px">🦠 Your Good Bugs — Weekly Targets</div>
+    ${bugGroups.map(grp=>`
+      <div style="margin-bottom:20px">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border);margin-bottom:10px">${grp.lbl}</div>
+        ${grp.bugs.map(bug=>{
+          const wc=bugWeekFed(bug.id);
+          const fedToday=GUT_FOODS.some(f=>f.bugs.includes(bug.id)&&foods[f.id]);
+          const met=wc>=bug.t;
+          const pct=Math.min(wc/bug.t,1)*100;
+          const todayFoodNames=GUT_FOODS.filter(f=>f.bugs.includes(bug.id)&&foods[f.id]).map(f=>f.l.split(' /')[0]);
+          return `<div style="margin-bottom:12px;opacity:${met?0.6:1}">
+            <div style="display:flex;align-items:flex-start;gap:8px">
+              <div style="flex:1">
+                <div style="font-size:12px;font-weight:${fedToday||met?'400':'700'};color:${met?'var(--muted)':'var(--text)'}">${bug.l}${bug.bf?' <span style="color:#b8934a">⭐</span>':''} <span style="font-size:10px;font-weight:300;color:var(--muted);font-style:italic">${bug.species}</span></div>
+                <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">${bug.label}</div>
+                ${todayFoodNames.length?`<div style="font-size:10px;color:var(--green);margin-top:2px">Today: ${todayFoodNames.join(', ')}</div>`:''}
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:18px;font-weight:500;color:${met?'var(--green)':'var(--text)'};line-height:1">${wc}<span style="font-size:11px;color:var(--muted)">/${bug.t}</span></div>
+                <div style="font-size:9px;color:${met?'var(--green)':'var(--muted)'};">${met?'✓ done':fedToday?'✓ today':'not yet'}</div>
+              </div>
+            </div>
+            <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:5px">
+              <div style="height:100%;width:${pct}%;background:${met?'var(--green)':'#4a8c6a80'};border-radius:2px;transition:width .3s"></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `).join('')}
+  `;
   // Food chips — with cycle phase highlighting
   const cycleResult=getCyclePhase();
   const cyclePriority=cycleResult?new Set(cycleResult.phase.prioritise):new Set();
@@ -6496,11 +6558,17 @@ function toggleFood(id){
 function toggleGut(id){
   const k=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[k])state.foods[k]={};
-  // Increment count each tap (allows multiple per day)
   const cur=typeof state.foods[k][id]==='number'?state.foods[k][id]:(state.foods[k][id]?1:0);
   state.foods[k][id]=cur+1;
   const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
   if(chip)state.foods[k][chip]=true;
+  persist();renderFood();
+}
+
+function toggleGutFood(id){
+  const k=`foods-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.foods[k])state.foods[k]={};
+  state.foods[k][id]=!state.foods[k][id];
   persist();renderFood();
 }
 
