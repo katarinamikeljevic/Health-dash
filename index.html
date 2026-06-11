@@ -756,7 +756,7 @@ Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
   <div id="gutSection" style="padding:0 16px">
     <div class="gut-intro">
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:4px">🌿 Zoe Gut Boosters · Weekly Tracker</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit · <span style="color:#b8934a">⭐ = body fat priority</span></div>
       <div class="gut-stats">
         <div><div class="gut-stat-val">1</div><div class="gut-stat-lbl">Today</div></div>
         <div><div class="gut-stat-val">1</div><div class="gut-stat-lbl">This week</div></div>
@@ -1968,22 +1968,22 @@ const FOOD_CATS=[
 
 // Each booster: id, l (label), e (emoji), s (score), t (weekly target), n (note), alts (alternatives that count toward same target)
 const GUT_BOOSTERS=[
-  {id:"g_avocado",l:"Avocado",e:"🥑",s:100,t:4,n:"½ avocado · ~120 kcal · 3–4× week",alts:["Olives","Extra virgin olive oil (1 tbsp)","Mixed nuts"]},
-  {id:"g_lentils",l:"Legumes",e:"🫘",s:100,t:5,n:"80g cooked · any legume counts · 5–6× week",alts:["Chickpeas","Kidney beans","Black beans","Butter beans","Cannellini","Borlotti","Pinto beans","Haricot","Black-eyed peas","Edamame","Broad beans"],kw:["lentil","chickpea","kidney bean","black bean","butter bean","cannellini","borlotti","haricot","black-eyed","legume","edamame","broad bean","pinto"]},
-  {id:"g_tofu",l:"Tofu",e:"🟨",s:100,t:3,n:"100–150g · ~80–120 kcal · 3–4× week",alts:["Tempeh","Edamame"]},
-  {id:"g_peas",l:"Peas",e:"🫛",s:100,t:4,n:"80g · ~60 kcal · 4× week",alts:["Broad beans","Edamame","Mangetout"]},
-  {id:"g_beansprouts",l:"Beansprouts",e:"🌱",s:99,t:3,n:"50–80g · ~15 kcal · 2–3× week",alts:["Mangetout","Alfalfa sprouts"]},
-  {id:"g_greenbeans",l:"Green Beans",e:"🫛",s:97,t:3,n:"80–100g · ~30 kcal · 2–4× week",alts:["Asparagus","Mangetout"]},
+  {id:"g_avocado",l:"Avocado",e:"🥑",s:100,t:4,n:"½ avocado · ~120 kcal · 3–4× week",bf:true,alts:["Olives","Extra virgin olive oil (1 tbsp)","Mixed nuts"]},
+  {id:"g_lentils",l:"Legumes",e:"🫘",s:100,t:5,n:"80g cooked · any legume counts · 5–6× week",bf:true,alts:["Chickpeas","Kidney beans","Black beans","Butter beans","Cannellini","Borlotti","Pinto beans","Haricot","Black-eyed peas","Edamame","Broad beans"],kw:["lentil","chickpea","kidney bean","black bean","butter bean","cannellini","borlotti","haricot","black-eyed","legume","edamame","broad bean","pinto"]},
+  {id:"g_tofu",l:"Tofu",e:"🟨",s:100,t:3,n:"100–150g · ~80–120 kcal · 3–4× week",bf:true,alts:["Tempeh","Edamame"]},
+  {id:"g_peas",l:"Peas",e:"🫛",s:100,t:4,n:"80g · ~60 kcal · 4× week",bf:true,alts:["Broad beans","Edamame","Mangetout"]},
+  {id:"g_beansprouts",l:"Beansprouts",e:"🌱",s:99,t:3,n:"50–80g · ~15 kcal · 2–3× week",bf:true,alts:["Mangetout","Alfalfa sprouts"]},
+  {id:"g_greenbeans",l:"Green Beans",e:"🫛",s:97,t:3,n:"80–100g · ~30 kcal · 2–4× week",bf:true,alts:["Asparagus","Mangetout"]},
   {id:"g_grapefruit",l:"Grapefruit",e:"🍊",s:95,t:3,n:"½ grapefruit · ~40 kcal · 2–4× week · morning only",alts:["Other citrus","Kiwi"]},
   {id:"g_kefir",l:"Kefir",e:"🥛",s:95,t:7,n:"150ml · ~65 kcal · Daily: in your morning shake",alts:["Arla Skyr","Fage 0% Greek yogurt","Live plain yogurt"]},
-  {id:"g_leeks",l:"Leeks",e:"🧅",s:94,t:3,n:"½ leek (~75g) · ~25 kcal · Daily in cooking",alts:["Onions","Shallots","Asparagus"]},
-  {id:"g_pistachios",l:"Pistachios",e:"🟢",s:92,t:7,n:"Small handful · ~140 kcal · Daily",alts:["Walnuts","Almonds","Hazelnuts"]},
+  {id:"g_leeks",l:"Leeks",e:"🧅",s:94,t:3,n:"½ leek (~75g) · ~25 kcal · Daily in cooking",bf:true,alts:["Onions","Shallots","Asparagus"]},
+  {id:"g_pistachios",l:"Pistachios",e:"🟢",s:92,t:7,n:"Small handful · ~140 kcal · Daily",bf:true,alts:["Walnuts","Almonds","Hazelnuts"]},
   {id:"g_kimchi",l:"Kimchi",e:"🌶️",s:90,t:7,n:"2–3 tbsp · ~15 kcal · Daily fermented portion",alts:["Sauerkraut (add cold)","Tempeh","Live plain yogurt"]},
-  {id:"g_salmon",l:"Oily Fish",e:"🐟",s:88,t:3,n:"Salmon · Trout · 130–150g · 2–3× week",alts:["Mackerel","Sardines","Anchovies","Herring"],kw:["salmon","trout","sardine","mackerel","herring","anchovie"]},
+  {id:"g_salmon",l:"Oily Fish",e:"🐟",s:88,t:3,n:"Salmon · Trout · 130–150g · 2–3× week",bf:true,alts:["Mackerel","Sardines","Anchovies","Herring"],kw:["salmon","trout","sardine","mackerel","herring","anchovie"]},
   {id:"g_emmental",l:"Emmental",e:"🧀",s:83,t:3,n:"30–40g · ~140 kcal · few times/week · any aged/live cheese",alts:["Live kefir","Natural yoghurt","Sauerkraut","Kimchi"]},
   {id:"g_blacktea",l:"Black Tea",e:"🍵",s:86,t:7,n:"1–3 cups · ~2 kcal · Daily",alts:["Oolong","White tea"]},
-  {id:"g_greentea",l:"Green Tea",e:"🍵",s:84,t:7,n:"1–3 cups · ~2 kcal · Daily",alts:["Matcha (1 tsp)","White tea"]},
-  {id:"g_garlic",l:"Garlic",e:"🧄",s:82,t:7,n:"1–2 cloves · Daily: add to cooking",alts:["Onions","Shallots","Chives"]},
+  {id:"g_greentea",l:"Green Tea",e:"🍵",s:84,t:7,n:"1–3 cups · ~2 kcal · Daily",bf:true,alts:["Matcha (1 tsp)","White tea"]},
+  {id:"g_garlic",l:"Garlic",e:"🧄",s:82,t:7,n:"1–2 cloves · Daily: add to cooking",bf:true,alts:["Onions","Shallots","Chives"]},
   {id:"g_oranges",l:"Oranges",e:"🍊",s:81,t:7,n:"1 medium · ~60 kcal · Daily (polyphenol fruit target)",alts:["Clementines","Tangerines","Mandarins — any citrus counts"],kw:["orange","clementine","mandarin","tangerine","easy peeler","satsuma"]},
   {id:"g_strawberries",l:"Strawberries",e:"🍓",s:80,t:7,n:"100g · ~30 kcal · Daily (polyphenol fruit target)",alts:["Blackberries","Raspberries","Blueberries"]},
 ];
@@ -4232,7 +4232,7 @@ function renderFood(){
   document.getElementById("gutSection").innerHTML=`
     <div class="gut-intro">
       <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--green);margin-bottom:4px">🌿 Zoe Gut Boosters · Weekly Tracker</div>
-      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:10px">Tap to tick today · <strong style="color:rgba(255,255,255,.6)">Bold = still outstanding</strong> · greyed = weekly target hit · <span style="color:#b8934a">⭐ = body fat priority</span></div>
       <div class="gut-stats">
         <div><div class="gut-stat-val">${todayDone}</div><div class="gut-stat-lbl">Today</div></div>
         <div><div class="gut-stat-val">${done}</div><div class="gut-stat-lbl">This week</div></div>
@@ -4248,7 +4248,7 @@ function renderFood(){
         <div class="gut-item-top" onclick="toggleGut('${item.id}')">
           <div class="gut-tick${ticked?" ticked":""}" style="font-size:${todayCount>1?"11px":"13px"}">${todayCount>1?todayCount+"×":"✓"}</div>
           <div style="flex:1">
-            <div class="gut-item-name" style="${nameStyle}">${item.e} ${item.l}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:400">/ ${item.alts.join(' / ')}</span>`:''}</div>
+            <div class="gut-item-name" style="${nameStyle}">${item.e} ${item.l}${item.bf?` <span style="font-size:10px;color:#b8934a;font-weight:700" title="Helps with body fat distribution">⭐</span>`:''}${item.alts&&item.alts.length?` <span style="font-size:10px;color:var(--muted);font-weight:400">/ ${item.alts.join(' / ')}</span>`:''}</div>
             <div class="gut-item-note">${item.n}</div>
           </div>
           <div style="text-align:right;flex-shrink:0">
