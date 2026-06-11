@@ -1991,22 +1991,22 @@ const GUT_BOOSTERS=[
 const FOOD_TO_GUT={"f_avo":"g_avocado","f_lentils":"g_lentils","f_chickpeas":"g_lentils","f_kidney":"g_lentils","f_tofu":"g_tofu","f_peas":"g_peas","f_beansprouts":"g_beansprouts","f_greenbeans":"g_greenbeans","f_grapefruit":"g_grapefruit","f_leeks":"g_leeks","f_pistachios":"g_pistachios","f_salmon":"g_salmon","f_trout":"g_salmon","f_sardines":"g_salmon","f_mackerel":"g_salmon","f_kefir":"g_kefir","f_kimchi":"g_kimchi","f_greentea":"g_greentea","f_blacktea":"g_blacktea","f_garlic":"g_garlic","f_strawberries":"g_strawberries","f_orange":"g_oranges","f_emmental":"g_emmental"};
 
 const GUT_FOODS=[
-  {id:"gf_avocado",l:"Avocado / Guacamole",e:"🥑",bf:true,bugs:["b_emelia","b_kenneth","b_cora","b_wes","b_ted"]},
-  {id:"gf_legumes",l:"Lentils / Chickpeas / Kidney beans",e:"🫘",bf:true,bugs:["b_alberto","b_skye","b_dale","b_christopher","b_ted","b_molly","b_bethan"]},
-  {id:"gf_tofu",l:"Tofu / Tempeh",e:"🟨",bf:true,bugs:["b_alberto","b_skye","b_aron","b_new_strains"]},
-  {id:"gf_peas",l:"Peas / Broad beans",e:"🫛",bugs:["b_molly","b_meghan"]},
-  {id:"gf_edamame",l:"Edamame",e:"🫘",bf:true,bugs:["b_alberto","b_skye","b_aron","b_molly","b_meghan"]},
-  {id:"gf_beansprouts",l:"Beansprouts / Mangetout",e:"🌱",bugs:["b_alberto","b_skye"]},
-  {id:"gf_greenbeans",l:"Green beans / Asparagus",e:"🫛",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
-  {id:"gf_citrus",l:"Grapefruit / Citrus / Kiwi",e:"🍊",note:"Grapefruit = highest scored · orange, clementine, satsuma, kiwi all count",bugs:["b_ronan","b_leon"]},
-  {id:"gf_alliums",l:"Leeks / Garlic / Onions",e:"🧅",bf:true,bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
-  {id:"gf_nuts",l:"Pistachios / Walnuts / Almonds",e:"🟢",bf:true,bugs:["b_leon","b_aron","b_wes","b_kenneth"]},
-  {id:"gf_oilyfish",l:"Salmon / Trout / Mackerel / Sardines",e:"🐟",bf:true,bugs:["b_ronan","b_leon","b_ted","b_emelia","b_kenneth"]},
-  {id:"gf_blacktea",l:"Black Tea / Oolong",e:"☕",note:"Oolong = tea between green & black — Twinings stock it · any count",bugs:["b_ronan","b_leon"]},
-  {id:"gf_greentea",l:"Green Tea / Matcha",e:"🍵",bf:true,bugs:["b_ronan","b_leon","b_kenneth"]},
-  {id:"gf_berries",l:"Strawberries / Raspberries / Blueberries",e:"🍓",bugs:["b_leon","b_ronan","b_meghan"]},
-  {id:"gf_oranges",l:"Oranges / Clementines",e:"🍊",bugs:["b_ronan","b_leon","b_meghan"]},
-  {id:"gf_fermented",l:"Kefir / Kimchi / Sauerkraut / Yogurt with live cultures / Skyr / Quark",e:"🧫",note:"All LDL-neutral · look for 'live cultures' on yogurt labels · Yeo Valley, Onken, Activia natural, Rachel's Organic · Skyr & Quark available at Tesco, Waitrose, M&S",bugs:["b_new_strains"]},
+  {id:"gf_avocado",l:"Avocado / Guacamole",e:"🥑",bf:true,note:"½ avocado (~70g) or 2 tbsp guacamole",bugs:["b_emelia","b_kenneth","b_cora","b_wes","b_ted"]},
+  {id:"gf_legumes",l:"Lentils / Chickpeas / Kidney beans",e:"🫘",bf:true,note:"80g cooked · rotate varieties across the week",bugs:["b_alberto","b_skye","b_dale","b_christopher","b_ted","b_molly","b_bethan"]},
+  {id:"gf_tofu",l:"Tofu / Tempeh",e:"🟨",bf:true,note:"100–150g · tempeh is fermented so feeds New Strains too",bugs:["b_alberto","b_skye","b_aron","b_new_strains"]},
+  {id:"gf_peas",l:"Peas / Broad beans",e:"🫛",note:"80g · fresh, frozen or from pod — all count",bugs:["b_molly","b_meghan"]},
+  {id:"gf_edamame",l:"Edamame",e:"🫘",bf:true,note:"80g shelled · fresh or frozen",bugs:["b_alberto","b_skye","b_aron","b_molly","b_meghan"]},
+  {id:"gf_beansprouts",l:"Beansprouts / Mangetout",e:"🌱",note:"50–80g as a veg side",bugs:["b_alberto","b_skye"]},
+  {id:"gf_greenbeans",l:"Green beans / Asparagus",e:"🫛",note:"80–100g · lightly cooked, not boiled to mush",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
+  {id:"gf_citrus",l:"Grapefruit / Citrus / Kiwi",e:"🍊",note:"½ grapefruit or 1 orange/clementine/kiwi · grapefruit = highest scored",bugs:["b_ronan","b_leon"]},
+  {id:"gf_alliums",l:"Leeks / Garlic / Onions",e:"🧅",bf:true,note:"1–2 cloves garlic or ½ leek or ½ onion cooked into a meal counts",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
+  {id:"gf_nuts",l:"Pistachios / Walnuts / Almonds",e:"🟢",bf:true,note:"25–30g · small handful · unsalted or lightly salted",bugs:["b_leon","b_aron","b_wes","b_kenneth"]},
+  {id:"gf_oilyfish",l:"Salmon / Trout / Mackerel / Sardines",e:"🐟",bf:true,note:"130–150g portion",bugs:["b_ronan","b_leon","b_ted","b_emelia","b_kenneth"]},
+  {id:"gf_blacktea",l:"Black Tea / Oolong",e:"☕",note:"1–3 cups · oolong is a tea between green & black — same polyphenol benefit",bugs:["b_ronan","b_leon"]},
+  {id:"gf_greentea",l:"Green Tea / Matcha",e:"🍵",bf:true,note:"1–3 cups · matcha = 1 tsp whisked in hot water",bugs:["b_ronan","b_leon","b_kenneth"]},
+  {id:"gf_berries",l:"Strawberries / Raspberries / Blueberries",e:"🍓",note:"80–100g · fresh or frozen both count",bugs:["b_leon","b_ronan","b_meghan"]},
+  {id:"gf_oranges",l:"Oranges / Clementines",e:"🍊",note:"1 medium orange or 2 clementines",bugs:["b_ronan","b_leon","b_meghan"]},
+  {id:"gf_fermented",l:"Kefir / Kimchi / Sauerkraut / Yogurt with live cultures / Skyr / Quark",e:"🧫",note:"150ml kefir · 2–3 tbsp kimchi or sauerkraut · 150g yogurt/skyr/quark · look for 'live cultures' on yogurt labels · Yeo Valley, Onken, Activia natural, Rachel's Organic all qualify",bugs:["b_new_strains"]},
 ];
 
 const BUGS=[
