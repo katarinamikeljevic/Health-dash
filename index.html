@@ -6649,6 +6649,40 @@ function importWeekMon2026W23(btn){
   setTimeout(()=>renderFood(),400);
 }
 
+function copyGutReport(bugStats){
+  const today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const lines=[
+    `Gut Health 4-Week Report — ${today}`,
+    `(Average days/week fed out of weekly target, rolling last 4 weeks)`,
+    '',
+  ];
+  const groups={generalist:'The 4 Generalists',bodyfat:'Body Fat',bloodsugar:'Blood Sugar',inflam:'Inflammation',diversity:'New Strains / Diversity'};
+  Object.entries(groups).forEach(([g,label])=>{
+    const bugs=bugStats.filter(b=>b.g===g);
+    if(!bugs.length)return;
+    lines.push(`── ${label} ──`);
+    bugs.forEach(b=>{
+      const bar='█'.repeat(Math.round(b.pct/10))+'░'.repeat(10-Math.round(b.pct/10));
+      const status=b.pct>=100?'✓ ON TARGET':b.pct>=50?'⚠ PARTIAL':'✗ UNDERFED';
+      lines.push(`${b.l} (${b.label})`);
+      lines.push(`  ${bar} ${b.avg.toFixed(1)}/${b.t} days/wk — ${status}`);
+      if(b.pct<100)lines.push(`  Eat more: ${b.foods}`);
+    });
+    lines.push('');
+  });
+  lines.push('Context: I track a gut health dashboard based on my Zoe microbiome results.');
+  lines.push('18/50 good bugs, 19/50 bad bugs. Cholesterol 6.69 mmol/L. All 4 clusters POOR.');
+  const text=lines.join('\n');
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=event.target;
+    btn.textContent='✓ Copied!';
+    btn.style.background='rgba(74,140,106,.25)';
+    btn.style.borderColor='rgba(74,140,106,.5)';
+    btn.style.color='#4a8c6a';
+    setTimeout(()=>{btn.textContent='📋 Copy report for Claude';btn.style.background='rgba(184,147,74,.15)';btn.style.borderColor='rgba(184,147,74,.35)';btn.style.color='#b8934a';},2500);
+  });
+}
+
 function showMonthlyCheckin(){
   // Build 4 past week keys (not including current week)
   function getPastWeekKey(weeksAgo){
@@ -6710,7 +6744,8 @@ function showMonthlyCheckin(){
       <button onclick="this.closest('[style*=fixed]').remove()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#f0ece4;font-size:20px;cursor:pointer;padding:4px 14px;border-radius:4px;line-height:1.4">×</button>
     </div>
     ${rows}
-    <div style="font-size:10px;color:#807870;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">Bugs in red are your focus for next month — the foods listed are the quickest wins.</div>
+    <div style="font-size:10px;color:#807870;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">Each number = average days/week you fed that bug over the last 4 rolling weeks.</div>
+    <button onclick="copyGutReport(${JSON.stringify(bugStats.map(b=>({l:b.l,label:b.label,avg:b.avg,t:b.t,pct:b.pct,foods:GUT_FOODS.filter(f=>f.bugs.includes(b.id)).map(f=>f.l.split(' /')[0]).join(', ')})))})" style="width:100%;margin-top:10px;padding:10px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);color:#b8934a;font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">📋 Copy report for Claude</button>
   </div>`;
   document.body.appendChild(overlay);
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
