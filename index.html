@@ -1991,23 +1991,23 @@ const GUT_BOOSTERS=[
 const FOOD_TO_GUT={"f_avo":"g_avocado","f_lentils":"g_lentils","f_chickpeas":"g_lentils","f_kidney":"g_lentils","f_tofu":"g_tofu","f_peas":"g_peas","f_beansprouts":"g_beansprouts","f_greenbeans":"g_greenbeans","f_grapefruit":"g_grapefruit","f_leeks":"g_leeks","f_pistachios":"g_pistachios","f_salmon":"g_salmon","f_trout":"g_salmon","f_sardines":"g_salmon","f_mackerel":"g_salmon","f_kefir":"g_kefir","f_kimchi":"g_kimchi","f_greentea":"g_greentea","f_blacktea":"g_blacktea","f_garlic":"g_garlic","f_strawberries":"g_strawberries","f_orange":"g_oranges","f_emmental":"g_emmental"};
 
 const GUT_FOODS=[
-  {id:"gf_avocado",l:"Avocado / Guacamole",e:"🥑",bugs:["b_emelia","b_kenneth","b_cora","b_wes","b_ted"]},
-  {id:"gf_legumes",l:"Lentils / Chickpeas / Kidney beans",e:"🫘",bugs:["b_alberto","b_skye","b_dale","b_christopher","b_ted","b_molly","b_bethan"]},
-  {id:"gf_tofu",l:"Tofu / Tempeh",e:"🟨",bugs:["b_alberto","b_skye","b_aron","b_new_strains"]},
+  {id:"gf_avocado",l:"Avocado / Guacamole",e:"🥑",bf:true,bugs:["b_emelia","b_kenneth","b_cora","b_wes","b_ted"]},
+  {id:"gf_legumes",l:"Lentils / Chickpeas / Kidney beans",e:"🫘",bf:true,bugs:["b_alberto","b_skye","b_dale","b_christopher","b_ted","b_molly","b_bethan"]},
+  {id:"gf_tofu",l:"Tofu / Tempeh",e:"🟨",bf:true,bugs:["b_alberto","b_skye","b_aron","b_new_strains"]},
   {id:"gf_peas",l:"Peas / Broad beans",e:"🫛",bugs:["b_molly","b_meghan"]},
-  {id:"gf_edamame",l:"Edamame",e:"🫘",bugs:["b_alberto","b_skye","b_aron","b_molly","b_meghan"]},
+  {id:"gf_edamame",l:"Edamame",e:"🫘",bf:true,bugs:["b_alberto","b_skye","b_aron","b_molly","b_meghan"]},
   {id:"gf_beansprouts",l:"Beansprouts / Mangetout",e:"🌱",bugs:["b_alberto","b_skye"]},
   {id:"gf_greenbeans",l:"Green beans / Asparagus",e:"🫛",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
-  {id:"gf_citrus",l:"Grapefruit / Citrus / Kiwi",e:"🍊",bugs:["b_ronan","b_leon"]},
-  {id:"gf_alliums",l:"Leeks / Garlic / Onions",e:"🧅",bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
-  {id:"gf_nuts",l:"Pistachios / Walnuts / Almonds",e:"🟢",bugs:["b_leon","b_aron","b_wes","b_kenneth"]},
-  {id:"gf_oilyfish",l:"Salmon / Trout / Mackerel / Sardines",e:"🐟",bugs:["b_ronan","b_leon","b_ted","b_emelia","b_kenneth"]},
-  {id:"gf_blacktea",l:"Black Tea / Oolong",e:"☕",bugs:["b_ronan","b_leon"]},
-  {id:"gf_greentea",l:"Green Tea / Matcha",e:"🍵",bugs:["b_ronan","b_leon","b_kenneth"]},
+  {id:"gf_citrus",l:"Grapefruit / Citrus / Kiwi",e:"🍊",note:"Grapefruit = highest scored · orange, clementine, satsuma, kiwi all count",bugs:["b_ronan","b_leon"]},
+  {id:"gf_alliums",l:"Leeks / Garlic / Onions",e:"🧅",bf:true,bugs:["b_alberto","b_meghan","b_skye","b_molly"]},
+  {id:"gf_nuts",l:"Pistachios / Walnuts / Almonds",e:"🟢",bf:true,bugs:["b_leon","b_aron","b_wes","b_kenneth"]},
+  {id:"gf_oilyfish",l:"Salmon / Trout / Mackerel / Sardines",e:"🐟",bf:true,bugs:["b_ronan","b_leon","b_ted","b_emelia","b_kenneth"]},
+  {id:"gf_blacktea",l:"Black Tea / Oolong",e:"☕",note:"Oolong = tea between green & black — Twinings stock it · any count",bugs:["b_ronan","b_leon"]},
+  {id:"gf_greentea",l:"Green Tea / Matcha",e:"🍵",bf:true,bugs:["b_ronan","b_leon","b_kenneth"]},
   {id:"gf_berries",l:"Strawberries / Raspberries / Blueberries",e:"🍓",bugs:["b_leon","b_ronan","b_meghan"]},
   {id:"gf_oranges",l:"Oranges / Clementines",e:"🍊",bugs:["b_ronan","b_leon","b_meghan"]},
-  {id:"gf_fermented",l:"Kefir / Kimchi / Sauerkraut / Live yogurt",e:"🧫",bugs:["b_new_strains"]},
-  {id:"gf_emmental",l:"Emmental / Aged cheese",e:"🧀",bugs:["b_new_strains"]},
+  {id:"gf_fermented",l:"Kefir / Kimchi / Sauerkraut / Yogurt with live cultures",e:"🧫",note:"Look for 'live cultures' on the label · Yeo Valley, Onken, Activia natural, Rachel's Organic all qualify",bugs:["b_new_strains"]},
+  {id:"gf_emmental",l:"Aged cheese (gut diversity only — limit if lowering cholesterol)",e:"🧀",note:"<s>Emmental</s> · <s>Comté</s> · <s>Gruyère</s> · <s>Aged Gouda</s> · <s>Aged Cheddar</s> — all high in sat fat · max 30g · kefir/kimchi/live yogurt give same benefit without the sat fat",bugs:["b_new_strains"]},
 ];
 
 const BUGS=[
@@ -4286,13 +4286,16 @@ function renderFood(){
       ${GUT_FOODS.map(f=>{
         const ticked=!!foods[f.id];
         const fedNames=f.bugs.map(bid=>{const b=BUGS.find(x=>x.id===bid);return b?b.l:''}).filter(Boolean);
-        return `<div onclick="toggleGutFood('${f.id}')" style="cursor:pointer;padding:8px 10px;background:${ticked?'rgba(74,140,106,.2)':'rgba(255,255,255,.03)'};border:1px solid ${ticked?'var(--green)':'var(--border)'};border-radius:4px;display:flex;align-items:center;gap:8px">
-          <span style="font-size:18px;line-height:1">${f.e}</span>
-          <div style="flex:1;min-width:0">
-            <div style="font-size:12px;font-weight:${ticked?'600':'400'};color:${ticked?'var(--green)':'var(--text)'}">${f.l}</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:1px">feeds: ${fedNames.join(' · ')}</div>
+        return `<div onclick="toggleGutFood('${f.id}')" style="cursor:pointer;padding:8px 10px;background:${ticked?'rgba(74,140,106,.2)':'rgba(255,255,255,.03)'};border:1px solid ${ticked?'var(--green)':'var(--border)'};border-radius:4px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:18px;line-height:1">${f.e}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;font-weight:${ticked?'600':'400'};color:${ticked?'var(--green)':'var(--text)'}">${f.l}${f.bf?' <span style="color:#b8934a;font-size:11px">⭐</span>':''}</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:1px">feeds: ${fedNames.join(' · ')}</div>
+            </div>
+            <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'};flex-shrink:0">${ticked?'✓':'+'}</div>
           </div>
-          <div style="font-size:14px;color:${ticked?'var(--green)':'var(--muted)'};flex-shrink:0">${ticked?'✓':'+'}</div>
+          ${f.note?`<div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:5px;padding-top:5px;border-top:1px solid var(--border);line-height:1.5">${f.note}</div>`:''}
         </div>`;
       }).join('')}
     </div>
@@ -4309,7 +4312,7 @@ function renderFood(){
           return `<div style="margin-bottom:12px;opacity:${met?0.6:1}">
             <div style="display:flex;align-items:flex-start;gap:8px">
               <div style="flex:1">
-                <div style="font-size:12px;font-weight:${fedToday||met?'400':'700'};color:${met?'var(--muted)':'var(--text)'}">${bug.l}${bug.bf?' <span style="color:#b8934a">⭐</span>':''} <span style="font-size:10px;font-weight:300;color:var(--muted);font-style:italic">${bug.species}</span></div>
+                <div style="font-size:12px;font-weight:${fedToday||met?'400':'700'};color:${met?'var(--muted)':'var(--text)'}">${bug.l} <span style="font-size:10px;font-weight:300;color:var(--muted);font-style:italic">${bug.species}</span></div>
                 <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">${bug.label}</div>
                 ${todayFoodNames.length?`<div style="font-size:10px;color:var(--green);margin-top:2px">Today: ${todayFoodNames.join(', ')}</div>`:''}
               </div>
