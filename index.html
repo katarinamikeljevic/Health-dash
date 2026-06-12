@@ -5740,13 +5740,14 @@ function autoTickGutFromText(text){
     "lentil":"g_lentils","chickpea":"g_lentils","kidney bean":"g_lentils","black bean":"g_lentils","butter bean":"g_lentils","cannellini":"g_lentils","borlotti":"g_lentils","haricot":"g_lentils","peas":"g_peas",
     "beansprout":"g_beansprouts","green bean":"g_greenbeans","leek":"g_leeks","garlic":"g_garlic",
     "grapefruit":"g_grapefruit","strawberr":"g_strawberries","orange":"g_oranges","clementine":"g_oranges","easy peeler":"g_oranges","satsuma":"g_oranges","mandarin":"g_oranges","tangerine":"g_oranges","kimchi":"g_kimchi",
-    "miso":"g_miso","pistachio":"g_pistachios","tofu":"g_tofu","green tea":"g_greentea",
-    "black tea":"g_blacktea"};
+    "miso":"g_miso","pistachio":"g_pistachios","tofu":"g_tofu","green tea":"g_greentea","black tea":"g_blacktea"};
   Object.entries(keywords).forEach(([kw,gid])=>{
     if(lower.includes(kw)){
       state.foods[fk][gid]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===gid);
       if(chipId)state.foods[fk][chipId]=true;
+      const gfId=GUT_BOOSTER_TO_GUT_FOOD[gid];
+      if(gfId)state.foods[fk][gfId]=true;
     }
   });
 }
@@ -7231,14 +7232,28 @@ function showZoePopup(mealName, boosterIds){
 function tickZoeBoosters(ids){
   const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[fk])state.foods[fk]={};
+  const bugNames=new Set();
   ids.forEach(id=>{
     state.foods[fk][id]=true;
     const chip=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===id);
     if(chip)state.foods[fk][chip]=true;
+    const gfId=GUT_BOOSTER_TO_GUT_FOOD[id];
+    if(gfId){
+      state.foods[fk][gfId]=true;
+      const gf=GUT_FOODS.find(f=>f.id===gfId);
+      if(gf)gf.bugs.forEach(bid=>{const b=BUGS.find(x=>x.id===bid);if(b)bugNames.add(b.l);});
+    }
   });
   persist();
   const p=document.getElementById("zoePopup");if(p)p.remove();
   renderFood();
+  if(bugNames.size){
+    const t=document.createElement('div');
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 16px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:90vw;line-height:1.5';
+    t.innerHTML=`✓ Gut boosters logged<div style="font-size:10px;opacity:.85;margin-top:3px">feeding: ${[...bugNames].join(' · ')}</div>`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),3500);
+  }
 }
 
 // ── SAVE PROMPT AFTER LOGGING ─────────────────────────────────────
