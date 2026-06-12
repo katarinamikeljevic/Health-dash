@@ -5683,25 +5683,33 @@ function confirmGutBoosterPrompt(){
   const gutIds=window._pendingGutIds||[];
   const fk=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[fk]) state.foods[fk]={};
-  let ticked=0;
+  const tickedNames=[];
+  const bugNames=new Set();
   gutIds.forEach((gid,i)=>{
     const cb=document.getElementById(`gbp_${i}`);
     if(cb&&cb.checked){
       state.foods[fk][gid]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(c=>FOOD_TO_GUT[c]===gid);
       if(chipId) state.foods[fk][chipId]=true;
-      ticked++;
+      const gfId=GUT_BOOSTER_TO_GUT_FOOD[gid];
+      if(gfId){
+        state.foods[fk][gfId]=true;
+        const gf=GUT_FOODS.find(f=>f.id===gfId);
+        if(gf) gf.bugs.forEach(bid=>{const b=BUGS.find(x=>x.id===bid);if(b)bugNames.add(b.l);});
+      }
+      const gb=GUT_BOOSTERS.find(g=>g.id===gid);
+      if(gb) tickedNames.push(gb.l);
     }
   });
   persist();
   renderFood();
   document.querySelectorAll('.gut-prompt-overlay').forEach(e=>e.remove());
-  if(ticked>0){
+  if(tickedNames.length){
     const t=document.createElement('div');
-    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 20px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);letter-spacing:0.5px';
-    t.textContent=`✓ ${ticked} gut booster${ticked>1?'s':''} ticked`;
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#4a8c6a;color:#fff;font-family:inherit;font-size:12px;padding:10px 16px;border-radius:4px;z-index:500;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:90vw;line-height:1.5';
+    t.innerHTML=`✓ ${tickedNames.join(' + ')} logged${bugNames.size?`<div style="font-size:10px;opacity:.85;margin-top:3px">feeding: ${[...bugNames].join(' · ')}</div>`:''}`;
     document.body.appendChild(t);
-    setTimeout(()=>t.remove(),2200);
+    setTimeout(()=>t.remove(),3500);
   }
 }
 
