@@ -4334,7 +4334,18 @@ function renderFood(){
           const fedToday=GUT_FOODS.some(f=>f.bugs.includes(bug.id)&&foods[f.id]);
           const met=wc>=bug.t;
           const pct=Math.min(wc/bug.t,1)*100;
+          const remaining=Math.max(0,bug.t-wc);
           const todayFoodNames=GUT_FOODS.filter(f=>f.bugs.includes(bug.id)&&foods[f.id]).map(f=>f.l.split(' /')[0]);
+          const allFoods=GUT_FOODS.filter(f=>f.bugs.includes(bug.id));
+          const notYetToday=allFoods.filter(f=>!foods[f.id]);
+          const foodRows=allFoods.map(f=>{
+            const eaten=!!foods[f.id];
+            return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+              <span style="font-size:14px">${f.e}</span>
+              <div style="flex:1;font-size:11px;color:${eaten?'var(--green)':'rgba(255,255,255,.7)'}">${f.l.split(' /')[0]}${f.bf?' ⭐':''}</div>
+              <div style="font-size:10px;color:${eaten?'var(--green)':'var(--muted)'};">${eaten?'✓ today':'–'}</div>
+            </div>`;
+          }).join('');
           return `<div style="margin-bottom:12px;opacity:${met?0.6:1}">
             <div style="display:flex;align-items:flex-start;gap:8px">
               <div style="flex:1">
@@ -4342,13 +4353,22 @@ function renderFood(){
                 <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">${bug.label}</div>
                 ${todayFoodNames.length?`<div style="font-size:10px;color:var(--green);margin-top:2px">Today: ${todayFoodNames.join(', ')}</div>`:''}
               </div>
-              <div style="text-align:right;flex-shrink:0">
-                <div style="font-size:18px;font-weight:500;color:${met?'var(--green)':'var(--text)'};line-height:1">${wc}<span style="font-size:11px;color:var(--muted)">/${bug.t}</span></div>
-                <div style="font-size:9px;color:${met?'var(--green)':'var(--muted)'};">${met?'✓ done':fedToday?'✓ today':'not yet'}</div>
+              <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+                <div style="text-align:right">
+                  <div style="font-size:18px;font-weight:500;color:${met?'var(--green)':'var(--text)'};line-height:1">${wc}<span style="font-size:11px;color:var(--muted)">/${bug.t}</span></div>
+                  <div style="font-size:9px;color:${met?'var(--green)':'var(--muted)'};">${met?'✓ done':fedToday?'✓ today':remaining+' to go'}</div>
+                </div>
+                <button onclick="const d=document.getElementById('buginfo_${bug.id}');d.style.display=d.style.display==='none'?'block':'none'" style="flex-shrink:0;width:28px;height:28px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:4px;color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">ℹ</button>
               </div>
             </div>
             <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:5px">
               <div style="height:100%;width:${pct}%;background:${met?'var(--green)':'#4a8c6a80'};border-radius:2px;transition:width .3s"></div>
+            </div>
+            <div id="buginfo_${bug.id}" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(0,0,0,.3);border-radius:4px;border:1px solid rgba(255,255,255,.08)">
+              <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:8px">${met?'✓ Target met this week':`${remaining} more day${remaining!==1?'s':''} needed this week`}</div>
+              <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Foods that feed ${bug.l}:</div>
+              ${foodRows}
+              ${!met&&notYetToday.length?`<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:8px">Still to eat today: <span style="color:rgba(255,255,255,.7)">${notYetToday.map(f=>f.l.split(' /')[0]).join(' · ')}</span></div>`:''}
             </div>
           </div>`;
         }).join('')}
