@@ -3088,11 +3088,14 @@ const FOOD_DB=[
   // ── SUN365 ──
   ["Sun365 Mango Sorbet Bar",114,1,0.5,15.1,7.5,1,70,"1 bar (70g)"],
   // ── FORM PROTEIN BARS ──
-  ["Form Protein Bar Chocolate Peanut",185,15,8.5,8,12,120,50,"1 bar (50g)"],
-  ["Form Protein Bar Chocolate Salted Caramel",182,15,8.5,8,12,130,50,"1 bar (50g)"],
+  ["Form Protein Bar Chocolate Peanut",360,30,14,16,24,240,50,"1 bar (50g)"],
+  ["Form Protein Bar Chocolate Salted Caramel",360,30,14,16,24,260,50,"1 bar (50g)"],
   ["Form Protein Bar Double Chocolate",183,15,8,8.5,12,110,50,"1 bar (50g)"],
   ["Form Protein Bar Vanilla",180,15,7.5,8,12,100,50,"1 bar (50g)"],
   ["Form Tiramisu Pea Protein",378,75,6.5,5.5,3,380,30,"1 scoop (30g)"],
+  // ── PRET PROTEIN POTS ──
+  ["Pret Chicken & Edamame Protein Pot",144,14.4,9.6,4.8,2.1,233,146,"1 pot (146g)"],
+  ["Pret Egg & Spinach Protein Pot",91,8,1.7,6.3,1.1,280,175,"1 pot (175g)"],
   // ── KOMBUCHA ──
   ["Remedy Kombucha Ginger Lemon",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
   ["Remedy Kombucha Raspberry Lemonade",2,0,4,0,0,2,250,"1 can (250ml) — 4 kcal"],
@@ -3853,7 +3856,7 @@ function saveMealCartPrompt(){
   const items=cart.map(i=>({name:i.name,kcal:i.kcal,protein:i.protein,fat:i.fat,carbs:i.carbs,fibre:i.fibre||0,salt:i.salt||0}));
   const meal={name,ingredients,items,protein:Math.round(t.p*10)/10,fat:Math.round(t.f*10)/10,carbs:Math.round(t.c*10)/10,fibre:Math.round(t.fi*10)/10,kcal:Math.round(t.kcal),salt:Math.round(t.salt)};
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
-  const cat=meal.kcal<250?'snacks':meal.kcal<400?'breakfast':meal.kcal<600?'lunch':'dinner';
+  const cat=guessMealCat(meal.name,meal.kcal);
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
   persist();
   renderFavouritesSection();
@@ -4071,8 +4074,7 @@ function saveCurrentMeal(){
     salt:Math.round(parseFloat(document.getElementById("mS")?.value)||0),
   };
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
-  // Guess category from kcal
-  const cat=meal.kcal<350?"breakfast":meal.kcal<200?"snacks":"lunch";
+  const cat=guessMealCat(meal.name,meal.kcal);
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
   persist();
   showMealStatus(`💾 Saved to ${cat} in Meals tab`,true);
@@ -4085,7 +4087,7 @@ function parsePasteAndSave(){
   const meal=parseMacrosFromText(raw,nameInput);
   if(!meal.kcal&&!meal.protein){showMealStatus("Couldn't read macros — try clearer text.",false);return;}
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
-  const cat=meal.kcal<350?"breakfast":meal.kcal<200?"snacks":"lunch";
+  const cat=guessMealCat(meal.name,meal.kcal);
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),meal];
   persist();
   showMealStatus(`💾 Saved "${meal.name}" to ${cat}`,true);
@@ -4141,7 +4143,7 @@ function logAIParsed(name,kcal,protein,fat,carbs,fibre,salt){
 
 function saveAIParsed(name,kcal,protein,fat,carbs,fibre,salt){
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
-  const cat=kcal<350?"breakfast":kcal<200?"snacks":kcal<500?"lunch":"dinner";
+  const cat=guessMealCat(name,kcal);
   state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),{name,kcal,protein,fat,carbs,fibre,salt,ingredients:""}];
   persist();
   showMealStatus(`💾 Saved "${name}" to ${cat}`,true);
@@ -7304,9 +7306,18 @@ function showSavePrompt(mealName, protein, fat, carbs, fibre, kcal, salt){
   setTimeout(()=>{const p=document.getElementById("savePrompt");if(p)p.remove();},8000);
 }
 
+function guessMealCat(name,kcal){
+  const n=(name||'').toLowerCase();
+  if(/\bbar\b|protein pot|snack/.test(n))return'snacks';
+  if(/\bcod\b|salmon fillet|sea bass|sea bream|fish.*dinner|roast|stew/.test(n))return'dinner';
+  if(kcal<250)return'snacks';
+  if(kcal<450)return'breakfast';
+  if(kcal<650)return'lunch';
+  return'dinner';
+}
 function quickSaveMeal(name, kcal, protein, fat, carbs, fibre, salt){
   if(!state.savedMeals)state.savedMeals={breakfast:[],lunch:[],dinner:[],snacks:[]};
-  const cat=kcal<350?'breakfast':kcal<200?'snacks':kcal<550?'lunch':'dinner';
+  const cat=guessMealCat(name,kcal);
   // Don't duplicate
   const exists=(state.savedMeals[cat]||[]).some(m=>m.name===name);
   if(!exists)state.savedMeals[cat]=[...(state.savedMeals[cat]||[]),{name,kcal,protein,fat,carbs,fibre,salt:salt||0,ingredients:""}];
