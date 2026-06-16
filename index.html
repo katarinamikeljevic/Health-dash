@@ -3406,6 +3406,7 @@ function renderFoodSearch(){
     <div style="display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:2px;overflow:hidden">
       <button id="fsTab_search" onclick="setFoodSearchTab('search')" style="flex:1;padding:8px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;cursor:pointer;font-family:inherit">🔍 Search</button>
       <button id="fsTab_label" onclick="setFoodSearchTab('label')" style="flex:1;padding:8px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📸 Scan Label</button>
+      <button id="fsTab_paste" onclick="setFoodSearchTab('paste')" style="flex:1;padding:8px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;background:var(--bg);color:var(--muted);border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit">📋 Paste List</button>
     </div>
     <div id="fsPanel_search" style="display:none">
       <div style="display:flex;gap:8px;margin-bottom:8px">
@@ -3430,6 +3431,12 @@ function renderFoodSearch(){
       <div id="labelStatus" style="font-size:12px;margin-top:8px;min-height:16px"></div>
       <div id="labelResult"></div>
       <div class="hint">Works on any nutrition label</div>
+    </div>
+    <div id="fsPanel_paste" style="display:none">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste an ingredient list from Claude or any source — e.g. <em>Salmon 155g, chickpeas 85g, peas 75g</em></div>
+      <textarea id="pasteListInput" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border);background:var(--white);color:var(--text);font-family:inherit;font-size:12px;border-radius:2px;resize:vertical;min-height:90px;line-height:1.6" placeholder="Salmon 155g, chickpeas cooked 85g, peas 75g, edamame 22g…"></textarea>
+      <button onclick="parsePasteList()" style="width:100%;margin-top:8px;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients</button>
+      <div id="pasteListPreview" style="margin-top:10px"></div>
     </div>
   </div>`;
   // Restore active tab
@@ -3602,6 +3609,147 @@ function renderFavouritesSection(){
       return buildFoodResultHTML(f,idx,"fav");
     }).join("")}
   </div>`;
+}
+
+// ── PASTE INGREDIENT LIST ─────────────────────────────────────────
+function parsePasteList(){
+  const raw=document.getElementById("pasteListInput")?.value||"";
+  const preview=document.getElementById("pasteListPreview");
+  if(!raw.trim()){preview.innerHTML=`<div style="font-size:12px;color:var(--red)">Paste an ingredient list first.</div>`;return;}
+  // Split on commas or newlines, parse "name Xg" or "name X g"
+  const parts=raw.split(/[,\n]+/).map(s=>s.trim()).filter(Boolean);
+  const parsed=parts.map(p=>{
+    const m=p.match(/^(.+?)\s+(\d+\.?\d*)\s*(?:g|ml|tsp|tbsp)?\s*$/i);
+    if(!m)return{raw:p,name:p,g:null};
+    return{raw:p,name:m[1].trim(),g:parseFloat(m[2])};
+  });
+  // Match each to FOOD_DB
+  const rows=parsed.map((item,i)=>{
+    const words=item.name.toLowerCase().split(/\s+/).filter(w=>w.length>1);
+    // Try all-word match first, then any-word
+    let match=FOOD_DB_INDEX.find(f=>words.every(w=>f.lower.includes(w)));
+    if(!match)match=FOOD_DB_INDEX.find(f=>words.some(w=>f.lower.includes(w)));
+    const db=match?FOOD_DB[match.idx]:null;
+    return{...item,dbIdx:match?match.idx:null,db};
+  });
+  window._pasteRows=rows;
+  renderPastePreview(rows);
+}
+
+function renderPastePreview(rows){
+  const preview=document.getElementById("pasteListPreview");
+  if(!rows.length){preview.innerHTML="";return;}
+  const rowsHtml=rows.map((row,i)=>{
+    const db=row.db;
+    const g=row.g||100;
+    const kcal=db?Math.round(db[1]*g/100):null;
+    const prot=db?Math.round(db[2]*g/100*10)/10:null;
+    const matchName=db?db[0]:'';
+    const unmatched=!db;
+    return `<div id="pasterow_${i}" style="border:1px solid ${unmatched?'var(--red)':'var(--border)'};border-radius:3px;padding:8px 10px;margin-bottom:6px;background:${unmatched?'rgba(255,60,60,.05)':'rgba(255,255,255,.03)'}">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:12px;font-weight:500;color:var(--text)">${row.name}</div>
+          ${db?`<div style="font-size:10px;color:var(--muted)">→ ${matchName}</div>`:`<div style="font-size:10px;color:var(--red)">No match — search below</div>`}
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+          <input type="number" inputmode="decimal" value="${g}" min="1" style="width:55px;padding:4px 6px;border:1px solid var(--border);background:var(--white);color:var(--text);font-size:12px;border-radius:2px;text-align:center" oninput="updatePasteRowMacros(${i},this.value)" id="paste_g_${i}">
+          <span style="font-size:11px;color:var(--muted)">g</span>
+        </div>
+        ${db?`<div id="paste_macros_${i}" style="font-size:11px;color:var(--muted);flex-shrink:0">${kcal} kcal · ${prot}g P</div>`:`<div style="flex-shrink:0"><input id="paste_search_${i}" placeholder="Search…" style="width:90px;padding:4px 6px;border:1px solid var(--border);background:var(--white);color:var(--text);font-size:11px;border-radius:2px" oninput="pasteRowSearch(${i},this.value)"><div id="paste_sr_${i}" style="position:relative"></div></div>`}
+        <button onclick="removePasteRow(${i})" style="background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0 2px;line-height:1;flex-shrink:0">×</button>
+      </div>
+    </div>`;
+  }).join('');
+  const totals=rows.reduce((s,row)=>{
+    const db=row.db;const g=row.g||100;
+    if(!db)return s;
+    return{kcal:s.kcal+Math.round(db[1]*g/100),p:s.p+db[2]*g/100,c:s.c+db[3]*g/100,f:s.f+db[4]*g/100,fi:s.fi+(db[5]||0)*g/100};
+  },{kcal:0,p:0,c:0,f:0,fi:0});
+  const hasUnmatched=rows.some(r=>!r.db);
+  preview.innerHTML=`
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${rows.length} ingredient${rows.length!==1?'s':''} parsed — check matches and weights, then log</div>
+    ${rowsHtml}
+    <div style="border-top:1px solid var(--border);padding-top:8px;margin-top:4px;font-size:12px;color:var(--soft)">
+      Total: <strong>${totals.kcal} kcal</strong> · ${totals.p.toFixed(1)}g P · ${totals.c.toFixed(1)}g C · ${totals.f.toFixed(1)}g F · ${totals.fi.toFixed(1)}g fibre
+    </div>
+    ${hasUnmatched?`<div style="font-size:11px;color:var(--red);margin-top:4px">Some ingredients couldn't be matched — search to assign them, or remove them.</div>`:''}
+    <button onclick="confirmPasteList()" style="width:100%;margin-top:10px;padding:11px;background:var(--green);color:#fff;border:none;font-family:inherit;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">✓ Log All to Today</button>`;
+}
+
+function updatePasteRowMacros(i,val){
+  const rows=window._pasteRows||[];if(!rows[i]||!rows[i].db)return;
+  rows[i].g=parseFloat(val)||0;
+  const db=rows[i].db;const g=rows[i].g;
+  const el=document.getElementById(`paste_macros_${i}`);
+  if(el)el.textContent=`${Math.round(db[1]*g/100)} kcal · ${Math.round(db[2]*g/100*10)/10}g P`;
+  // Refresh totals footer
+  const preview=document.getElementById("pasteListPreview");
+  const totals=rows.reduce((s,row)=>{
+    const d=row.db;const g2=row.g||100;
+    if(!d)return s;
+    return{kcal:s.kcal+Math.round(d[1]*g2/100),p:s.p+d[2]*g2/100,c:s.c+d[3]*g2/100,f:s.f+d[4]*g2/100,fi:s.fi+(d[5]||0)*g2/100};
+  },{kcal:0,p:0,c:0,f:0,fi:0});
+  const totEl=preview?.querySelector('[style*="border-top"]');
+  if(totEl)totEl.innerHTML=`Total: <strong>${totals.kcal} kcal</strong> · ${totals.p.toFixed(1)}g P · ${totals.c.toFixed(1)}g C · ${totals.f.toFixed(1)}g F · ${totals.fi.toFixed(1)}g fibre`;
+}
+
+function removePasteRow(i){
+  const rows=window._pasteRows||[];
+  rows.splice(i,1);
+  window._pasteRows=rows;
+  renderPastePreview(rows);
+}
+
+function pasteRowSearch(i,q){
+  const srEl=document.getElementById(`paste_sr_${i}`);if(!srEl)return;
+  if(!q||q.length<2){srEl.innerHTML="";return;}
+  const words=q.toLowerCase().split(/\s+/).filter(w=>w.length>1);
+  const matches=FOOD_DB_INDEX.filter(f=>words.every(w=>f.lower.includes(w))).slice(0,4);
+  const results=matches.length?matches:FOOD_DB_INDEX.filter(f=>words.some(w=>f.lower.includes(w))).slice(0,4);
+  srEl.innerHTML=`<div style="background:var(--ink);border:1px solid var(--border);border-radius:2px;overflow:hidden;margin-top:2px;z-index:50;position:absolute;width:200px;max-width:90vw">
+    ${results.map(m=>`<div onclick="assignPasteRow(${i},${m.idx})" style="padding:6px 10px;font-size:11px;cursor:pointer;border-bottom:1px solid var(--border);color:var(--soft)" onmouseover="this.style.background='rgba(255,255,255,.08)'" onmouseout="this.style.background=''">${FOOD_DB[m.idx][0]}</div>`).join('')}
+    ${!results.length?`<div style="padding:6px 10px;font-size:11px;color:var(--muted)">No results</div>`:''}
+  </div>`;
+}
+
+function assignPasteRow(i,dbIdx){
+  const rows=window._pasteRows||[];if(!rows[i])return;
+  rows[i].db=FOOD_DB[dbIdx];
+  rows[i].dbIdx=dbIdx;
+  renderPastePreview(rows);
+}
+
+function confirmPasteList(){
+  const rows=(window._pasteRows||[]).filter(r=>r.db);
+  if(!rows.length){showMealStatus("No matched ingredients to log.",false);return;}
+  const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
+  const s=state.macros[mk];
+  const time=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const gutFk=`foods-${getWeekKey()}-${foodDayIdx}`;
+  if(!state.foods[gutFk])state.foods[gutFk]={};
+  rows.forEach(row=>{
+    const db=row.db;const g=row.g||100;const r=g/100;
+    const item={name:`${db[0]} (${g}g)`,protein:Math.round(db[2]*r*10)/10,fat:Math.round(db[4]*r*10)/10,carbs:Math.round(db[3]*r*10)/10,fibre:Math.round((db[5]||0)*r*10)/10,kcal:Math.round(db[1]*r),salt:Math.round((db[6]||0)*r),time};
+    ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+item[k]||0)));
+    s.meals=[...(s.meals||[]),item];
+    // Auto-tick gut boosters
+    const matchedGut=GUT_BOOSTERS.find(gb=>gutMatchesFood(gb,db[0]));
+    if(matchedGut){
+      state.foods[gutFk][matchedGut.id]=true;
+      const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
+      if(chipId)state.foods[gutFk][chipId]=true;
+      const gfId=GUT_BOOSTER_TO_GUT_FOOD[matchedGut.id];
+      if(gfId)state.foods[gutFk][gfId]=true;
+    }
+  });
+  persist();
+  window._pasteRows=[];
+  const el=document.getElementById("pasteListInput");if(el)el.value="";
+  document.getElementById("pasteListPreview").innerHTML=`<div style="font-size:12px;color:var(--green);padding:8px 0">✓ ${rows.length} ingredients logged to today</div>`;
+  renderFood();
+  showZoePopup(rows.map(r=>r.db[0]).join(' '),detectZoeBoosters(rows.map(r=>r.db[0]).join(' ')));
 }
 
 function clearFoodSearch(){
