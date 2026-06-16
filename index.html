@@ -3434,6 +3434,7 @@ function renderFoodSearch(){
     </div>
     <div id="fsPanel_paste" style="display:none">
       <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste an ingredient list from Claude or any source — e.g. <em>Salmon 155g, chickpeas 85g, peas 75g</em></div>
+      <input id="pasteListMealName" class="meal-name-input" style="margin-bottom:8px" placeholder="Meal name (e.g. Salmon salad bowl)">
       <textarea id="pasteListInput" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border);background:var(--white);color:var(--text);font-family:inherit;font-size:12px;border-radius:2px;resize:vertical;min-height:90px;line-height:1.6" placeholder="Salmon 155g, chickpeas cooked 85g, peas 75g, edamame 22g…"></textarea>
       <button onclick="parsePasteList()" style="width:100%;margin-top:8px;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients</button>
       <div id="pasteListPreview" style="margin-top:10px"></div>
@@ -3723,19 +3724,26 @@ function assignPasteRow(i,dbIdx){
 function confirmPasteList(){
   const rows=(window._pasteRows||[]).filter(r=>r.db);
   if(!rows.length){showMealStatus("No matched ingredients to log.",false);return;}
+  const nameEl=document.getElementById("pasteListMealName");
+  const mealName=(nameEl?.value.trim())||rows.map(r=>r.db[0].split(' ')[0]).slice(0,3).join(' + ');
+  // Sum all macros into one meal entry
+  const totals=rows.reduce((s,row)=>{
+    const db=row.db;const g=row.g||100;const r=g/100;
+    return{protein:s.protein+db[2]*r,fat:s.fat+db[4]*r,carbs:s.carbs+db[3]*r,fibre:s.fibre+(db[5]||0)*r,kcal:s.kcal+db[1]*r,salt:s.salt+(db[6]||0)*r};
+  },{protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0});
   const mk=`macros-${getWeekKey()}-${foodDayIdx}`;
   if(!state.macros[mk])state.macros[mk]={protein:0,fat:0,carbs:0,fibre:0,kcal:0,salt:0,meals:[]};
   const s=state.macros[mk];
   const time=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const meal={name:mealName,protein:Math.round(totals.protein*10)/10,fat:Math.round(totals.fat*10)/10,carbs:Math.round(totals.carbs*10)/10,fibre:Math.round(totals.fibre*10)/10,kcal:Math.round(totals.kcal),salt:Math.round(totals.salt),time,
+    ingredients:rows.map(r=>`${r.db[0]} (${r.g||100}g)`).join(', ')};
+  ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+meal[k]||0)));
+  s.meals=[...(s.meals||[]),meal];
+  // Auto-tick gut boosters for each ingredient
   const gutFk=`foods-${getWeekKey()}-${foodDayIdx}`;
   if(!state.foods[gutFk])state.foods[gutFk]={};
   rows.forEach(row=>{
-    const db=row.db;const g=row.g||100;const r=g/100;
-    const item={name:`${db[0]} (${g}g)`,protein:Math.round(db[2]*r*10)/10,fat:Math.round(db[4]*r*10)/10,carbs:Math.round(db[3]*r*10)/10,fibre:Math.round((db[5]||0)*r*10)/10,kcal:Math.round(db[1]*r),salt:Math.round((db[6]||0)*r),time};
-    ['protein','fat','carbs','fibre','kcal','salt'].forEach(k=>s[k]=Math.round((+s[k]||0)+(+item[k]||0)));
-    s.meals=[...(s.meals||[]),item];
-    // Auto-tick gut boosters
-    const matchedGut=GUT_BOOSTERS.find(gb=>gutMatchesFood(gb,db[0]));
+    const matchedGut=GUT_BOOSTERS.find(gb=>gutMatchesFood(gb,row.db[0]));
     if(matchedGut){
       state.foods[gutFk][matchedGut.id]=true;
       const chipId=Object.keys(FOOD_TO_GUT).find(k=>FOOD_TO_GUT[k]===matchedGut.id);
@@ -3746,9 +3754,11 @@ function confirmPasteList(){
   });
   persist();
   window._pasteRows=[];
+  if(nameEl)nameEl.value="";
   const el=document.getElementById("pasteListInput");if(el)el.value="";
-  document.getElementById("pasteListPreview").innerHTML=`<div style="font-size:12px;color:var(--green);padding:8px 0">✓ ${rows.length} ingredients logged to today</div>`;
+  document.getElementById("pasteListPreview").innerHTML=`<div style="font-size:12px;color:var(--green);padding:8px 0">✓ "${mealName}" logged — ${Math.round(totals.kcal)} kcal · ${Math.round(totals.protein*10)/10}g protein</div>`;
   renderFood();
+  showSavePrompt(mealName,Math.round(totals.protein*10)/10,Math.round(totals.fat*10)/10,Math.round(totals.carbs*10)/10,Math.round(totals.fibre*10)/10,Math.round(totals.kcal),Math.round(totals.salt));
   showZoePopup(rows.map(r=>r.db[0]).join(' '),detectZoeBoosters(rows.map(r=>r.db[0]).join(' ')));
 }
 
