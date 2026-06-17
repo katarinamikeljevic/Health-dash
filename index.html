@@ -2698,15 +2698,24 @@ function getCyclePhase() {
   today.setHours(0,0,0,0);
   start.setHours(0,0,0,0);
   const diffDays = Math.floor((today - start) / 86400000);
-  // Show actual day count even if overdue — phase stays late luteal until user updates
   const cycleDay = diffDays + 1;
   const clampedDay = Math.min(cycleDay, CYCLE_LENGTH);
-  const phase = CYCLE_PHASES.find(p => clampedDay >= p.days[0] && clampedDay <= p.days[1]);
-  return { phase: phase || CYCLE_PHASES[3], cycleDay, overdue: cycleDay > CYCLE_LENGTH };
+  // Manual phase override takes priority
+  const overrideIdx = state.phaseOverride;
+  const phase = overrideIdx != null ? CYCLE_PHASES[overrideIdx] : (CYCLE_PHASES.find(p => clampedDay >= p.days[0] && clampedDay <= p.days[1]) || CYCLE_PHASES[3]);
+  return { phase, cycleDay, overdue: cycleDay > CYCLE_LENGTH, overrideIdx };
+}
+
+function setPhaseOverride(idx) {
+  state.phaseOverride = idx;
+  persist();
+  renderCycleBanner();
+  renderAll();
 }
 
 function setCycleStart(val) {
   state.cycleStart = val;
+  state.phaseOverride = null; // clear manual override when new period logged
   persist();
   renderCycleBanner();
   renderFood();
@@ -2780,7 +2789,15 @@ function renderCycleTabBanner(el) {
     <div class="cycle-foods">
       ${phase.avoidNames.map(n=>`<span class="cycle-food-tag" style="background:rgba(224,112,112,.1);color:var(--red);border-color:rgba(224,112,112,.3)">${n}</span>`).join("")}
     </div>`:""}
-    <div class="cycle-settings">
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid ${phase.border}">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px">I'm now in…</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${CYCLE_PHASES.map((p,i)=>`<button onclick="setPhaseOverride(${i})" style="padding:6px 11px;font-size:11px;font-family:inherit;border-radius:2px;cursor:pointer;letter-spacing:.5px;border:1px solid ${result.overrideIdx===i?p.color:phase.border};background:${result.overrideIdx===i?p.bg:'transparent'};color:${result.overrideIdx===i?p.color:'var(--muted)'}">${p.emoji} ${p.name}</button>`).join('')}
+        ${result.overrideIdx!=null?`<button onclick="setPhaseOverride(null)" style="padding:6px 11px;font-size:11px;font-family:inherit;border-radius:2px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted)">↺ Auto</button>`:''}
+      </div>
+      ${result.overrideIdx!=null?`<div style="font-size:10px;color:${phase.color};margin-top:6px">Manually set to ${phase.name} — tap ↺ Auto to use the calendar again</div>`:''}
+    </div>
+    <div class="cycle-settings" style="margin-top:10px">
       <label style="color:var(--muted);font-size:10px;letter-spacing:1px;text-transform:uppercase">Last period started:</label>
       <input type="date" value="${state.cycleStart||""}" onchange="setCycleStart(this.value)" style="background:rgba(255,255,255,.6);border:1px solid ${phase.border};color:var(--ink);padding:5px 8px;font-size:12px;border-radius:2px;font-family:inherit">
     </div>
