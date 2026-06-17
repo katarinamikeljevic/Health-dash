@@ -1,4 +1,4 @@
-const CACHE = 'health-dash-v2';
+const CACHE = 'health-dash-v5';
 
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -11,13 +11,7 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// Network first, cache fallback for offline only
+// Always fetch fresh from network, no caching of app files
 self.addEventListener('fetch', e => {
-  e.respondWith(
-    fetch(e.request).then(res => {
-      const clone = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, clone));
-      return res;
-    }).catch(() => caches.match(e.request))
-  );
+  e.respondWith(fetch(e.request));
 });
