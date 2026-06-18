@@ -6026,6 +6026,14 @@ function renderCycleTab(){
       <div style="font-size:12px;color:var(--soft);line-height:1.7">${phase.tips}</div>
     </div>
 
+    <div style="background:${phase.bg};border:1px solid ${phase.border};padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">I'm now in…</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${CYCLE_PHASES.map((p,i)=>`<button onclick="setPhaseOverride(${i})" style="padding:6px 10px;font-size:11px;border:1px solid ${p.border};background:${result.overrideIdx===i?p.bg:'var(--bg)'};color:${p.color};border-radius:2px;font-family:inherit;cursor:pointer;font-weight:${result.overrideIdx===i?'600':'400'}">${p.emoji} ${p.name}</button>`).join('')}
+        ${result.overrideIdx!=null?`<button onclick="setPhaseOverride(null)" style="padding:6px 10px;font-size:11px;border:1px solid var(--border);background:var(--bg);color:var(--muted);border-radius:2px;font-family:inherit;cursor:pointer">↺ Auto</button>`:''}
+      </div>
+    </div>
+
     <div class="card" style="margin:0 0 14px">
       <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Cycle Overview · Day ${cycleDay} of ${cycleLen}</div>
       <div style="display:flex;height:8px;border-radius:3px;overflow:hidden;margin-bottom:6px;position:relative">${phaseBar}</div>
