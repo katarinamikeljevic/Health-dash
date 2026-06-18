@@ -667,7 +667,10 @@ button,input,textarea,select{font-family:inherit}
       <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste an ingredient list — e.g. <em>Salmon 155g, chickpeas 85g, peas 75g</em>. Each ingredient appears as a row you can edit or remove, then log as one meal.</div>
       <input id="pasteListMealName" class="meal-name-input" style="margin-bottom:8px" placeholder="Meal name (e.g. Salmon salad bowl)">
       <textarea id="pasteListInput" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:12px;border-radius:2px;resize:vertical;min-height:90px;line-height:1.6" placeholder="Salmon fillet 155g, chickpeas cooked 85g, peas 75g, edamame 22g, spinach 40g…"></textarea>
-      <button onclick="parsePasteList()" style="width:100%;margin-top:8px;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients →</button>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button onclick="parsePasteList()" style="flex:1;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients →</button>
+        <button onclick="clearPasteList()" style="padding:10px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Clear</button>
+      </div>
       <div id="pasteListPreview" style="margin-top:10px"></div>
     </div>
 
@@ -3773,6 +3776,13 @@ function confirmPasteList(){
   showZoePopup(rows.map(r=>r.db[0]).join(' '),detectZoeBoosters(rows.map(r=>r.db[0]).join(' ')));
 }
 
+function clearPasteList(){
+  const inp=document.getElementById("pasteListInput");if(inp)inp.value="";
+  const name=document.getElementById("pasteListMealName");if(name)name.value="";
+  const preview=document.getElementById("pasteListPreview");if(preview)preview.innerHTML="";
+  window._pasteRows=[];
+}
+
 function clearFoodSearch(){
   const i=document.getElementById("foodSearchInput");if(i)i.value="";
   const r=document.getElementById("foodSearchResults");if(r)r.innerHTML="";
@@ -4172,7 +4182,10 @@ function renderFoodLogger(){
       <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste an ingredient list — e.g. <em>Salmon 155g, chickpeas 85g, peas 75g</em>. Each ingredient appears as a row you can edit or remove, then log as one meal.</div>
       <input id="pasteListMealName" class="meal-name-input" style="margin-bottom:8px" placeholder="Meal name (e.g. Salmon salad bowl)">
       <textarea id="pasteListInput" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:12px;border-radius:2px;resize:vertical;min-height:90px;line-height:1.6" placeholder="Salmon fillet 155g, chickpeas cooked 85g, peas 75g, edamame 22g, spinach 40g…"></textarea>
-      <button onclick="parsePasteList()" style="width:100%;margin-top:8px;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients →</button>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button onclick="parsePasteList()" style="flex:1;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients →</button>
+        <button onclick="clearPasteList()" style="padding:10px 14px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">Clear</button>
+      </div>
       <div id="pasteListPreview" style="margin-top:10px"></div>
     </div>
 
