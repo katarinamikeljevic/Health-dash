@@ -663,22 +663,12 @@ button,input,textarea,select{font-family:inherit}
     </div>
 
     <!-- Paste panel -->
-    <div id="fsPanel_paste" style="">
-      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste a recipe or macros from Claude. It will extract the name, macros and Zoe gut boosters automatically.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste Claude's recipe here e.g.
-
-🐟 Sardine & Cottage Cheese Bowl
-480 kcal · 32g P · 28g C · 24g F · 7g fibre · 680mg salt
-
-Spinach, mushrooms, avocado, tomatoes, seaweed, garlic, kimchi
-
-Or just paste: 480 kcal · 32g P · 28g C · 24g F"></textarea>
-      <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
-      <div style="display:flex;gap:8px;margin-top:4px">
-        <button onclick="pasteLogToday(this)" style="flex:1;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
-        <button onclick="pasteSaveMeal(this)" style="flex:1;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
-      </div>
-      <div class="hint">Reads name, macros, ingredients and Zoe gut boosters from any format</div>
+    <div id="fsPanel_paste" style="display:none">
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste an ingredient list — e.g. <em>Salmon 155g, chickpeas 85g, peas 75g</em>. Each ingredient appears as a row you can edit or remove, then log as one meal.</div>
+      <input id="pasteListMealName" class="meal-name-input" style="margin-bottom:8px" placeholder="Meal name (e.g. Salmon salad bowl)">
+      <textarea id="pasteListInput" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:12px;border-radius:2px;resize:vertical;min-height:90px;line-height:1.6" placeholder="Salmon fillet 155g, chickpeas cooked 85g, peas 75g, edamame 22g, spinach 40g…"></textarea>
+      <button onclick="parsePasteList()" style="width:100%;margin-top:8px;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients →</button>
+      <div id="pasteListPreview" style="margin-top:10px"></div>
     </div>
 
 
@@ -4179,21 +4169,11 @@ function renderFoodLogger(){
 
     <!-- Paste panel -->
     <div id="fsPanel_paste" style="display:none">
-      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste a recipe or macros from Claude. Name, macros and Zoe gut boosters are picked up automatically.</div>
-      <textarea id="mealPasteInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);background:var(--bg);font-family:inherit;font-size:13px;color:var(--text);resize:none;height:130px;line-height:1.5;box-sizing:border-box;border-radius:2px" placeholder="Paste Claude's recipe here e.g.
-
-🐟 Sardine & Cottage Cheese Bowl
-480 kcal · 32g P · 28g C · 24g F · 7g fibre · 680mg salt
-
-Spinach, mushrooms, avocado, garlic, kimchi, seaweed
-
-Or just: 480 kcal · 32g P · 28g C · 24g F"></textarea>
-      <div id="mealPastePreview" style="margin:8px 0;min-height:20px"></div>
-      <div style="display:flex;gap:8px;margin-top:4px">
-        <button onclick="pasteLogToday(this)" style="flex:1;padding:11px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Today</button>
-        <button onclick="pasteSaveMeal(this)" style="flex:1;padding:11px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save Meal</button>
-      </div>
-      <div class="hint">Reads name, macros, ingredients and Zoe gut boosters from any format</div>
+      <div style="font-size:12px;color:var(--soft);margin-bottom:10px;line-height:1.6">Paste an ingredient list — e.g. <em>Salmon 155g, chickpeas 85g, peas 75g</em>. Each ingredient appears as a row you can edit or remove, then log as one meal.</div>
+      <input id="pasteListMealName" class="meal-name-input" style="margin-bottom:8px" placeholder="Meal name (e.g. Salmon salad bowl)">
+      <textarea id="pasteListInput" style="width:100%;box-sizing:border-box;padding:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:12px;border-radius:2px;resize:vertical;min-height:90px;line-height:1.6" placeholder="Salmon fillet 155g, chickpeas cooked 85g, peas 75g, edamame 22g, spinach 40g…"></textarea>
+      <button onclick="parsePasteList()" style="width:100%;margin-top:8px;padding:10px;background:var(--ink);color:var(--gold);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px">Parse Ingredients →</button>
+      <div id="pasteListPreview" style="margin-top:10px"></div>
     </div>
 
     <!-- Label scanner panel -->
