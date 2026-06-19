@@ -7615,12 +7615,41 @@ if(!state.cycleStart&&state.cycleLastPeriod)state.cycleStart=state.cycleLastPeri
 if(!state.cycleStart)state.cycleStart="2026-05-04";
 renderAll();
 
-// ── UNREGISTER ALL SERVICE WORKERS (force fresh loads) ──────────
+// ── SERVICE WORKER: register + auto-update ───────────────────────
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.getRegistrations().then(regs=>{
-    regs.forEach(r=>r.unregister());
+  navigator.serviceWorker.register('./sw.js').then(reg=>{
+    // Check for updates every time the page loads
+    reg.update();
+
+    // A new SW is waiting — show update banner
+    const showUpdateBanner=()=>{
+      let banner=document.getElementById('swUpdateBanner');
+      if(banner)return;
+      banner=document.createElement('div');
+      banner.id='swUpdateBanner';
+      banner.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1410;border:1px solid var(--gold);color:var(--gold);padding:10px 16px;font-size:12px;font-family:inherit;letter-spacing:1px;cursor:pointer;z-index:9999;border-radius:2px;box-shadow:0 4px 20px rgba(0,0,0,.5);white-space:nowrap';
+      banner.textContent='✦ New version available — tap to update';
+      banner.onclick=()=>{
+        reg.waiting.postMessage('skipWaiting');
+        banner.textContent='Updating…';
+      };
+      document.body.appendChild(banner);
+    };
+
+    if(reg.waiting) showUpdateBanner();
+    reg.addEventListener('updatefound',()=>{
+      const newSW=reg.installing;
+      newSW.addEventListener('statechange',()=>{
+        if(newSW.state==='installed'&&navigator.serviceWorker.controller) showUpdateBanner();
+      });
+    });
   });
-  caches.keys().then(keys=>keys.forEach(k=>caches.delete(k)));
+
+  // Reload once the new SW takes over
+  let refreshing=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(!refreshing){refreshing=true;window.location.reload();}
+  });
 }
 </script>
 
