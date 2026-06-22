@@ -5097,6 +5097,7 @@ function renderRestaurantCalc(container, which){
   const cartKey = which;
   const items = cart[cartKey]||[];
   const totals = items.reduce((t,i)=>({kcal:t.kcal+i.kcal,p:t.p+i.p,c:t.c+i.c,f:t.f+i.f,fi:t.fi+(i.fi||0)}),{kcal:0,p:0,c:0,f:0,fi:0});
+  const tr={kcal:Math.round(totals.kcal),p:Math.round(totals.p*10)/10,c:Math.round(totals.c*10)/10,f:Math.round(totals.f*10)/10,fi:Math.round(totals.fi*10)/10};
 
   container.innerHTML=`
     <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;color:var(--ink);margin-bottom:4px">${name}</div>
@@ -5143,11 +5144,11 @@ function renderRestaurantCalc(container, which){
         </div>
       </div>`).join("")}
       <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
-        <span style="font-size:13px;font-weight:500;color:var(--gold)">${totals.kcal} kcal</span>
-        <span style="font-size:12px;color:#b8934a">${totals.p}g P</span>
-        <span style="font-size:12px;color:#4a8c6a">${totals.c}g C</span>
-        <span style="font-size:12px;color:#6a9898">${totals.f}g F</span>
-        ${totals.fi?`<span style="font-size:12px;color:#9a7060">${totals.fi}g fibre</span>`:''}
+        <span style="font-size:13px;font-weight:500;color:var(--gold)">${tr.kcal} kcal</span>
+        <span style="font-size:12px;color:#b8934a">${tr.p}g P</span>
+        <span style="font-size:12px;color:#4a8c6a">${tr.c}g C</span>
+        <span style="font-size:12px;color:#6a9898">${tr.f}g F</span>
+        ${tr.fi?`<span style="font-size:12px;color:#9a7060">${tr.fi}g fibre</span>`:''}
       </div>
       <div style="display:flex;gap:8px;margin-top:10px">
         <button onclick="logRestOrder('${cartKey}','${name}');flashBtn(this)" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
