@@ -6699,6 +6699,146 @@ function renderExerciseTab(){
       </div>`:''}
     </div>
 
+    <!-- Floor & mat exercises dropdown -->
+    <div style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #7a6aa0;cursor:pointer" onclick="toggleFloorGuide()">
+        <div>
+          <div style="font-size:13px;color:var(--text)">🧘 Floor & Mat Exercises</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px">Glute/hip · Obliques/waist · Back/posterior chain</div>
+        </div>
+        <span style="font-size:12px;color:var(--gold);flex-shrink:0;margin-left:12px">${(state._floorGuideOpen||false)?'▲':'▼'}</span>
+      </div>
+      ${(state._floorGuideOpen||false)?`<div style="border:1px solid var(--border);border-top:none">
+
+        <div style="padding:10px 14px;background:rgba(122,106,160,.06);border-bottom:1px solid rgba(122,106,160,.15)">
+          <div style="font-size:10px;color:var(--soft);line-height:1.6">Floor work for glutes, waist and back. No equipment needed unless noted. Do both sides before moving on.</div>
+        </div>
+
+        <!-- GLUTE / HIP -->
+        <div style="padding:10px 14px 4px;background:rgba(122,106,160,.08)">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#7a6aa0">🍑 Glute & Hip · Side-Lying</div>
+        </div>
+        ${[
+          {
+            name:"Side-Lying Double Leg Lift",
+            weight:"Bodyweight · ankle weight optional (0.5–1kg)",
+            sets:"3 × 15–20 reps each side",
+            position:"Lie on your side, body in a straight line from head to feet. Bottom arm extended under head. Stack hips directly on top of each other — do not let the top hip roll back. Legs straight and together.",
+            feel:"Outer glute (gluteus medius) and outer hip firing — not lower back",
+            breathe:"Exhale as you lift both legs · inhale as you lower with control",
+            form:[
+              "Stack hips — do not let the pelvis tilt backward",
+              "Lift both legs together 15–20cm off the floor",
+              "Hold at the top for 1 sec · lower with control — do not drop",
+              "Keep feet flexed (toes pointing forward, not down)",
+              "Top hip stays stacked throughout — place hand on top hip to check it isn't rotating back",
+              "If ankle weight used: attach above the ankle, not the foot"
+            ],
+            fix:"Feeling it in your lower back? Your hips are tilting — press the bottom hip forward and brace core before lifting"
+          },
+          {
+            name:"Side-Lying Single Leg Lift",
+            weight:"Bodyweight · ankle weight optional (0.5–1kg)",
+            sets:"3 × 20 reps each side",
+            position:"Same side-lying position. Bottom leg stays on the floor (can be slightly bent for stability). Top leg straight, foot flexed.",
+            feel:"Outer glute and hip abductor of the top leg · inner thigh of the bottom leg as a stabiliser",
+            breathe:"Exhale lift · inhale lower",
+            form:[
+              "Top leg lifts straight up — not forward or back",
+              "Stop at about 45° — higher is not better and loses glute tension",
+              "Toes point forward (slightly down is fine, but not up)",
+              "Slow the lowering phase — 2 counts down — this is where the sculpting happens",
+              "Add pulses at the top: 20 reps + 20 pulses for a full burn set"
+            ],
+            fix:"Hip flexor taking over? The leg is drifting forward — realign so the lift goes directly up toward the ceiling"
+          }
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- OBLIQUES / WAIST -->
+        <div style="padding:10px 14px 4px;background:rgba(106,138,160,.08);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a7a9a">⏳ Obliques & Waist</div>
+        </div>
+        ${[
+          {
+            name:"Kneeling Side Bend",
+            weight:"0 or 1–2kg dumbbell in top hand",
+            sets:"3 × 12–15 reps each side",
+            position:"Kneel on the floor with both knees together (or hip-width for balance). Sit tall — hips directly over knees, no forward lean. One arm reaches up overhead, other hand on hip or holding dumbbell.",
+            feel:"Oblique on the side you are bending away from — the stretch side. Not the neck or lower back.",
+            breathe:"Inhale tall · exhale as you bend sideways · inhale return to centre",
+            form:[
+              "Spine tall before you bend — do not let ribs collapse",
+              "Bend directly to the side — not forward or backward",
+              "Reach the top arm overhead and slightly toward the bend — this lengthens the oblique more",
+              "Return slowly to upright — controlled, not flopping back",
+              "Keep hips level — they should not shift left or right",
+              "If using a dumbbell: hold it in the hand of the side you are reaching toward (adds resistance to the bend)"
+            ],
+            fix:"Neck aching? You are tensing the shoulder — keep the working arm close to the ear and relax the shoulder down"
+          },
+          {
+            name:"Thread the Needle",
+            weight:"Bodyweight",
+            sets:"3 × 10–12 reps each side · slow and controlled",
+            position:"Start on all fours — hands under shoulders, knees under hips. Back flat and neutral (not arched or rounded). Core lightly braced.",
+            feel:"Thoracic (mid-back) rotation · obliques working to control the twist · hip stays stable",
+            breathe:"Inhale to thread under · exhale as you open and reach up",
+            form:[
+              "Start with one arm raised to ceiling — rotate to look up at that hand",
+              "Thread that arm under your body between your other arm and knee — slide as far as you can",
+              "Shoulder and cheek rest lightly on the floor at the bottom",
+              "Reverse: unthread and rotate back open, reaching arm toward ceiling",
+              "Hips stay still — only the upper back rotates",
+              "Move slowly — 3 seconds each direction — this is a mobility + oblique exercise, not a speed drill"
+            ],
+            fix:"Lower back rotating? Place a hand on your lower back and check it stays still — only the ribcage should twist"
+          }
+        ].map(e=>renderExCard(e)).join("")}
+
+        <!-- BACK / POSTERIOR CHAIN -->
+        <div style="padding:10px 14px 4px;background:rgba(74,106,106,.08);margin-top:8px">
+          <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#4a7a7a">🔙 Back & Posterior Chain · Prone (Face Down)</div>
+        </div>
+        ${[
+          {
+            name:"Flutter Kicks",
+            weight:"Bodyweight",
+            sets:"3 × 20–30 sec · or 3 × 30 kicks",
+            position:"Lie face down (prone). Hands stacked under forehead or placed flat by sides. Legs straight, feet together. Lift both legs slightly off the floor — hold that base position.",
+            feel:"Lower back (erector spinae) and glutes holding the lift · hamstrings engaged throughout",
+            breathe:"Steady breathing throughout — do not hold breath",
+            form:[
+              "Lift both legs just off the floor (5–8cm) — this is your start",
+              "Alternate lifting each leg up and down in a small, controlled flutter — like swimming",
+              "Keep legs as straight as possible",
+              "Do not let the pelvis rock side to side — core and glutes keep it stable",
+              "Toes pointed away from you (like a swimmer)",
+              "If lower back aches: reduce lift height or place a folded towel under hips"
+            ],
+            fix:"Lower back cramping? Your legs are lifting too high — reduce the range and focus on glute squeeze rather than height"
+          },
+          {
+            name:"Chest Lifts + Pulses",
+            weight:"Bodyweight",
+            sets:"3 × 12 lifts + 12 pulses each set",
+            position:"Lie face down. Arms extended forward (Superman position) or hands at temples (easier). Forehead down between reps. Legs hip-width, tops of feet on the floor.",
+            feel:"Lower and mid back (erector spinae) · rear deltoids if arms extended · glutes if you squeeze them on the lift",
+            breathe:"Exhale as you lift · inhale as you lower · short exhales on pulses",
+            form:[
+              "Keep gaze DOWN — do not crane neck up (your eye line should follow your chest, not go ahead of it)",
+              "Lift chest 10–15cm off the floor — quality over height",
+              "Arms reach forward as they lift (Superman) — shoulder blades draw together",
+              "Squeeze glutes on the lift to protect lower back",
+              "Pulses: hold at the top position and pulse upward 12 times — small 2–3cm movement",
+              "Lower slowly — 2 counts down"
+            ],
+            fix:"Neck strain? You are leading with your chin — consciously lengthen the back of the neck and keep chin slightly tucked"
+          }
+        ].map(e=>renderExCard(e)).join("")}
+
+      </div>`:''}
+    </div>
+
     <!-- Arm walk exercises dropdown -->
     <div style="margin-bottom:20px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--white);border:1px solid var(--border);border-left:3px solid #4a6a8a;cursor:pointer" onclick="toggleArmGuide()">
@@ -6858,6 +6998,7 @@ function toggleExerciseCheck(id){
 function toggleStrengthGuide(){state._strengthGuideOpen=!state._strengthGuideOpen;persist();renderExerciseTab();}
 function toggleArmGuide(){state._armGuideOpen=!state._armGuideOpen;persist();renderExerciseTab();}
 function togglePhysioGuide(){state._physioGuideOpen=!state._physioGuideOpen;persist();renderExerciseTab();}
+function toggleFloorGuide(){state._floorGuideOpen=!state._floorGuideOpen;persist();renderExerciseTab();}
 
 function gutWeekCount(id){
   let n=0;
