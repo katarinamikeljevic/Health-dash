@@ -288,10 +288,7 @@ button,input,textarea,select{font-family:inherit}
               <div style="font-size:13px;color:var(--soft)">1L water + electrolytes</div>
               <div style="font-size:10px;color:var(--muted);margin-top:1px;line-height:1.4">On waking — first thing</div>
             </div>
-          </div><div class="check-item supp checked" onclick="toggleCheck('sup1','morning')">
-              <div class="check-box">✓</div>
-              <div style="flex:1"><div class="check-lbl">💊 Iron</div><div class="check-note">Empty stomach</div></div>
-            </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
+          </div><div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)">
             <div style="width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;margin-top:6px"></div>
             <div>
               <div style="font-size:13px;color:var(--soft)">Ice face 60 sec</div>
@@ -435,6 +432,9 @@ button,input,textarea,select{font-family:inherit}
           </div><div class="check-item supp" onclick="toggleCheck('sup7','evening')">
               <div class="check-box"></div>
               <div style="flex:1"><div class="check-lbl">💊 Zinc + Collagen + Magnesium glycinate 300mg</div><div class="check-note">Before sleep</div></div>
+            </div><div class="check-item supp" onclick="toggleCheck('sup_ashwa','evening')">
+              <div class="check-box"></div>
+              <div style="flex:1"><div class="check-lbl">💊 Ashwagandha KSM-66 300mg</div><div class="check-note">With magnesium before bed · lowers cortisol · supports sleep</div></div>
             </div>
       </div>
     </div></div>
@@ -1914,7 +1914,6 @@ button,input,textarea,select{font-family:inherit}
 const ROUTINE_SECTIONS=[
   {id:"morning",title:"Morning Protocol",items:[
     {id:"m1",label:"1L water + electrolytes",note:"On waking — first thing",tag:"info",tick:false},
-    {id:"sup1",label:"💊 Iron",note:"Empty stomach",tag:"supp",tick:true},
     {id:"m2",label:"Ice face 60 sec",note:"Face & neck · <a href='https://youtu.be/Js2rgq_va3Q?si=YFoy77aiYOhnNVmg' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"info",tick:false},
     {id:"m_physio",label:"Physio — ball release + marching drill",note:"Left glute · left lower back · then march 5kg",tag:"physio",tick:true},
     {id:"m_walk_daily",label:"Morning Fasted Walk",note:"6% · 5.5 km/h · 30–35 min · <a href='#' onclick='showTab(\"exercise\");return false;' style='color:var(--gold);text-decoration:none'>→ Exercise tab</a>",tag:"weekly",tick:true,weeklyId:"walksday",weeklyTarget:7},
@@ -1931,6 +1930,9 @@ const ROUTINE_SECTIONS=[
     {id:"sup4",label:"💊 Berberine",note:"10–20 min before lunch",tag:"supp",tick:true},
     {id:"sup5",label:"💊 Omega-3 second dose",note:"Needs 5g fat minimum at this meal (avocado, olive oil, salmon)",tag:"supp",tick:true},
   ]},
+  {id:"afternoon",title:"Afternoon · 3pm",items:[
+    {id:"sup1",label:"💊 Iron — Igennus Bisglycinate 20mg",note:"Plain water only · alone · already contains vitamin C · ✅ 2h after lunch · 1.5–2h before dinner · ❌ avoid within 2h: tea (all types), dairy, kefir, cheese, magnesium, zinc, coffee, high-fibre foods",tag:"supp",tick:true},
+  ]},
   {id:"evening",title:"Evening Protocol",items:[
     {id:"e0",label:"Dinner 3h before bed · no carbs · no cruciferous veg",note:"",tag:"info",tick:false},
     {id:"sup6",label:"💊 Berberine",note:"10–20 min before dinner",tag:"supp",tick:true},
@@ -1943,6 +1945,7 @@ const ROUTINE_SECTIONS=[
     {id:"e6",label:"Sheet mask",note:"Not consecutive nights",tag:"weekly",tick:true,weeklyId:"mask",weeklyTarget:3},
     {id:"e7",label:"In bed by 10:30pm",note:"",tag:"info",tick:false},
     {id:"sup7",label:"💊 Zinc + Collagen + Magnesium glycinate 300mg",note:"Before sleep",tag:"supp",tick:true},
+    {id:"sup_ashwa",label:"💊 Ashwagandha KSM-66 300mg",note:"With magnesium before bed · lowers cortisol · supports sleep · allow 6–8 weeks to take effect",tag:"supp",tick:true},
   ]},
 ];
 
@@ -2144,8 +2147,10 @@ function selectFoodDay(i){foodDayIdx=i;foodDayIdx!==dayIdx&&(dayIdx=i);renderFoo
 // ── SUPPLEMENTS TAB ──────────────────────────────────────────────
 const SUPP_GROUPS=[
   {id:"am", title:"☀️ Morning — On Waking", timing:"With electrolyte water before walk", items:[
-    {id:"sup1",name:"Iron",why:"Take on empty stomach — best absorbed before food",sync:"⟳ Linked to Morning Protocol"},
     {id:"sup3",name:"Creatine",why:"Add to kefir shake post-walk — supports muscle recomposition",sync:"⟳ Linked to Morning Protocol"},
+  ]},
+  {id:"afternoon", title:"☕ Afternoon — 3pm", timing:"Alone with plain water · already contains vitamin C", items:[
+    {id:"sup1",name:"Iron — Igennus Bisglycinate 20mg",why:"✅ 2h after lunch · 1.5–2h before dinner · ❌ avoid within 2h: all tea, dairy, kefir, cheese, magnesium, zinc, coffee, high-fibre foods, antacids",sync:"⟳ Linked to Afternoon Protocol"},
   ]},
   {id:"breakfast", title:"☀️ Morning — With Breakfast", timing:"Take with first meal", items:[
     {id:"sup2a",name:"Omega-3",why:"Lowers LDL, supports HDL — take with fat-containing meal for absorption",sync:"⟳ Linked to Morning Protocol"},
@@ -2163,6 +2168,7 @@ const SUPP_GROUPS=[
     {id:"sup7a",name:"Zinc",why:"Supports immune function, skin repair & hormone balance overnight",sync:"⟳ Linked to Evening Protocol"},
     {id:"sup7b",name:"Collagen peptides",why:"Skin, hair, joint support — synthesised during sleep",sync:"⟳ Linked to Evening Protocol"},
     {id:"sup7c",name:"Magnesium glycinate 300mg",why:"Lowers cortisol, improves sleep quality & reduces water retention",sync:"⟳ Linked to Evening Protocol"},
+    {id:"sup_ashwa",name:"Ashwagandha KSM-66 300mg",why:"Lowers cortisol · supports deep sleep · take with magnesium for synergistic effect · allow 6–8 weeks to take full effect",sync:"⟳ Linked to Evening Protocol"},
   ]},
 ];
 
@@ -2173,6 +2179,7 @@ const SUPP_TO_ROUTINE={
   "sup3":"sup3",
   "sup4":"sup4",
   "sup5":"sup5",
+  "sup_ashwa":"sup_ashwa",
   "sup6":"sup6",
   "sup7a":"sup7","sup7b":"sup7","sup7c":"sup7",
 };
