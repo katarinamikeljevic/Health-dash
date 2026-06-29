@@ -3394,6 +3394,8 @@ const FOOD_DB=[
   ["Yeo Valley Greek Yogurt 5%",115,7.5,4,8,0,50,150,"150g pot"],
   ["Arla Protein Strawberry Yogurt",72,10,6.3,0.2,0,52,200,"1 pouch (200g) — 144 kcal"],
   ["Arla Protein Strawberry Yogurt",72,10,6.3,0.2,0,52,100,"100g — 72 kcal"],
+  ["Arla Protein Raspberry Yogurt",71,10,6.1,0.2,0,50,200,"1 pouch (200g) — 142 kcal"],
+  ["Arla Protein Raspberry Yogurt",71,10,6.1,0.2,0,50,100,"100g — 71 kcal"],
   ["Arla Protein Mango Yogurt",70,10,6,0.2,0,50,200,"1 pouch (200g) — 140 kcal"],
   ["Arla Protein Mango Yogurt",70,10,6,0.2,0,50,100,"100g — 70 kcal"],
   ["Lindahls Kvarg Protein Cottage Cheese",67,12.8,2.4,0.5,0,256,125,"1 pot (125g) — 84 kcal"],
@@ -5013,7 +5015,7 @@ function getRestItemTags(name, cartKey){
   // Zoe gut booster check — match against GUT_FOODS keywords
   const gutFoodKeywords={
     salmon:'🐟 Oily fish',trout:'🐟 Oily fish',mackerel:'🐟 Oily fish',sardine:'🐟 Oily fish',
-    avocado:'🥑 Avocado',
+    avocado:'🥑 Avocado','avo smash':'🥑 Avocado','avo half':'🥑 Avocado',
     tofu:'🟨 Tofu / Tempeh',tempeh:'🟨 Tofu / Tempeh',
     edamame:'🫘 Edamame',
     pea:'🫛 Peas',
@@ -5057,7 +5059,7 @@ function getRestItemTags(name, cartKey){
 
     // Phase-specific manual rules
     if(phaseName==='Menstrual'){
-      if(n.includes('salmon')||n.includes('kimchi')||n.includes('avocado')||n.includes('tempeh')){
+      if(n.includes('salmon')||n.includes('kimchi')||n.includes('avocado')||n.includes('avo smash')||n.includes('tempeh')){
         if(!badges.find(b=>b.label.includes(phaseName)))
           badges.push({label:'🌑 Good now',bg:'rgba(208,64,64,.12)',color:'#f08080'});
         if(!highlight)highlight='#d04040';
@@ -5067,14 +5069,14 @@ function getRestItemTags(name, cartKey){
       }
     }
     if(phaseName==='Luteal'){
-      if(n.includes('salmon')||n.includes('avocado')||n.includes('sweet potato')||n.includes('chicken')){
+      if(n.includes('salmon')||n.includes('avocado')||n.includes('avo smash')||n.includes('sweet potato')||n.includes('chicken')){
         if(!badges.find(b=>b.label.includes(phaseName)))
           badges.push({label:'🌘 Good now',bg:'rgba(106,90,138,.15)',color:'#b4a0d4'});
         if(!highlight)highlight='#6a5a8a';
       }
     }
     if(phaseName==='Follicular'||phaseName==='Ovulatory'){
-      if(n.includes('chicken')||n.includes('salmon')||n.includes('tempeh')||n.includes('avocado')){
+      if(n.includes('chicken')||n.includes('salmon')||n.includes('tempeh')||n.includes('avocado')||n.includes('avo smash')){
         if(!badges.find(b=>b.label.includes(phaseName)))
           badges.push({label:`${phase.phase.emoji} Prioritise`,bg:`${phaseColor}15`,color:phaseColor});
         if(!highlight)highlight=phaseColor;
@@ -5088,7 +5090,7 @@ function getRestItemTags(name, cartKey){
     const isHighFat=item.f>=20&&item.kcal>=200;
     if(isLean&&!badges.find(b=>b.label.includes('protein')))
       badges.push({label:'✓ Lean',bg:'rgba(74,106,138,.15)',color:'#90b4c4'});
-    if(n.includes('avocado')&&!badges.find(b=>b.label.includes('Zoe')))
+    if((n.includes('avocado')||n.includes('avo smash'))&&!badges.find(b=>b.label.includes('Zoe')))
       badges.push({label:'🌿 Zoe 100',bg:'rgba(74,140,106,.15)',color:'#4a8c6a'});
     if(n.includes('kimchi')&&!badges.find(b=>b.label.includes('Zoe')))
       badges.push({label:'🌿 Zoe 90',bg:'rgba(74,140,106,.15)',color:'#4a8c6a'});
@@ -5173,6 +5175,7 @@ function renderRestaurantCalc(container, which){
       </div>
       <div style="display:flex;gap:8px;margin-top:10px">
         <button onclick="logRestOrder('${cartKey}','${name}');flashBtn(this)" style="flex:1;padding:9px;background:var(--gold);color:var(--ink);border:none;font-family:inherit;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-radius:2px;font-weight:500">+ Log to Food Diary</button>
+        <button onclick="copyRestOrderForClaude('${cartKey}','${name}',this)" style="padding:9px 12px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">📋 Claude</button>
         <button onclick="saveRestOrder('${cartKey}','${name}',this)" style="padding:9px 12px;background:none;border:1px solid var(--gold);color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px">💾 Save</button>
         <button onclick="clearRestCart('${cartKey}')" style="padding:9px 12px;background:none;border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:10px;cursor:pointer;border-radius:2px">Clear</button>
       </div>
@@ -5270,6 +5273,41 @@ function logRestOrder(cartKey,restaurantName){
   // Show save prompt before clearing cart
   showRestSavePrompt(cartKey,restaurantName,items,t);
   clearRestCart(cartKey);
+}
+
+function copyRestOrderForClaude(cartKey, restaurantName, btn){
+  const items=(state._restCart||{})[cartKey]||[];
+  if(!items.length){showMealStatus('Add items first',false);return;}
+  const t=items.reduce((s,i)=>({kcal:s.kcal+i.kcal,p:s.p+i.p,c:s.c+i.c,f:s.f+i.f,fi:s.fi+(i.fi||0)}),{kcal:0,p:0,c:0,f:0,fi:0});
+  const tr={kcal:Math.round(t.kcal),p:Math.round(t.p*10)/10,c:Math.round(t.c*10)/10,f:Math.round(t.f*10)/10,fi:Math.round(t.fi*10)/10};
+  const wk=getWeekKey(),mk=`macros-${wk}-${foodDayIdx}`;
+  const ms=(state.macros||{})[mk]||{protein:0,fat:0,carbs:0,fibre:0,kcal:0};
+  const remP=Math.max(0,115-(ms.protein||0));
+  const remC=Math.max(0,130-(ms.carbs||0));
+  const remF=Math.max(0,50-(ms.fat||0));
+  const remKcal=Math.max(0,1550-(ms.kcal||0));
+  const text=`I'm building a ${restaurantName} order. Here's what I have so far:
+
+${items.map(i=>`• ${i.name} — ${i.kcal} kcal · ${i.p}g P · ${i.c}g C · ${i.f}g F${i.fi?` · ${i.fi}g fibre`:''}`).join('\n')}
+
+Order total: ${tr.kcal} kcal · ${tr.p}g P · ${tr.c}g C · ${tr.f}g F${tr.fi?` · ${tr.fi}g fibre`:''}
+
+My remaining macro budget for today:
+  Calories: ${remKcal} kcal left
+  Protein:  ${remP}g left
+  Carbs:    ${remC}g left
+  Fat:      ${remF}g left
+
+My targets: 1550 kcal · 115g protein · 130g carbs · 50g fat · 32g fibre. No carbs at dinner. Pear-shaped, VS body goal.
+
+Does this order work? Or suggest tweaks to better hit my remaining targets.`;
+  navigator.clipboard.writeText(text).then(()=>{
+    if(btn){const orig=btn.textContent;btn.textContent='✓ Copied';setTimeout(()=>{btn.textContent=orig;},2000);}
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    if(btn){const orig=btn.textContent;btn.textContent='✓ Copied';setTimeout(()=>{btn.textContent=orig;},2000);}
+  });
 }
 
 function showRestSavePrompt(cartKey,restaurantName,items,t){
