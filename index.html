@@ -5908,6 +5908,24 @@ function copyMealToLog(name,protein,fat,carbs,fibre,kcal,salt,ingredientText){
   if(ingredientText){
     const gutMatches=detectGutBoostersFromIngredients(ingredientText);
     if(gutMatches.length) setTimeout(()=>showGutBoosterPrompt(gutMatches,name),600);
+    // Also auto-tick gut foods panel entries (state.foods)
+    const lower=ingredientText.toLowerCase();
+    const gutFoodKw={"edamame":"gf_edamame","peas":"gf_peas","avocado":"gf_avocado","avo smash":"gf_avocado","avo half":"gf_avocado",
+      "lentil":"gf_legumes","chickpea":"gf_legumes","black bean":"gf_legumes","kidney bean":"gf_legumes","butter bean":"gf_legumes","edamame":"gf_legumes",
+      "tofu":"gf_tofu","tempeh":"gf_tofu","salmon":"gf_oilyfish","trout":"gf_oilyfish","mackerel":"gf_oilyfish","sardine":"gf_oilyfish",
+      "kefir":"gf_fermented","kimchi":"gf_fermented","miso":"gf_fermented","sauerkraut":"gf_fermented",
+      "leek":"gf_alliums","spring onion":"gf_alliums","shallot":"gf_alliums","garlic":"gf_alliums",
+      "green bean":"gf_greenbeans","asparagus":"gf_greenbeans",
+      "green tea":"gf_greentea","matcha":"gf_greentea",
+      "strawberr":"gf_berries","blueberr":"gf_berries","raspberr":"gf_berries","blackberr":"gf_berries",
+      "orange":"gf_oranges","clementine":"gf_oranges","grapefruit":"gf_citrus",
+      "pistachio":"gf_nuts","walnut":"gf_nuts","almond":"gf_nuts"};
+    const gutFk=`foods-${getWeekKey()}-${foodDayIdx}`;
+    if(!state.foods[gutFk])state.foods[gutFk]={};
+    Object.entries(gutFoodKw).forEach(([kw,gfId])=>{ if(lower.includes(kw)) state.foods[gutFk][gfId]=true; });
+    // edamame ticks its own entry (not just legumes)
+    if(lower.includes('edamame')) state.foods[gutFk]['gf_edamame']=true;
+    persist();
   }
 }
 
