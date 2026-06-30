@@ -7663,21 +7663,7 @@ ${outstandingLines||"  All weekly targets hit! 🌿"}
 ━━ MY QUESTION ━━
 It's ${mealTime} time. Based on everything above, what should I eat next? Be specific — suggest 1–2 options with approximate macros. Keep meal suggestions within my remaining targets and follow my meal structure rules.
 
-━━ ATIS MENU ━━
-Proteins: ${ATIS_MEALS.proteins.map(i=>i.name+' ('+i.kcal+'kcal · '+i.p+'g P · '+i.c+'g C · '+i.f+'g F)').join(' | ')}
-Bases: ${ATIS_MEALS.bases.map(i=>i.name+' ('+i.kcal+'kcal · '+i.p+'g P · '+i.c+'g C · '+i.f+'g F)').join(' | ')}
-Toppings: ${ATIS_MEALS.toppings.map(i=>i.name+' ('+i.kcal+'kcal · '+i.p+'g P · '+i.c+'g C · '+i.f+'g F)').join(' | ')}
-Sides: ${ATIS_MEALS.sides.map(i=>i.name+' ('+i.kcal+'kcal · '+i.p+'g P · '+i.c+'g C · '+i.f+'g F)').join(' | ')}
-Dressings: ${ATIS_MEALS.dressings.map(i=>i.name+' ('+i.kcal+'kcal · '+i.f+'g F)').join(' | ')}
-
-━━ THE SALAD PROJECT MENU ━━
-Proteins: ${SALAD_PROJECT_MEALS.proteins.map(i=>i.name+' ('+i.kcal+'kcal · '+i.p+'g P · '+i.c+'g C · '+i.f+'g F)').join(' | ')}
-Bases: ${SALAD_PROJECT_MEALS.bases.map(i=>i.name+' ('+i.kcal+'kcal)').join(' | ')}
-Toppings: ${SALAD_PROJECT_MEALS.toppings.map(i=>i.name+' ('+i.kcal+'kcal · '+i.p+'g P · '+i.c+'g C · '+i.f+'g F)').join(' | ')}
-Extras: ${SALAD_PROJECT_MEALS.ingredients.map(i=>i.name+' ('+i.kcal+'kcal · '+i.f+'g F)').join(' | ')}
-Dressings: ${SALAD_PROJECT_MEALS.dressings.map(i=>i.name+' ('+i.kcal+'kcal · '+i.f+'g F)').join(' | ')}
-
-If I'm eating at Atis or The Salad Project, build me the optimal bowl using their actual menu items — tell me exactly what to order (protein + base + toppings + dressing) with the total macros.`;
+If I'm eating at Atis or The Salad Project, ask me what I'm thinking of ordering and help me hit my remaining macros — I know their menus, just guide the choice.`;
 
   navigator.clipboard.writeText(text).then(()=>{
     const btn=document.getElementById("copyToClaudeBtn");
