@@ -1930,7 +1930,6 @@ const ROUTINE_SECTIONS=[
   ]},
   {id:"midday",title:"Midday",items:[
     {id:"sup4",label:"💊 Berberine",note:"10–20 min before lunch",tag:"supp",tick:true},
-    {id:"sup5",label:"💊 Omega-3 second dose",note:"Needs 5g fat minimum at this meal (avocado, olive oil, salmon)",tag:"supp",tick:true},
   ]},
   {id:"afternoon",title:"Afternoon · 3pm",items:[
     {id:"sup1",label:"💊 Iron — Igennus Bisglycinate 20mg",note:"Plain water only · alone · already contains vitamin C · ✅ 2h after lunch · 1.5–2h before dinner · ❌ avoid within 2h: black or green tea (herbal tea is ok), dairy, kefir, cheese, magnesium, zinc, coffee, high-fibre foods",tag:"supp",tick:true},
@@ -1938,6 +1937,7 @@ const ROUTINE_SECTIONS=[
   {id:"evening",title:"Evening Protocol",items:[
     {id:"e0",label:"Dinner 3h before bed · no carbs · no cruciferous veg",note:"",tag:"info",tick:false},
     {id:"sup6",label:"💊 Berberine",note:"10–20 min before dinner",tag:"supp",tick:true},
+    {id:"sup5",label:"💊 Omega-3 (second dose) + Zinc + Collagen",note:"With dinner · needs 5g fat minimum for omega-3 absorption (avocado, olive oil, salmon)",tag:"supp",tick:true},
     {id:"e0b",label:"Evening walk 20 min",note:"After dinner · flat · fat oxidation",tag:"weekly",tick:true,weeklyId:"evewalk",weeklyTarget:7},
     {id:"e1",label:"Dry brush",note:"3 min on dry skin · <a href='https://youtu.be/1YnVb9Ie-r0?si=V8CZC-8htDUwLm9Z' target='_blank' style='color:var(--gold);text-decoration:none'>▶ YouTube technique</a>",tag:"weekly",tick:true,weeklyId:"drybr",weeklyTarget:4},
     {id:"e2",label:"Red light therapy",note:"30 min before bed · clean skin",tag:"info",tick:false},
@@ -1946,8 +1946,7 @@ const ROUTINE_SECTIONS=[
     {id:"e5",label:"Skincare: serum → moisturiser",note:"",tag:"info",tick:false},
     {id:"e6",label:"Sheet mask",note:"Not consecutive nights",tag:"weekly",tick:true,weeklyId:"mask",weeklyTarget:3},
     {id:"e7",label:"In bed by 10:30pm",note:"",tag:"info",tick:false},
-    {id:"sup7",label:"💊 Zinc + Collagen + Magnesium glycinate 300mg",note:"Before sleep",tag:"supp",tick:true},
-    {id:"sup_ashwa",label:"💊 Ashwagandha KSM-66 300mg",note:"With magnesium before bed · lowers cortisol · supports sleep · allow 6–8 weeks to take effect",tag:"supp",tick:true},
+    {id:"sup7",label:"💊 Magnesium glycinate 300mg + Ashwagandha KSM-66 300mg",note:"Before sleep · lowers cortisol · supports sleep · allow 6–8 weeks to take effect",tag:"supp",tick:true},
   ]},
 ];
 
@@ -2161,17 +2160,17 @@ const SUPP_GROUPS=[
   ]},
   {id:"lunch", title:"🍽️ Midday — Before & With Lunch", timing:"Berberine 10–20 min before eating", items:[
     {id:"sup4",name:"Berberine (before lunch)",why:"Blood sugar management · LDL reduction — take 10–20 min before meal",sync:"⟳ Linked to Midday"},
-    {id:"sup5",name:"Omega-3 (second dose)",why:"Split dosing improves absorption — optional if taking full dose at breakfast",sync:"⟳ Linked to Midday"},
   ]},
   {id:"afternoon", title:"☕ Afternoon — 3pm", timing:"Alone with plain water · already contains vitamin C", items:[
     {id:"sup1",name:"Iron — Igennus Bisglycinate 20mg",why:"✅ 2h after lunch · 1.5–2h before dinner · ❌ avoid within 2h: black or green tea (herbal tea is ok), dairy, kefir, cheese, magnesium, zinc, coffee, high-fibre foods, antacids",sync:"⟳ Linked to Afternoon Protocol"},
   ]},
-  {id:"dinner", title:"🌙 Evening — Before Dinner", timing:"Berberine 10–20 min before eating", items:[
+  {id:"dinner", title:"🌙 Evening — Before & With Dinner", timing:"Berberine 10–20 min before eating · rest with dinner", items:[
     {id:"sup6",name:"Berberine (before dinner)",why:"Blood sugar management — take 10–20 min before evening meal",sync:"⟳ Linked to Evening Protocol"},
+    {id:"sup5",name:"Omega-3 (second dose)",why:"Split dosing improves absorption — needs 5g fat minimum at dinner (avocado, olive oil, salmon)",sync:"⟳ Linked to Evening Protocol"},
+    {id:"sup7a",name:"Zinc",why:"Supports immune function, skin repair & hormone balance overnight — taken with dinner",sync:"⟳ Linked to Evening Protocol"},
+    {id:"sup7b",name:"Collagen peptides",why:"Skin, hair, joint support — taken with dinner",sync:"⟳ Linked to Evening Protocol"},
   ]},
   {id:"sleep", title:"🌙 Evening — Before Sleep", timing:"Take before bed", items:[
-    {id:"sup7a",name:"Zinc",why:"Supports immune function, skin repair & hormone balance overnight",sync:"⟳ Linked to Evening Protocol"},
-    {id:"sup7b",name:"Collagen peptides",why:"Skin, hair, joint support — synthesised during sleep",sync:"⟳ Linked to Evening Protocol"},
     {id:"sup7c",name:"Magnesium glycinate 300mg",why:"Lowers cortisol, improves sleep quality & reduces water retention",sync:"⟳ Linked to Evening Protocol"},
     {id:"sup_ashwa",name:"Ashwagandha KSM-66 300mg",why:"Lowers cortisol · supports deep sleep · take with magnesium for synergistic effect · allow 6–8 weeks to take full effect",sync:"⟳ Linked to Evening Protocol"},
   ]},
@@ -2183,11 +2182,10 @@ const SUPP_TO_ROUTINE={
   "sup2a":"sup2","sup2b":"sup2","sup2c":"sup2",
   "sup3":"sup3",
   "sup4":"sup4",
-  "sup5":"sup5",
-  "sup_ashwa":"sup_ashwa",
+  "sup5":"sup5","sup7a":"sup5","sup7b":"sup5",
+  "sup7c":"sup7","sup_ashwa":"sup7",
   "sup_brazil":"sup_brazil",
   "sup6":"sup6",
-  "sup7a":"sup7","sup7b":"sup7","sup7c":"sup7",
 };
 
 function renderSupplements(){
