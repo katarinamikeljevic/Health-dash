@@ -1133,6 +1133,7 @@ button,input,textarea,select{font-family:inherit}
     <button class="meals-sub" onclick="setMealsView('atis',this)">🥗 Atis</button>
     <button class="meals-sub" onclick="setMealsView('salad',this)">🥬 Salad Project</button>
     <button class="meals-sub" onclick="setMealsView('saladkitchen',this)">🫙 Salad Kitchen</button>
+    <button class="meals-sub" onclick="setMealsView('sushidog',this)">🍣 Sushi Dog</button>
   </div>
   <div id="mealsContainer" style="padding:16px 16px 40px">
     <div style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--ink);margin-bottom:4px">My Saved Meals</div>
@@ -4841,6 +4842,56 @@ const SALAD_KITCHEN_MEALS={
   ],
 };
 
+const SUSHI_DOG_MEALS={
+  bases:[
+    {name:"Rice Sheet & Nori (Roll)",kcal:226,p:4,c:48,f:1,fi:0,salt:0},
+    {name:"White Rice",kcal:441,p:7,c:95,f:1,fi:0,salt:0},
+    {name:"Brown Rice",kcal:453,p:9,c:90,f:3,fi:0,salt:0},
+    {name:"Taiwanese Noodles",kcal:448,p:10,c:70,f:12,fi:0,salt:0},
+    {name:"Asian Superfood Slaw",kcal:101,p:2,c:10,f:6,fi:0,salt:0},
+  ],
+  fillings:[
+    {name:"Salmon",kcal:142,p:17,c:0,f:8,fi:0,salt:0},
+    {name:"Ahi Tuna",kcal:92,p:20,c:0,f:1,fi:0,salt:0},
+    {name:"Chicken Katsu",kcal:170,p:12,c:8,f:10,fi:0,salt:0},
+    {name:"Popcorn Shrimp",kcal:134,p:9,c:10,f:7,fi:0,salt:0},
+    {name:"Honey Sesame Chicken",kcal:150,p:14,c:10,f:6,fi:0,salt:0},
+    {name:"Teriyaki Tofu",kcal:106,p:8,c:6,f:6,fi:0,salt:0},
+    {name:"Soy Glazed Steak",kcal:196,p:18,c:8,f:10,fi:0,salt:0},
+  ],
+  sauce:[
+    {name:"Soy Sauce",kcal:8,p:1,c:1,f:0,fi:0,salt:0},
+    {name:"Soy Sauce Bottle",kcal:2,p:0,c:0,f:0,fi:0,salt:0},
+    {name:"Chilli Miso Soy",kcal:34,p:1,c:4,f:1.5,fi:0,salt:0},
+    {name:"Sriracha Mayo",kcal:101,p:0,c:1,f:11,fi:0,salt:0},
+    {name:"Japanese Mayo",kcal:79,p:0,c:0,f:9,fi:0,salt:0},
+    {name:"Teriyaki Sauce",kcal:28,p:0.5,c:6,f:0,fi:0,salt:0},
+    {name:"Korean Hot Sauce",kcal:35,p:0.5,c:6,f:0.5,fi:0,salt:0},
+    {name:"Sesame Cashew Sauce",kcal:37,p:1,c:2,f:3,fi:0,salt:0},
+  ],
+  toppings:[
+    {name:"Cucumber",kcal:8,p:0,c:2,f:0,fi:0,salt:0},
+    {name:"Edamame",kcal:71,p:6,c:5,f:3,fi:0,salt:0},
+    {name:"Mango",kcal:18,p:0,c:4.5,f:0,fi:0,salt:0},
+    {name:"Corn Salsa",kcal:73,p:2,c:14,f:1,fi:0,salt:0},
+    {name:"Purple Cabbage",kcal:8,p:0,c:2,f:0,fi:0,salt:0},
+    {name:"Kimchi",kcal:12,p:1,c:2,f:0,fi:0,salt:0},
+    {name:"Pickled Carrot",kcal:17,p:0,c:4,f:0,fi:0,salt:0},
+    {name:"Fresh Chilli",kcal:2,p:0,c:0,f:0,fi:0,salt:0},
+    {name:"Spring Onion",kcal:2,p:0,c:0,f:0,fi:0,salt:0},
+    {name:"Crispy Onions",kcal:71,p:1,c:6,f:5,fi:0,salt:0},
+    {name:"Crispy Wonton Strips",kcal:29,p:0.5,c:4,f:1,fi:0,salt:0},
+    {name:"Pickled Ginger",kcal:1,p:0,c:0,f:0,fi:0,salt:0},
+    {name:"Wakame",kcal:41,p:1,c:3,f:3,fi:0,salt:0},
+    {name:"Avocado",kcal:84,p:1,c:4,f:8,fi:0,salt:0},
+  ],
+  seasoning:[
+    {name:"SushiDog Seasoning 2.0",kcal:34,p:0,c:2,f:3,fi:0,salt:0},
+    {name:"Togarashi",kcal:7,p:0,c:0,f:0,fi:0,salt:0},
+    {name:"Sesame Seeds",kcal:17,p:1,c:1,f:1.5,fi:0,salt:0},
+  ],
+};
+
 let mealsView='saved';
 function setMealsView(view,btn){
   mealsView=view;
@@ -5003,6 +5054,7 @@ function renderMeals(){
   if(mealsView==='atis') return renderRestaurantCalc(container,'atis');
   if(mealsView==='salad') return renderRestaurantCalc(container,'salad');
   if(mealsView==='saladkitchen') return renderRestaurantCalc(container,'saladkitchen');
+  if(mealsView==='sushidog') return renderRestaurantCalc(container,'sushidog');
   renderSavedMeals(container);
 }
 
@@ -5043,7 +5095,7 @@ function getRestItemTags(name, cartKey){
   }
 
   // High protein — good for goals
-  const mealData=cartKey==='atis'?ATIS_MEALS:cartKey==='saladkitchen'?SALAD_KITCHEN_MEALS:SALAD_PROJECT_MEALS;
+  const mealData=cartKey==='atis'?ATIS_MEALS:cartKey==='saladkitchen'?SALAD_KITCHEN_MEALS:cartKey==='sushidog'?SUSHI_DOG_MEALS:SALAD_PROJECT_MEALS;
   const allItems=Object.values(mealData).flat();
   const item=allItems.find(i=>i.name.toLowerCase()===name.toLowerCase());
   if(item&&item.p>=20){
@@ -5111,12 +5163,14 @@ function getRestItemTags(name, cartKey){
 }
 
 function renderRestaurantCalc(container, which){
-  const data = which==='atis' ? ATIS_MEALS : which==='saladkitchen' ? SALAD_KITCHEN_MEALS : SALAD_PROJECT_MEALS;
-  const name = which==='atis' ? 'Atis' : which==='saladkitchen' ? 'The Salad Kitchen' : 'The Salad Project';
+  const data = which==='atis' ? ATIS_MEALS : which==='saladkitchen' ? SALAD_KITCHEN_MEALS : which==='sushidog' ? SUSHI_DOG_MEALS : SALAD_PROJECT_MEALS;
+  const name = which==='atis' ? 'Atis' : which==='saladkitchen' ? 'The Salad Kitchen' : which==='sushidog' ? 'Sushi Dog' : 'The Salad Project';
   const sections = which==='atis'
     ? [{key:'proteins',label:'Proteins'},{key:'bases',label:'Bases'},{key:'toppings',label:'Toppings'},{key:'sides',label:'Sides'},{key:'dressings',label:'Dressings'}]
     : which==='saladkitchen'
     ? [{key:'proteins',label:'Proteins'},{key:'bases',label:'Bases'},{key:'dressings',label:'Dressings'},{key:'sprinkles',label:'Sprinkles'}]
+    : which==='sushidog'
+    ? [{key:'bases',label:'Base'},{key:'fillings',label:'Fillings'},{key:'sauce',label:'Sauce'},{key:'toppings',label:'Toppings'},{key:'seasoning',label:'Seasoning'}]
     : [{key:'proteins',label:'Proteins'},{key:'bases',label:'Bases'},{key:'toppings',label:'Toppings'},{key:'ingredients',label:'Other Ingredients'},{key:'sides',label:'Sides'},{key:'dressings',label:'Dressings'}];
 
   const cart = state._restCart||{};
@@ -5248,7 +5302,7 @@ function deleteSavedRestOrder(cartKey, idx){
 function addRestItemByKey(cartKey, sectionKey, itemIdx){
   if(!state._restCart)state._restCart={};
   if(!state._restCart[cartKey])state._restCart[cartKey]=[];
-  const data = cartKey==='atis' ? ATIS_MEALS : cartKey==='saladkitchen' ? SALAD_KITCHEN_MEALS : SALAD_PROJECT_MEALS;
+  const data = cartKey==='atis' ? ATIS_MEALS : cartKey==='saladkitchen' ? SALAD_KITCHEN_MEALS : cartKey==='sushidog' ? SUSHI_DOG_MEALS : SALAD_PROJECT_MEALS;
   const item = data[sectionKey]&&data[sectionKey][itemIdx];
   if(!item)return;
   state._restCart[cartKey].push({...item});
@@ -5358,7 +5412,7 @@ async function getRestSuggestion(cartKey, restName){
   const gutBoosters=GUT_BOOSTERS.filter(g=>g.s>=88).map(g=>g.l).join(", ");
 
   // Build menu context from actual data
-  const data = cartKey==='atis' ? ATIS_MEALS : cartKey==='saladkitchen' ? SALAD_KITCHEN_MEALS : SALAD_PROJECT_MEALS;
+  const data = cartKey==='atis' ? ATIS_MEALS : cartKey==='saladkitchen' ? SALAD_KITCHEN_MEALS : cartKey==='sushidog' ? SUSHI_DOG_MEALS : SALAD_PROJECT_MEALS;
   const menuContext = Object.entries(data).map(([section,items])=>
     `${section}: ${items.map(i=>i.name).join(', ')}`
   ).join('\n');
