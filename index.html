@@ -5274,7 +5274,7 @@ function renderRestaurantCalc(container, which){
                 ${item.tags?`<span style="font-size:9px;${item.tags.startsWith('⚠️')?'color:#d04040':'color:var(--muted)'}">${item.tags}</span>`:''}
                 ${tags.badges.map(b=>`<span style="font-size:9px;padding:1px 5px;border-radius:10px;background:${b.bg};color:${b.color};white-space:nowrap">${b.label}</span>`).join('')}
               </div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px">${item.kcal} kcal · ${item.p}g P · ${item.c}g C · ${item.f}g F${item.fi?` · ${item.fi}g fibre`:''}${item.sug!==undefined?` · ${item.sug}g sugar`:''}${item.salt!==undefined?` · ${item.salt}g salt`:''}</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px">${Math.round(item.kcal)} kcal · ${+parseFloat((+item.p).toFixed(1))}g P · ${+parseFloat((+item.c).toFixed(1))}g C · ${+parseFloat((+item.f).toFixed(1))}g F${item.fi?` · ${+parseFloat((+item.fi).toFixed(1))}g fibre`:''}${item.sug!==undefined?` · ${+parseFloat((+item.sug).toFixed(1))}g sugar`:''}${item.salt!==undefined?` · ${+parseFloat((+item.salt).toFixed(2))}g salt`:''}</div>
             </div>
             <button onclick="addRestItemByKey('${cartKey}','${sec.key}',${(data[sec.key]||[]).indexOf(item)})" style="padding:5px 10px;background:var(--ink);color:white;border:none;font-family:inherit;font-size:10px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:2px;white-space:nowrap;flex-shrink:0">+ Add</button>
           </div>`;
@@ -6019,7 +6019,7 @@ function detectGutBoostersFromIngredients(text){
     "kefir":"g_kefir","avocado":"g_avocado","avo smash":"g_avocado","avo half":"g_avocado",
     "lentil":"g_lentils","chickpea":"g_lentils","kidney bean":"g_lentils","black bean":"g_lentils","butter bean":"g_lentils","cannellini":"g_lentils","borlotti":"g_lentils","haricot":"g_lentils","legume":"g_lentils",
     "edamame":"g_lentils","peas":"g_peas","beansprout":"g_beansprouts","green bean":"g_greenbeans",
-    "spring onion":"g_leeks","shallot":"g_leeks","leek":"g_leeks","garlic":"g_garlic",
+    "spring onion":"g_leeks","shallot":"g_leeks","leek":"g_leeks","onion":"g_leeks","garlic":"g_garlic",
     "grapefruit":"g_grapefruit","strawberr":"g_strawberries","blueberr":"g_strawberries","raspberr":"g_strawberries","blackberr":"g_strawberries","kiwi":"g_strawberries",
     "orange":"g_oranges","clementine":"g_oranges","easy peeler":"g_oranges","satsuma":"g_oranges","mandarin":"g_oranges","tangerine":"g_oranges",
     "kimchi":"g_kimchi","sauerkraut":"g_kimchi","kombucha":"g_kimchi",
