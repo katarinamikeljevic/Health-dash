@@ -7237,7 +7237,7 @@ function importWeekMon2026W23(btn){
   setTimeout(()=>renderFood(),400);
 }
 
-function copyGutReport(bugStats){
+function copyGutReport(bugStats,btn){
   const today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   const lines=[
     `Gut Health 4-Week Report — ${today}`,
@@ -7261,13 +7261,14 @@ function copyGutReport(bugStats){
   lines.push('Context: I track a gut health dashboard based on my Zoe microbiome results.');
   lines.push('18/50 good bugs, 19/50 bad bugs. Cholesterol 6.69 mmol/L. All 4 clusters POOR.');
   const text=lines.join('\n');
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn=event.target;
-    btn.textContent='✓ Copied!';
-    btn.style.background='rgba(74,140,106,.25)';
-    btn.style.borderColor='rgba(74,140,106,.5)';
-    btn.style.color='#4a8c6a';
-    setTimeout(()=>{btn.textContent='📋 Copy report for Claude';btn.style.background='rgba(184,147,74,.15)';btn.style.borderColor='rgba(184,147,74,.35)';btn.style.color='#b8934a';},2500);
+  function confirm(){
+    if(btn){btn.textContent='✓ Copied!';btn.style.background='rgba(74,140,106,.25)';btn.style.borderColor='rgba(74,140,106,.5)';btn.style.color='#4a8c6a';
+    setTimeout(()=>{btn.textContent='📋 Copy report for Claude';btn.style.background='rgba(184,147,74,.15)';btn.style.borderColor='rgba(184,147,74,.35)';btn.style.color='#b8934a';},2500);}
+  }
+  navigator.clipboard.writeText(text).then(confirm).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    confirm();
   });
 }
 
@@ -7333,7 +7334,7 @@ function showMonthlyCheckin(){
     </div>
     ${rows}
     <div style="font-size:10px;color:#807870;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">Each number = average days/week you fed that bug over the last 4 rolling weeks.</div>
-    <button onclick="copyGutReport(${JSON.stringify(bugStats.map(b=>({l:b.l,label:b.label,avg:b.avg,t:b.t,pct:b.pct,foods:GUT_FOODS.filter(f=>f.bugs.includes(b.id)).map(f=>f.l.split(' /')[0]).join(', ')})))})" style="width:100%;margin-top:10px;padding:10px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);color:#b8934a;font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">📋 Copy report for Claude</button>
+    <button onclick="copyGutReport(${JSON.stringify(bugStats.map(b=>({l:b.l,label:b.label,avg:b.avg,t:b.t,pct:b.pct,foods:GUT_FOODS.filter(f=>f.bugs.includes(b.id)).map(f=>f.l.split(' /')[0]).join(', ')})))},this)" style="width:100%;margin-top:10px;padding:10px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);color:#b8934a;font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">📋 Copy report for Claude</button>
   </div>`;
   document.body.appendChild(overlay);
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
