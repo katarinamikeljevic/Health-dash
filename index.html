@@ -4434,21 +4434,35 @@ function renderFood(){
   const macroViewMode=state._macroView||'cumulative';
   const byMealHTML=(()=>{
     const meals=ms.meals||[];
-    if(!meals.length) return `<div style="font-size:12px;color:var(--muted);padding:10px 0;font-style:italic">No meals logged yet</div>`;
+    if(!meals.length) return `<div style="font-size:12px;color:var(--muted);padding:10px 0;font-style:italic">No meals logged yet — log a meal to see per-meal breakdown</div>`;
+    const pMax=115,cMax=130,fMax=50,kMax=1550;
     return meals.map((m,i)=>{
       const f=+(m.fat||0),p=+(m.protein||0),c=+(m.carbs||0),k=+(m.kcal||0),fi=+(m.fibre||0);
-      const fatColor=f<10?'var(--red)':f<=15?'#2980b9':'var(--red)';
-      return `<div style="padding:10px 0;border-bottom:1px solid var(--border)">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px">
-          <span style="font-size:12px;color:var(--text);font-weight:500">${m.name}</span>
-          <span style="font-size:10px;color:var(--muted)">${m.time} · ${k} kcal</span>
+      const fatLow=f<10;
+      const fatColor=fatLow?'var(--red)':'#2980b9';
+      const pPct=Math.min(p/pMax*100,100),cPct=Math.min(c/cMax*100,100),fPct=Math.min(f/fMax*100,100),kPct=Math.min(k/kMax*100,100);
+      return `<div style="padding:11px 0;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
+          <span style="font-size:12.5px;font-weight:500;color:var(--text)">${m.name}</span>
+          <span style="font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${m.time} · ${Math.round(k)} kcal</span>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span style="font-size:11px;color:#f5a623">${p.toFixed(1)}g P</span>
-          <span style="font-size:11px;color:#27ae60">${c.toFixed(1)}g C</span>
-          <span style="font-size:11px;color:${fatColor};font-weight:${f<10?'600':'400'}">${f.toFixed(1)}g F${f<10?' ⚠':''}</span>
-          ${fi?`<span style="font-size:11px;color:var(--muted)">${fi.toFixed(1)}g fibre</span>`:''}
+        <div style="display:grid;grid-template-columns:28px 1fr 36px;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-size:9px;color:#f5a623;letter-spacing:.5px">P</span>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pPct}%;background:#f5a623;border-radius:3px"></div></div>
+          <span style="font-size:10px;color:#f5a623;text-align:right">${p.toFixed(1)}g</span>
         </div>
+        <div style="display:grid;grid-template-columns:28px 1fr 36px;align-items:center;gap:6px;margin-bottom:4px">
+          <span style="font-size:9px;color:#27ae60;letter-spacing:.5px">C</span>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${cPct}%;background:#27ae60;border-radius:3px"></div></div>
+          <span style="font-size:10px;color:#27ae60;text-align:right">${c.toFixed(1)}g</span>
+        </div>
+        <div style="display:grid;grid-template-columns:28px 1fr 36px;align-items:center;gap:6px;${fatLow?'margin-bottom:4px':''}">
+          <span style="font-size:9px;color:${fatColor};letter-spacing:.5px">F</span>
+          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${fPct}%;background:${fatColor};border-radius:3px"></div></div>
+          <span style="font-size:10px;color:${fatColor};text-align:right;font-weight:${fatLow?'600':'400'}">${f.toFixed(1)}g</span>
+        </div>
+        ${fatLow?`<div style="font-size:10px;color:var(--red);padding:3px 0 0">⚠ Under 10g fat — add nuts, oil, or salmon to this meal</div>`:''}
+        ${fi?`<div style="font-size:10px;color:var(--muted);margin-top:3px">${fi.toFixed(1)}g fibre</div>`:''}
       </div>`;
     }).join('');
   })();
