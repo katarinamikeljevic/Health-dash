@@ -2287,10 +2287,10 @@ function renderMacroSplit(){
 
   const weekday=[
     {label:"Kefir",      p:[25,30],  c:[6,10],   f:[5,8],   kcal:"~250"},
-    {label:"Breakfast",  p:[20,25],  c:[18,28],  f:[8,12],  kcal:"280–320"},
-    {label:"Lunch",      p:[30,37],  c:[48,58],  f:[12,16], kcal:"450–520"},
+    {label:"Breakfast",  p:[20,25],  c:[18,28],  f:[12,15], kcal:"280–320"},
+    {label:"Lunch",      p:[30,37],  c:[48,58],  f:[12,15], kcal:"450–520"},
     {label:"Snack",      p:[8,13],   c:[4,8],    f:[2,4],   kcal:"80–130", optional:true},
-    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[8,12],  kcal:"280–340"},
+    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[10,15], kcal:"280–340"},
   ];
   const weekend=[
     {label:"Brunch",     p:[38,48],  c:[22,38],  f:[16,22], kcal:"480–560"},
@@ -2344,6 +2344,10 @@ function renderMacroSplit(){
     <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap">
       <span style="font-size:10px;color:var(--red)">⚠ Carbs end at lunch</span>
       <span style="font-size:10px;color:var(--muted)">· Last meal 3h before bed</span>
+    </div>
+    <div style="margin-top:10px;padding:10px 12px;background:rgba(41,128,185,.08);border-left:3px solid #2980b9;border-radius:0 2px 2px 0">
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#2980b9;margin-bottom:4px">🔵 Fat distribution rule</div>
+      <div style="font-size:11px;color:var(--soft);line-height:1.6">Breakfast 12–15g · Lunch 12–15g · Dinner 10–15g. <strong style="color:var(--text)">Don't let breakfast drop below 10g</strong> — even on shake-only mornings. If your kefir shake is under 10g fat, add a few nuts, a smoked salmon pot, or an extra drizzle of oil to close the gap. That 12–15g at breakfast is what blunts hunger for 4+ hours.</div>
     </div>`;
 }
 
@@ -4427,15 +4431,40 @@ function renderFood(){
       </div>
     </div>`).join("")}
   </div>`:"";
+  const macroViewMode=state._macroView||'cumulative';
+  const byMealHTML=(()=>{
+    const meals=ms.meals||[];
+    if(!meals.length) return `<div style="font-size:12px;color:var(--muted);padding:10px 0;font-style:italic">No meals logged yet</div>`;
+    return meals.map((m,i)=>{
+      const f=+(m.fat||0),p=+(m.protein||0),c=+(m.carbs||0),k=+(m.kcal||0),fi=+(m.fibre||0);
+      const fatColor=f<10?'var(--red)':f<=15?'#2980b9':'var(--red)';
+      return `<div style="padding:10px 0;border-bottom:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px">
+          <span style="font-size:12px;color:var(--text);font-weight:500">${m.name}</span>
+          <span style="font-size:10px;color:var(--muted)">${m.time} · ${k} kcal</span>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span style="font-size:11px;color:#f5a623">${p.toFixed(1)}g P</span>
+          <span style="font-size:11px;color:#27ae60">${c.toFixed(1)}g C</span>
+          <span style="font-size:11px;color:${fatColor};font-weight:${f<10?'600':'400'}">${f.toFixed(1)}g F${f<10?' ⚠':''}</span>
+          ${fi?`<span style="font-size:11px;color:var(--muted)">${fi.toFixed(1)}g fibre</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+  })();
   document.getElementById("macroCard").innerHTML=`<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <div class="card-label" style="margin-bottom:0">Today's Macros</div>
       <div style="display:flex;gap:6px">
+        <div style="display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden">
+          <button onclick="state._macroView='cumulative';renderFood()" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 8px;border:none;cursor:pointer;font-family:inherit;background:${macroViewMode==='cumulative'?'var(--ink)':'var(--bg)'};color:${macroViewMode==='cumulative'?'var(--gold)':'var(--muted)'}">Total</button>
+          <button onclick="state._macroView='meal';renderFood()" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 8px;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit;background:${macroViewMode==='meal'?'var(--ink)':'var(--bg)'};color:${macroViewMode==='meal'?'var(--gold)':'var(--muted)'}">By meal</button>
+        </div>
         <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
         <button onclick="copyToClaudeClipboard()" id="copyToClaudeBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:rgba(184,147,74,.1);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">✉️ Claude</button>
       </div>
     </div>
-    ${bars}${mealLog}
+    ${macroViewMode==='cumulative'?bars+mealLog:byMealHTML}
   </div>`;
   // Combined logger rendered by renderFoodLogger — skip old meal logger
   if(false){document.getElementById("_skip").innerHTML=`<div class="card">
