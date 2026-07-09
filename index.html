@@ -7339,9 +7339,14 @@ function showMonthlyCheckin(){
     </div>
     ${rows}
     <div style="font-size:10px;color:#807870;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">Each number = average days/week you fed that bug over the last 4 rolling weeks.</div>
-    <button onclick="copyGutReport(${JSON.stringify(bugStats.map(b=>({l:b.l,label:b.label,avg:b.avg,t:b.t,pct:b.pct,foods:GUT_FOODS.filter(f=>f.bugs.includes(b.id)).map(f=>f.l.split(' /')[0]).join(', ')})))},this)" style="width:100%;margin-top:10px;padding:10px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);color:#b8934a;font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">📋 Copy report for Claude</button>
+    <button id="gutReportCopyBtn" style="width:100%;margin-top:10px;padding:10px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);color:#b8934a;font-family:inherit;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-radius:3px">📋 Copy report for Claude</button>
   </div>`;
   document.body.appendChild(overlay);
+  const copyBtn=document.getElementById('gutReportCopyBtn');
+  if(copyBtn){
+    const reportData=bugStats.map(b=>({l:b.l,label:b.label,avg:b.avg,t:b.t,pct:b.pct,g:b.g,foods:GUT_FOODS.filter(f=>f.bugs.includes(b.id)).map(f=>f.l.split(' /')[0]).join(', ')}));
+    copyBtn.onclick=()=>copyGutReport(reportData,copyBtn);
+  }
   overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
 }
 
