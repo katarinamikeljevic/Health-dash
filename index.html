@@ -2284,28 +2284,50 @@ function renderMacroSplit(){
   const el=document.getElementById("macroSplitCard");
   if(!el)return;
   const isWeekend=state._macroSplitView==='weekend';
+  const isCumul=state._macroSplitMode==='cumulative';
 
   const weekday=[
-    {label:"Kefir",      p:[25,30],  c:[6,10],   f:[5,8],   kcal:"~250"},
-    {label:"Breakfast",  p:[20,25],  c:[18,28],  f:[12,15], kcal:"280–320"},
-    {label:"Lunch",      p:[30,37],  c:[48,58],  f:[12,15], kcal:"450–520"},
-    {label:"Snack",      p:[8,13],   c:[4,8],    f:[2,4],   kcal:"80–130", optional:true},
-    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[10,15], kcal:"280–340"},
+    {label:"Kefir",      p:[25,30],  c:[6,10],   f:[5,8],   kcal:[250,250]},
+    {label:"Breakfast",  p:[20,25],  c:[18,28],  f:[12,15], kcal:[280,320]},
+    {label:"Lunch",      p:[30,37],  c:[48,58],  f:[12,15], kcal:[450,520]},
+    {label:"Snack",      p:[8,13],   c:[4,8],    f:[2,4],   kcal:[80,130], optional:true},
+    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[10,15], kcal:[280,340]},
   ];
   const weekend=[
-    {label:"Brunch",     p:[38,48],  c:[22,38],  f:[16,22], kcal:"480–560"},
-    {label:"Lunch",      p:[22,28],  c:[0,8],    f:[8,12],  kcal:"250–350"},
-    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[8,12],  kcal:"280–340"},
+    {label:"Brunch",     p:[38,48],  c:[22,38],  f:[16,22], kcal:[480,560]},
+    {label:"Lunch",      p:[22,28],  c:[0,8],    f:[8,12],  kcal:[250,350]},
+    {label:"Dinner",     p:[26,34],  c:[0,6],    f:[8,12],  kcal:[280,340]},
   ];
 
   const meals=isWeekend?weekend:weekday;
 
+  // Build cumulative rows: each entry sums all meals up to and including that index
+  const cumulMeals=meals.map((m,i)=>{
+    const prev=meals.slice(0,i+1);
+    const label=prev.map(x=>x.label).join(' + ');
+    return {
+      label,
+      p:[prev.reduce((s,x)=>s+x.p[0],0),prev.reduce((s,x)=>s+x.p[1],0)],
+      c:[prev.reduce((s,x)=>s+x.c[0],0),prev.reduce((s,x)=>s+x.c[1],0)],
+      f:[prev.reduce((s,x)=>s+x.f[0],0),prev.reduce((s,x)=>s+x.f[1],0)],
+      kcal:[prev.reduce((s,x)=>s+x.kcal[0],0),prev.reduce((s,x)=>s+x.kcal[1],0)],
+    };
+  });
+
+  const rows=isCumul?cumulMeals:meals;
+
   el.innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <div class="card-label" style="margin:0">Daily Macro Blueprint</div>
-      <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:2px;overflow:hidden">
-        <button onclick="state._macroSplitView='weekday';renderMacroSplit()" style="padding:5px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;background:${!isWeekend?'var(--ink)':'var(--bg)'};color:${!isWeekend?'var(--gold)':'var(--muted)'}">Week</button>
-        <button onclick="state._macroSplitView='weekend';renderMacroSplit()" style="padding:5px 10px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit;background:${isWeekend?'var(--ink)':'var(--bg)'};color:${isWeekend?'var(--gold)':'var(--muted)'}">Weekend</button>
+      <div style="display:flex;gap:4px">
+        <div style="display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden">
+          <button onclick="state._macroSplitMode='meal';renderMacroSplit()" style="padding:4px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;background:${!isCumul?'var(--ink)':'var(--bg)'};color:${!isCumul?'var(--gold)':'var(--muted)'}">Per meal</button>
+          <button onclick="state._macroSplitMode='cumulative';renderMacroSplit()" style="padding:4px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit;background:${isCumul?'var(--ink)':'var(--bg)'};color:${isCumul?'var(--gold)':'var(--muted)'}">Running total</button>
+        </div>
+        <div style="display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden">
+          <button onclick="state._macroSplitView='weekday';renderMacroSplit()" style="padding:4px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;background:${!isWeekend?'var(--ink)':'var(--bg)'};color:${!isWeekend?'var(--gold)':'var(--muted)'}">Week</button>
+          <button onclick="state._macroSplitView='weekend';renderMacroSplit()" style="padding:4px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit;background:${isWeekend?'var(--ink)':'var(--bg)'};color:${isWeekend?'var(--gold)':'var(--muted)'}">Weekend</button>
+        </div>
       </div>
     </div>
     <div style="display:flex;gap:12px;margin-bottom:14px">
@@ -2313,21 +2335,22 @@ function renderMacroSplit(){
       <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:#27ae60;border-radius:2px"></div><span style="font-size:10px;color:var(--muted)">Carbs</span></div>
       <div style="display:flex;align-items:center;gap:4px"><div style="width:8px;height:8px;background:#2980b9;border-radius:2px"></div><span style="font-size:10px;color:var(--muted)">Fat</span></div>
     </div>
-    ${meals.map(m=>{
-      const pW=Math.round((m.p[0]+m.p[1])/2/115*100);
-      const cW=Math.round((m.c[0]+m.c[1])/2/130*100);
-      const fW=Math.round((m.f[0]+m.f[1])/2/50*100);
+    ${rows.map(m=>{
+      const pAvg=(m.p[0]+m.p[1])/2,cAvg=(m.c[0]+m.c[1])/2,fAvg=(m.f[0]+m.f[1])/2;
+      const pMax=isCumul?115:115,cMax=isCumul?130:130,fMax=isCumul?50:50;
+      const pW=Math.round(pAvg/pMax*100),cW=Math.round(cAvg/cMax*100),fW=Math.round(fAvg/fMax*100);
       const total=pW+cW+fW;
       const pPct=Math.round(pW/total*100);
       const cPct=Math.round(cW/total*100);
       const fPct=100-pPct-cPct;
+      const kcalStr=Array.isArray(m.kcal)?`${m.kcal[0]}–${m.kcal[1]}`:`${m.kcal}`;
       return `<div style="margin-bottom:10px">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
           <div style="display:flex;align-items:center;gap:6px">
-            <span style="font-size:12px;font-weight:500;color:var(--text)">${m.label}</span>
+            <span style="font-size:${isCumul?'11px':'12px'};font-weight:500;color:var(--text)">${m.label}</span>
             ${m.optional?`<span style="font-size:9px;color:var(--muted);letter-spacing:1px">optional</span>`:''}
           </div>
-          <span style="font-size:10px;color:var(--muted)">${m.kcal} kcal</span>
+          <span style="font-size:10px;color:var(--muted)">${kcalStr} kcal</span>
         </div>
         <div style="display:flex;height:8px;border-radius:4px;overflow:hidden;gap:1px">
           <div style="width:${pPct}%;background:#f5a623"></div>
@@ -4431,54 +4454,15 @@ function renderFood(){
       </div>
     </div>`).join("")}
   </div>`:"";
-  const macroViewMode=state._macroView||'cumulative';
-  const byMealHTML=(()=>{
-    const meals=ms.meals||[];
-    if(!meals.length) return `<div style="font-size:12px;color:var(--muted);padding:10px 0;font-style:italic">No meals logged yet — log a meal to see per-meal breakdown</div>`;
-    const pMax=115,cMax=130,fMax=50,kMax=1550;
-    return meals.map((m,i)=>{
-      const f=+(m.fat||0),p=+(m.protein||0),c=+(m.carbs||0),k=+(m.kcal||0),fi=+(m.fibre||0);
-      const fatLow=f<10;
-      const fatColor=fatLow?'var(--red)':'#2980b9';
-      const pPct=Math.min(p/pMax*100,100),cPct=Math.min(c/cMax*100,100),fPct=Math.min(f/fMax*100,100),kPct=Math.min(k/kMax*100,100);
-      return `<div style="padding:11px 0;border-bottom:1px solid var(--border)">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
-          <span style="font-size:12.5px;font-weight:500;color:var(--text)">${m.name}</span>
-          <span style="font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${m.time} · ${Math.round(k)} kcal</span>
-        </div>
-        <div style="display:grid;grid-template-columns:28px 1fr 36px;align-items:center;gap:6px;margin-bottom:4px">
-          <span style="font-size:9px;color:#f5a623;letter-spacing:.5px">P</span>
-          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${pPct}%;background:#f5a623;border-radius:3px"></div></div>
-          <span style="font-size:10px;color:#f5a623;text-align:right">${p.toFixed(1)}g</span>
-        </div>
-        <div style="display:grid;grid-template-columns:28px 1fr 36px;align-items:center;gap:6px;margin-bottom:4px">
-          <span style="font-size:9px;color:#27ae60;letter-spacing:.5px">C</span>
-          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${cPct}%;background:#27ae60;border-radius:3px"></div></div>
-          <span style="font-size:10px;color:#27ae60;text-align:right">${c.toFixed(1)}g</span>
-        </div>
-        <div style="display:grid;grid-template-columns:28px 1fr 36px;align-items:center;gap:6px;${fatLow?'margin-bottom:4px':''}">
-          <span style="font-size:9px;color:${fatColor};letter-spacing:.5px">F</span>
-          <div style="height:6px;background:var(--border);border-radius:3px;overflow:hidden"><div style="height:100%;width:${fPct}%;background:${fatColor};border-radius:3px"></div></div>
-          <span style="font-size:10px;color:${fatColor};text-align:right;font-weight:${fatLow?'600':'400'}">${f.toFixed(1)}g</span>
-        </div>
-        ${fatLow?`<div style="font-size:10px;color:var(--red);padding:3px 0 0">⚠ Under 10g fat — add nuts, oil, or salmon to this meal</div>`:''}
-        ${fi?`<div style="font-size:10px;color:var(--muted);margin-top:3px">${fi.toFixed(1)}g fibre</div>`:''}
-      </div>`;
-    }).join('');
-  })();
   document.getElementById("macroCard").innerHTML=`<div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <div class="card-label" style="margin-bottom:0">Today's Macros</div>
       <div style="display:flex;gap:6px">
-        <div style="display:flex;border:1px solid var(--border);border-radius:2px;overflow:hidden">
-          <button onclick="state._macroView='cumulative';renderFood()" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 8px;border:none;cursor:pointer;font-family:inherit;background:${macroViewMode==='cumulative'?'var(--ink)':'var(--bg)'};color:${macroViewMode==='cumulative'?'var(--gold)':'var(--muted)'}">Total</button>
-          <button onclick="state._macroView='meal';renderFood()" style="font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:5px 8px;border:none;border-left:1px solid var(--border);cursor:pointer;font-family:inherit;background:${macroViewMode==='meal'?'var(--ink)':'var(--bg)'};color:${macroViewMode==='meal'?'var(--gold)':'var(--muted)'}">By meal</button>
-        </div>
         <button onclick="copyMacros()" id="copyMacroBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--ink);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">📋 Copy</button>
         <button onclick="copyToClaudeClipboard()" id="copyToClaudeBtn" style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:rgba(184,147,74,.1);color:var(--gold);border:1px solid rgba(184,147,74,.3);cursor:pointer;font-family:inherit;border-radius:2px;flex-shrink:0">✉️ Claude</button>
       </div>
     </div>
-    ${macroViewMode==='cumulative'?bars+mealLog:byMealHTML}
+    ${bars}${mealLog}
   </div>`;
   // Combined logger rendered by renderFoodLogger — skip old meal logger
   if(false){document.getElementById("_skip").innerHTML=`<div class="card">
