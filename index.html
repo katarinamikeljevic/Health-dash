@@ -7266,14 +7266,14 @@ function copyGutReport(bugStats,btn){
   lines.push('Context: I track a gut health dashboard based on my Zoe microbiome results.');
   lines.push('18/50 good bugs, 19/50 bad bugs. Cholesterol 6.69 mmol/L. All 4 clusters POOR.');
   const text=lines.join('\n');
-  function confirm(){
+  function onCopied(){
     if(btn){btn.textContent='✓ Copied!';btn.style.background='rgba(74,140,106,.25)';btn.style.borderColor='rgba(74,140,106,.5)';btn.style.color='#4a8c6a';
     setTimeout(()=>{btn.textContent='📋 Copy report for Claude';btn.style.background='rgba(184,147,74,.15)';btn.style.borderColor='rgba(184,147,74,.35)';btn.style.color='#b8934a';},2500);}
   }
-  navigator.clipboard.writeText(text).then(confirm).catch(()=>{
+  navigator.clipboard.writeText(text).then(onCopied).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
     document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    confirm();
+    onCopied();
   });
 }
 
