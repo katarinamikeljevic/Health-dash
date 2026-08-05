@@ -205,6 +205,7 @@ button,input,textarea,select{font-family:inherit}
 
 <!-- TABS -->
 <nav class="tabs">
+  <button class="tab" onclick="showTab('wedding',this)">💍 Wedding</button>
   <button class="tab" onclick="showTab('routine',this)">Routine</button>
   <button class="tab active" onclick="showTab('food',this)">Food Log</button>
   <button class="tab" onclick="showTab('meals',this)">Meals</button>
@@ -214,6 +215,136 @@ button,input,textarea,select{font-family:inherit}
   <button class="tab" onclick="showTab('blood',this)">Blood Goals</button>
 </nav>
 <div style="text-align:center;font-size:9px;color:rgba(255,255,255,.2);padding:2px 0;letter-spacing:1px">v17 Jun 2026</div>
+
+<!-- WEDDING TAB -->
+<div id="tab-wedding" class="panel">
+  <div style="padding:16px">
+
+    <!-- Header -->
+    <div style="background:linear-gradient(135deg,#2a1e2a,#1e1428);border:1px solid rgba(184,147,74,.25);border-radius:12px;padding:18px 20px;margin-bottom:16px;text-align:center">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(184,147,74,.6);margin-bottom:6px">Next 4–6 Weeks</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:rgba(255,255,255,.9);font-style:italic">Wedding Prep Routine</div>
+    </div>
+
+    <!-- Morning Routine -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">☀️ Morning Routine</div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Wake up and get <strong>5–10 minutes of daylight outside</strong> immediately (10–20 minutes if overcast).</li>
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Do this before skincare and SPF if possible.</li>
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Apply skincare and SPF afterwards.</li>
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Eat a <strong>protein-rich breakfast</strong> within 1–2 hours of waking.</li>
+      </ul>
+    </div>
+
+    <!-- Hydration -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">💧 Hydration</div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Drink <strong>2–2.5 L water/day</strong>.</li>
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Sip water steadily — <strong>150–250 ml every 20–30 min</strong>, not 500 ml in one go.</li>
+        <li style="font-size:13px;color:var(--text);line-height:1.5">☐ Only use electrolytes after long workouts or excessive sweating.</li>
+      </ul>
+    </div>
+
+    <!-- Nutrition -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">🍽️ Nutrition</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase">Daily targets</div>
+      <ul style="margin:0 0 14px;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text)">☐ <strong>110–120 g protein/day</strong></li>
+        <li style="font-size:13px;color:var(--text)">☐ Plenty of vegetables</li>
+        <li style="font-size:13px;color:var(--text)">☐ Eat at regular times each day</li>
+      </ul>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Great foods</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        ${["Chicken","Turkey","Salmon","White fish","Eggs","Greek yogurt","Cottage cheese","Rice","Potatoes","Oats","Sourdough","Spinach","Courgette","Cucumber","Asparagus","Berries","Kiwi","Papaya","Pineapple (if it agrees with you)"].map(f=>`<div style="font-size:12px;color:var(--text);padding:3px 0">✅ ${f}</div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Fruit -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">🍓 Fruit</div>
+      <div style="font-size:13px;color:var(--soft);margin-bottom:10px;line-height:1.5">Don't cut fruit out in the evening.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Good evening choices</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px">
+        ${["Berries","Kiwi","Cherries","Pineapple","Citrus"].map(f=>`<div style="font-size:12px;color:var(--text);background:rgba(80,200,120,.08);border:1px solid rgba(80,200,120,.2);border-radius:6px;padding:4px 10px">✅ ${f}</div>`).join('')}
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">If prone to bloating, limit</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        ${["Apples","Pears","Mango","Watermelon"].map(f=>`<div style="font-size:12px;color:var(--text);background:rgba(230,160,50,.08);border:1px solid rgba(230,160,50,.2);border-radius:6px;padding:4px 10px">⚠️ ${f}</div>`).join('')}
+      </div>
+    </div>
+
+    <!-- Limit -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">🚫 Limit <span style="font-size:11px;font-weight:400;color:var(--muted)">(especially final 3–5 days)</span></div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        ${["Alcohol","Salty food","Fizzy drinks","Sugar alcohols (protein bars, ‘diet’ sweets)"].map(f=>`<li style="font-size:13px;color:var(--text)">☐ ${f}</li>`).join('')}
+      </ul>
+    </div>
+
+    <!-- Exercise -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">💪 Exercise</div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text)">☐ 2–3 strength sessions/week</li>
+        <li style="font-size:13px;color:var(--text)">☐ 2 Pilates sessions/week</li>
+        <li style="font-size:13px;color:var(--text)">☐ Walk 8,000–12,000 steps/day</li>
+        <li style="font-size:13px;color:var(--text)">☐ Prioritise recovery over exhausting workouts</li>
+      </ul>
+    </div>
+
+    <!-- Sleep -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">😴 Sleep</div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text)">☐ <strong>7.5–9 hours</strong> every night</li>
+        <li style="font-size:13px;color:var(--text)">☐ Consistent bedtime</li>
+        <li style="font-size:13px;color:var(--text)">☐ Morning daylight exposure</li>
+        <li style="font-size:13px;color:var(--text)">☐ Limit screen time before bed</li>
+      </ul>
+    </div>
+
+    <!-- Skin -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">✨ Skin</div>
+      <div style="font-size:13px;color:var(--soft);margin-bottom:8px;line-height:1.5">Keep skincare simple and consistent.</div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none">
+        <li style="font-size:13px;color:var(--text)">☐ Avoid trying new products or treatments close to the wedding</li>
+      </ul>
+    </div>
+
+    <!-- Reduce Puffiness -->
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-label">💧 Reduce Puffiness</div>
+      <ul style="margin:0;padding:0 0 0 4px;list-style:none;display:flex;flex-direction:column;gap:8px">
+        <li style="font-size:13px;color:var(--text)">☐ Keep sodium intake consistent — don't drastically cut salt</li>
+        <li style="font-size:13px;color:var(--text)">☐ Don't cut carbohydrates</li>
+        <li style="font-size:13px;color:var(--text)">☐ Don't dehydrate yourself</li>
+        <li style="font-size:13px;color:var(--text)">☐ Don't skip meals</li>
+        <li style="font-size:13px;color:var(--text)">☐ Eat slowly and chew well</li>
+        <li style="font-size:13px;color:var(--text)">☐ Finish dinner <strong>2–3 hours before bed</strong></li>
+      </ul>
+    </div>
+
+    <!-- Final 72 Hours -->
+    <div class="card" style="margin-bottom:12px;border:1px solid rgba(184,147,74,.3);background:rgba(184,147,74,.04)">
+      <div class="card-label" style="color:var(--gold)">⭐ Final 72 Hours</div>
+      <div style="font-size:13px;color:var(--soft);margin-bottom:12px;line-height:1.5">Keep everything familiar.</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Focus on</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px">
+        ${["Lean protein","Potatoes / rice","Cooked vegetables","Fruit","Plenty of water"].map(f=>`<div style="font-size:13px;color:var(--text)">✅ ${f}</div>`).join('')}
+        <div style="font-size:13px;color:rgba(200,120,80,.8)">⚠️ Cut legumes out</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Avoid</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        ${["Alcohol","Very salty meals","Huge desserts","Late-night eating"].map(f=>`<div style="font-size:13px;color:var(--text)">🚫 ${f}</div>`).join('')}
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- ROUTINE TAB -->
 <div id="tab-routine" class="panel">
