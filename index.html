@@ -1881,9 +1881,14 @@ button,input,textarea,select{font-family:inherit}
 <!-- BLOOD TAB -->
 <div id="tab-blood" class="panel">
   <div style="padding:20px 16px 60px">
-    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">28 June 2026 Results</div>
-    <div class="section-title">Your Blood Panel</div>
-    <div class="tip-box"><strong style="color:var(--gold)">Big improvement:</strong> Cholesterol down from 6.69 → 4.66 ✓ LDL down to 2.23 ✓ Cortisol still slightly elevated (543) — keep managing. T3 low and B12 above range — both to mention to GP. Everything else excellent.</div>
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+      <div>
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">28 June 2026 Results</div>
+        <div class="section-title" style="margin-bottom:0">Your Blood Panel</div>
+      </div>
+      <button onclick="exportBloodResults(this)" style="flex-shrink:0;margin-top:4px;padding:8px 14px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);border-radius:8px;color:var(--gold);font-size:11px;letter-spacing:1px;cursor:pointer">📋 Export</button>
+    </div>
+    <div class="tip-box" style="margin-top:12px"><strong style="color:var(--gold)">Big improvement:</strong> Cholesterol down from 6.69 → 4.66 ✓ LDL down to 2.23 ✓ Cortisol still slightly elevated (543) — keep managing. T3 low and B12 above range — both to mention to GP. Everything else excellent.</div>
 
     <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:0 0 10px">Monitor These</div>
     <div class="blood-card watch"><div class="blood-name">Morning Cortisol</div><div class="blood-val">543 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Range 133–537 — slightly above upper limit · affects belly fat &amp; puffiness</div><span class="blood-badge badge-watch">Slightly High</span><div class="blood-tip">↗ 8h sleep, magnesium 300mg at night, gentle morning walks<br>↘ Avoid overtraining, caffeine after 2pm, high stress</div></div>
@@ -7751,6 +7756,43 @@ It's ${mealTime} time. Based on everything above, what should I eat next? Be spe
     document.body.removeChild(ta);
     const btn=document.getElementById("copyToClaudeBtn");
     if(btn){btn.textContent="✓ Copied";setTimeout(()=>{btn.textContent="✉️ Claude";},2000);}
+  });
+}
+
+function exportBloodResults(btn){
+  const text=`BLOOD PANEL RESULTS — 28 June 2026
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠ MONITOR THESE
+Morning Cortisol    543 nmol/L   [Range 133–537] — Slightly High
+T3 (Active Thyroid) 1.1 nmol/L   [Range 1.3–3.1] — Low · GP Review
+Vitamin B12         934 pg/mL    [Range 197–771] — Above Range
+
+✅ EXCELLENT IMPROVEMENTS
+Total Cholesterol   4.66 mmol/L  [Target <5.17] — down from 6.69 in April
+LDL Cholesterol     2.23 mmol/L  [Target <3.40] — down from 3.58 in April
+
+✅ EXCELLENT / GOOD
+Glucose             5.62 mmol/L  [Optimal 4.11–5.89]
+HbA1c               5.0 %        [Target <7.0]
+Insulin Resistance  1.5 HOMA     [Reference <2.7]
+Insulin             6.1 ulU/mL   [Reference 2.6–24.9]
+CRP (Inflammation)  0.6 mg/L     [Reference <5.0]
+HDL Cholesterol     2.22 mmol/L  [Reference >1.68] — Protective
+Triglycerides       0.46 mmol/L  [Target <1.70]
+TSH (Thyroid)       1.62 ulU/mL  [Reference 0.27–4.20]
+DHEA-S              155 ug/dL    [Reference 98.8–340.0]
+Ferritin            57 ng/mL     [Reference 13–150]
+Zinc                15.9 umol/L  [Reference 9.2–18.4]
+Vitamin D           92 nmol/L    [Reference >75]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GP notes: T3 below range · B12 above range (likely supplementation) · Cortisol borderline high`;
+  const onCopied=()=>{btn.textContent='✓ Copied!';btn.style.color='#5cb85c';setTimeout(()=>{btn.textContent='📋 Export';btn.style.color='';},2500);};
+  navigator.clipboard.writeText(text).then(onCopied).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    onCopied();
   });
 }
 
