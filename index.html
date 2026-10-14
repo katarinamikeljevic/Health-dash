@@ -1881,35 +1881,136 @@ button,input,textarea,select{font-family:inherit}
 <!-- BLOOD TAB -->
 <div id="tab-blood" class="panel">
   <div style="padding:20px 16px 60px">
+
+    <!-- Header + Export -->
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
       <div>
-        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">28 June 2026 Results</div>
+        <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Latest: 1 July 2026</div>
         <div class="section-title" style="margin-bottom:0">Your Blood Panel</div>
       </div>
       <button onclick="exportBloodResults(this)" style="flex-shrink:0;margin-top:4px;padding:8px 14px;background:rgba(184,147,74,.15);border:1px solid rgba(184,147,74,.35);border-radius:8px;color:var(--gold);font-size:11px;letter-spacing:1px;cursor:pointer">📋 Export</button>
     </div>
-    <div class="tip-box" style="margin-top:12px"><strong style="color:var(--gold)">Big improvement:</strong> Cholesterol down from 6.69 → 4.66 ✓ LDL down to 2.23 ✓ Cortisol still slightly elevated (543) — keep managing. T3 low and B12 above range — both to mention to GP. Everything else excellent.</div>
+    <div class="tip-box" style="margin-top:12px"><strong style="color:var(--gold)">1 July 2026:</strong> ALT just 1 unit above range — watch but not urgent. Ferritin dipped slightly (57→49), still fine. HbA1c crept up a touch (36 mmol/mol = 5.4%) — still excellent. TSH moved down nicely. Folate good. Haemoglobin and white cells normal.</div>
 
-    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:0 0 10px">Monitor These</div>
+    <!-- ── 1 JULY 2026 ── -->
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">1 July 2026 — Monitor</div>
+
+    <div class="blood-card watch">
+      <div class="blood-name">ALT (Liver Enzyme)</div>
+      <div class="blood-val">35 <span style="font-size:13px;color:var(--muted)">U/L</span></div>
+      <div class="blood-ref">Range 0–34 — 1 unit above upper limit · likely benign</div>
+      <span class="blood-badge badge-watch">Borderline High</span>
+      <div class="blood-tip">↗ Avoid alcohol, processed food, excess fat · stay hydrated<br>↘ Usually normalises on its own · recheck at next blood test</div>
+    </div>
+
+    <div class="blood-card watch">
+      <div class="blood-name">Monocytes</div>
+      <div class="blood-val">0.2 <span style="font-size:13px;color:var(--muted)">×10⁹/L</span></div>
+      <div class="blood-ref">Range 0.3–0.9 — slightly below lower limit · minor immune flag</div>
+      <span class="blood-badge badge-watch">Slightly Low</span>
+      <div class="blood-tip">↗ Generally not diet-actionable · mention at next GP visit if persistent<br>↘ Often transient — viral illness or timing can cause this</div>
+    </div>
+
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">1 July 2026 — Updated Results</div>
+
+    <!-- Ferritin with trend -->
+    <div class="blood-card">
+      <div class="blood-name">Ferritin (Iron Stores)</div>
+      <div class="blood-val">49 <span style="font-size:13px;color:var(--muted)">µg/L</span></div>
+      <div class="blood-ref">Range 15–200 · still well within range</div>
+      <span class="blood-badge badge-ok">Good</span>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:7px;font-size:11px">
+        <span style="color:var(--muted)">Jun 28</span>
+        <span style="color:var(--soft);font-weight:600">57</span>
+        <div style="flex:1;height:1.5px;background:linear-gradient(to right,rgba(184,147,74,.5),rgba(230,160,80,.5))"></div>
+        <span style="color:var(--text);font-weight:600">49</span>
+        <span style="color:var(--muted)">Jul 1</span>
+        <span style="color:#e8a050;font-weight:600">↓ −8</span>
+      </div>
+      <div class="blood-tip">Small dip — keep iron-rich foods: red meat, eggs, spinach. Vitamin C with iron helps absorption. Continue monitoring.</div>
+    </div>
+
+    <!-- HbA1c with trend -->
+    <div class="blood-card">
+      <div class="blood-name">HbA1c (Blood Sugar)</div>
+      <div class="blood-val">36 <span style="font-size:13px;color:var(--muted)">mmol/mol</span></div>
+      <div class="blood-ref">= 5.4% · Excellent blood sugar control · target &lt;48 mmol/mol</div>
+      <span class="blood-badge badge-ok">Excellent</span>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:7px;font-size:11px">
+        <span style="color:var(--muted)">Jun 28</span>
+        <span style="color:var(--soft);font-weight:600">31 <span style="font-weight:400;color:var(--muted)">(5.0%)</span></span>
+        <div style="flex:1;height:1.5px;background:linear-gradient(to right,rgba(184,147,74,.5),rgba(230,160,80,.5))"></div>
+        <span style="color:var(--text);font-weight:600">36 <span style="font-weight:400;color:var(--muted)">(5.4%)</span></span>
+        <span style="color:var(--muted)">Jul 1</span>
+        <span style="color:#e8a050;font-weight:600">↑ +5</span>
+      </div>
+      <div class="blood-tip">Slight uptick but well within excellent range. Keep consistent meal timing and avoid spiking carbs alone — pair with protein.</div>
+    </div>
+
+    <!-- TSH with trend -->
+    <div class="blood-card">
+      <div class="blood-name">TSH (Thyroid)</div>
+      <div class="blood-val">0.86 <span style="font-size:13px;color:var(--muted)">ulU/mL</span></div>
+      <div class="blood-ref">Reference 0.27–4.20 · moved lower — still well in range</div>
+      <span class="blood-badge badge-ok">Good</span>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:7px;font-size:11px">
+        <span style="color:var(--muted)">Jun 28</span>
+        <span style="color:var(--soft);font-weight:600">1.62</span>
+        <div style="flex:1;height:1.5px;background:linear-gradient(to right,rgba(80,180,120,.5),rgba(80,180,120,.5))"></div>
+        <span style="color:var(--text);font-weight:600">0.86</span>
+        <span style="color:var(--muted)">Jul 1</span>
+        <span style="color:#5cb85c;font-weight:600">↓ −0.76</span>
+      </div>
+      <div class="blood-tip">Decreasing TSH within range is normal. T3 was low in June — worth retesting T3 alongside TSH next time.</div>
+    </div>
+
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">1 July 2026 — Normal</div>
+
+    <div class="blood-card">
+      <div class="blood-name">Folate</div>
+      <div class="blood-val">11.5 <span style="font-size:13px;color:var(--muted)">ng/mL</span></div>
+      <div class="blood-ref">Normal range · important for energy &amp; fertility</div>
+      <span class="blood-badge badge-ok">Good</span>
+    </div>
+
+    <div class="blood-card">
+      <div class="blood-name">Haemoglobin</div>
+      <div class="blood-val">128 <span style="font-size:13px;color:var(--muted)">g/L</span></div>
+      <div class="blood-ref">Normal range · supports energy &amp; oxygen delivery</div>
+      <span class="blood-badge badge-ok">Normal</span>
+    </div>
+
+    <div class="blood-card">
+      <div class="blood-name">White Blood Cells</div>
+      <div class="blood-val">4.3 <span style="font-size:13px;color:var(--muted)">×10⁹/L</span></div>
+      <div class="blood-ref">Reference 4.0–11.0 · low-normal end</div>
+      <span class="blood-badge badge-ok">Normal (low-end)</span>
+      <div class="blood-tip">Within range but lower end — zinc, vitamin D and sleep all support immune function. Already supplementing both ✓</div>
+    </div>
+
+    <!-- ── 28 JUNE 2026 ── -->
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)">
+      <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:4px">Previous — 28 June 2026</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Results not repeated in July test</div>
+    </div>
+
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:0 0 10px">Monitor</div>
     <div class="blood-card watch"><div class="blood-name">Morning Cortisol</div><div class="blood-val">543 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Range 133–537 — slightly above upper limit · affects belly fat &amp; puffiness</div><span class="blood-badge badge-watch">Slightly High</span><div class="blood-tip">↗ 8h sleep, magnesium 300mg at night, gentle morning walks<br>↘ Avoid overtraining, caffeine after 2pm, high stress</div></div>
-    <div class="blood-card watch"><div class="blood-name">T3 (Active Thyroid)</div><div class="blood-val">1.1 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Range 1.3–3.1 — below lower limit · can affect energy &amp; metabolism</div><span class="blood-badge badge-watch">Low — GP Review</span><div class="blood-tip">↗ Selenium (Brazil nuts), zinc (already good), iodine, adequate calories<br>↘ Avoid very low calorie diets — can suppress T3</div></div>
+    <div class="blood-card watch"><div class="blood-name">T3 (Active Thyroid)</div><div class="blood-val">1.1 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Range 1.3–3.1 — below lower limit · can affect energy &amp; metabolism</div><span class="blood-badge badge-watch">Low — Retest</span><div class="blood-tip">↗ Selenium (Brazil nuts), zinc (already good), iodine, adequate calories<br>↘ Avoid very low calorie diets — can suppress T3</div></div>
     <div class="blood-card high"><div class="blood-name">Vitamin B12</div><div class="blood-val">934 <span style="font-size:13px;color:var(--muted)">pg/mL</span></div><div class="blood-ref">Above range 197–771 — likely from supplementation</div><span class="blood-badge badge-high">Above Range</span><div class="blood-tip">Consider reducing B12 supplement dose — mention to GP at next visit</div></div>
 
-    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">Excellent Improvements ↑</div>
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">Excellent Improvements (vs April)</div>
     <div class="blood-card"><div class="blood-name">Total Cholesterol</div><div class="blood-val">4.66 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Desirable &lt;5.17 ✓ — down from 6.69 in April</div><span class="blood-badge badge-ok">Excellent ↑</span></div>
     <div class="blood-card"><div class="blood-name">LDL Cholesterol</div><div class="blood-val">2.23 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Desirable &lt;3.40 ✓ — down from 3.58 in April</div><span class="blood-badge badge-ok">Excellent ↑</span></div>
 
-    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">Keep These Excellent</div>
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin:20px 0 10px">Excellent / Good</div>
     <div class="blood-card"><div class="blood-name">Glucose</div><div class="blood-val">5.62 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Optimal 4.11–5.89</div><span class="blood-badge badge-ok">Excellent</span></div>
-    <div class="blood-card"><div class="blood-name">HbA1c</div><div class="blood-val">5.0 <span style="font-size:13px;color:var(--muted)">%</span></div><div class="blood-ref">Excellent blood sugar control · target &lt;7.0</div><span class="blood-badge badge-ok">Excellent</span></div>
     <div class="blood-card"><div class="blood-name">Insulin Resistance (HOMA)</div><div class="blood-val">1.5 <span style="font-size:13px;color:var(--muted)">index</span></div><div class="blood-ref">Reference &lt;2.7 — very good</div><span class="blood-badge badge-ok">Very Good</span></div>
     <div class="blood-card"><div class="blood-name">Insulin</div><div class="blood-val">6.1 <span style="font-size:13px;color:var(--muted)">ulU/mL</span></div><div class="blood-ref">Reference 2.6–24.9</div><span class="blood-badge badge-ok">Good</span></div>
     <div class="blood-card"><div class="blood-name">CRP (Inflammation)</div><div class="blood-val">0.6 <span style="font-size:13px;color:var(--muted)">mg/L</span></div><div class="blood-ref">Reference &lt;5.0 — very low inflammation</div><span class="blood-badge badge-ok">Excellent</span></div>
     <div class="blood-card"><div class="blood-name">HDL Cholesterol (Good)</div><div class="blood-val">2.22 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Reference &gt;1.68 — very high HDL is protective</div><span class="blood-badge badge-ok">Very High — Protective</span></div>
     <div class="blood-card"><div class="blood-name">Triglycerides</div><div class="blood-val">0.46 <span style="font-size:13px;color:var(--muted)">mmol/L</span></div><div class="blood-ref">Desirable &lt;1.70 — excellent</div><span class="blood-badge badge-ok">Excellent</span></div>
-    <div class="blood-card"><div class="blood-name">TSH (Thyroid)</div><div class="blood-val">1.62 <span style="font-size:13px;color:var(--muted)">ulU/mL</span></div><div class="blood-ref">Reference 0.27–4.20</div><span class="blood-badge badge-ok">Good</span></div>
     <div class="blood-card"><div class="blood-name">DHEA-S</div><div class="blood-val">155 <span style="font-size:13px;color:var(--muted)">ug/dL</span></div><div class="blood-ref">Reference 98.8–340.0</div><span class="blood-badge badge-ok">Good</span></div>
-    <div class="blood-card"><div class="blood-name">Ferritin (Iron Stores)</div><div class="blood-val">57 <span style="font-size:13px;color:var(--muted)">ng/mL</span></div><div class="blood-ref">Reference 13–150</div><span class="blood-badge badge-ok">Good</span></div>
     <div class="blood-card"><div class="blood-name">Zinc</div><div class="blood-val">15.9 <span style="font-size:13px;color:var(--muted)">umol/L</span></div><div class="blood-ref">Reference 9.2–18.4</div><span class="blood-badge badge-ok">Good</span></div>
     <div class="blood-card"><div class="blood-name">Vitamin D</div><div class="blood-val">92 <span style="font-size:13px;color:var(--muted)">nmol/L</span></div><div class="blood-ref">Reference &gt;75 — keep supplementing</div><span class="blood-badge badge-ok">Good</span></div>
   </div>
@@ -7760,34 +7861,51 @@ It's ${mealTime} time. Based on everything above, what should I eat next? Be spe
 }
 
 function exportBloodResults(btn){
-  const text=`BLOOD PANEL RESULTS — 28 June 2026
+  const text=`BLOOD PANEL RESULTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⚠ MONITOR THESE
-Morning Cortisol    543 nmol/L   [Range 133–537] — Slightly High
-T3 (Active Thyroid) 1.1 nmol/L   [Range 1.3–3.1] — Low · GP Review
-Vitamin B12         934 pg/mL    [Range 197–771] — Above Range
+1 JULY 2026
 
-✅ EXCELLENT IMPROVEMENTS
-Total Cholesterol   4.66 mmol/L  [Target <5.17] — down from 6.69 in April
-LDL Cholesterol     2.23 mmol/L  [Target <3.40] — down from 3.58 in April
+⚠ MONITOR
+ALT (Liver)         35 U/L       [Range 0–34] — 1 unit above range
+Monocytes           0.2 ×10⁹/L  [Range 0.3–0.9] — slightly low
+
+📈 CHANGES FROM JUNE 28
+Ferritin            49 µg/L      [Range 15–200] — was 57 (↓−8, still normal)
+HbA1c               36 mmol/mol  [=5.4%, was 31/5.0%] — slight uptick, still excellent
+TSH                 0.86 ulU/mL  [Range 0.27–4.20] — was 1.62 (↓, still good)
+
+✅ NORMAL
+Folate              11.5 ng/mL   — normal
+Haemoglobin         128 g/L      — normal
+White Blood Cells   4.3 ×10⁹/L  [Range 4.0–11.0] — low-normal
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+28 JUNE 2026
+
+⚠ MONITOR
+Morning Cortisol    543 nmol/L   [Range 133–537] — Slightly High
+T3 (Active Thyroid) 1.1 nmol/L  [Range 1.3–3.1] — Low · Retest
+Vitamin B12         934 pg/mL    [Range 197–771] — Above Range (supplementation)
+
+✅ EXCELLENT IMPROVEMENTS (vs April)
+Total Cholesterol   4.66 mmol/L  [Target <5.17] — was 6.69
+LDL Cholesterol     2.23 mmol/L  [Target <3.40] — was 3.58
 
 ✅ EXCELLENT / GOOD
 Glucose             5.62 mmol/L  [Optimal 4.11–5.89]
-HbA1c               5.0 %        [Target <7.0]
 Insulin Resistance  1.5 HOMA     [Reference <2.7]
 Insulin             6.1 ulU/mL   [Reference 2.6–24.9]
 CRP (Inflammation)  0.6 mg/L     [Reference <5.0]
 HDL Cholesterol     2.22 mmol/L  [Reference >1.68] — Protective
 Triglycerides       0.46 mmol/L  [Target <1.70]
-TSH (Thyroid)       1.62 ulU/mL  [Reference 0.27–4.20]
 DHEA-S              155 ug/dL    [Reference 98.8–340.0]
-Ferritin            57 ng/mL     [Reference 13–150]
 Zinc                15.9 umol/L  [Reference 9.2–18.4]
 Vitamin D           92 nmol/L    [Reference >75]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-GP notes: T3 below range · B12 above range (likely supplementation) · Cortisol borderline high`;
+GP notes: ALT borderline (recheck) · T3 below range (retest) · B12 above range · Cortisol borderline high`;
   const onCopied=()=>{btn.textContent='✓ Copied!';btn.style.color='#5cb85c';setTimeout(()=>{btn.textContent='📋 Export';btn.style.color='';},2500);};
   navigator.clipboard.writeText(text).then(onCopied).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0';
