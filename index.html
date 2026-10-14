@@ -271,9 +271,9 @@ button,input,textarea,select{font-family:inherit}
     <div style="font-size:10px;color:var(--muted);margin-bottom:0">Log your steps above</div>
     </div>
   <div class="card" id="waterCard">
-    <div class="card-label">Daily Water · Target 2.5–3L</div>
-    <div class="glasses"><button class="glass filled" onclick="setWater(1)">1</button><button class="glass filled" onclick="setWater(2)">2</button><button class="glass filled" onclick="setWater(3)">3</button><button class="glass filled" onclick="setWater(4)">4</button><button class="glass" onclick="setWater(5)">5</button><button class="glass" onclick="setWater(6)">6</button><button class="glass" onclick="setWater(7)">7</button><button class="glass" onclick="setWater(8)">8</button><button class="glass" onclick="setWater(9)">9</button><button class="glass" onclick="setWater(10)">10</button><button class="glass" onclick="setWater(11)">11</button></div>
-    <div style="font-size:12px;color:var(--soft);margin-bottom:8px"><strong style="color:#6aaad4">1000ml</strong> of 2,750ml</div>
+    <div class="card-label">Daily Water · Target 2L</div>
+    <div class="glasses"><button class="glass filled" onclick="setWater(1)">1</button><button class="glass filled" onclick="setWater(2)">2</button><button class="glass filled" onclick="setWater(3)">3</button><button class="glass filled" onclick="setWater(4)">4</button><button class="glass" onclick="setWater(5)">5</button><button class="glass" onclick="setWater(6)">6</button><button class="glass" onclick="setWater(7)">7</button><button class="glass" onclick="setWater(8)">8</button></div>
+    <div style="font-size:12px;color:var(--soft);margin-bottom:8px"><strong style="color:#6aaad4">1000ml</strong> of 2,000ml</div>
     <div style="font-size:10px;color:var(--muted);line-height:1.6">Each 💧 = 250ml · <strong style="color:var(--text)">What counts:</strong> plain water ✓ · sparkling water ✓ · herbal teas (dandelion, peppermint, ginger) ✓ · green/black tea ✓ · electrolyte water ✓ · <span style="color:var(--red)">coffee, alcohol, fruit juice</span> ✗</div></div>
   <div id="checklistContainer" style="padding:0 16px"><div style="margin-top:12px">
       <div class="sec-hdr" onclick="toggleSec(this)">
@@ -2493,7 +2493,7 @@ function renderMealStructure(){
     {icon:"⏰",label:"Last meal 3h before bed",note:""},
     {icon:"🥦",label:"No cruciferous at dinner",note:"Broccoli/cauli → lunch only"},
     {icon:"🍶",label:"ACV before main meal",note:"Blood sugar management"},
-    {icon:"💧",label:"2.5L water daily",note:"Teas count · not coffee"},
+    {icon:"💧",label:"2L water daily",note:"Teas count · not coffee"},
   ];
   el.innerHTML=`
     <div style="margin:10px 0 4px">
@@ -2553,9 +2553,9 @@ function renderRoutine(){
     ${stepsLog.length?`<div style="border-top:1px solid var(--border);padding-top:6px">${stepsLog.map((e,i)=>`<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:11px"><span style="color:var(--soft)">${e.label||e.time}</span><div style="display:flex;align-items:center;gap:8px"><span style="color:var(--text);font-weight:500">+${e.count.toLocaleString()}</span><button onclick="removeStepsEntry(${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 2px;line-height:1">×</button></div></div>`).join("")}</div>`:""}`;
   // Water card
   document.getElementById("waterCard").innerHTML=`
-    <div class="card-label">Daily Water · Target 2.5–3L</div>
-    <div class="glasses">${Array.from({length:11},(_,i)=>`<button class="glass${i<water?" filled":""}" onclick="setWater(${i+1===water?i:i+1})">${i+1}</button>`).join("")}</div>
-    <div style="font-size:12px;color:var(--soft);margin-bottom:8px"><strong style="color:#6aaad4">${water*250}ml</strong> of 2,750ml</div>
+    <div class="card-label">Daily Water · Target 2L</div>
+    <div class="glasses">${Array.from({length:8},(_,i)=>`<button class="glass${i<water?" filled":""}" onclick="setWater(${i+1===water?i:i+1})">${i+1}</button>`).join("")}</div>
+    <div style="font-size:12px;color:var(--soft);margin-bottom:8px"><strong style="color:#6aaad4">${water*250}ml</strong> of 2,000ml</div>
     <div style="font-size:10px;color:var(--muted);line-height:1.6">Each 💧 = 250ml · <strong style="color:var(--text)">What counts:</strong> plain water ✓ · sparkling water ✓ · herbal teas (dandelion, peppermint, ginger) ✓ · green/black tea ✓ · electrolyte water ✓ · <span style="color:var(--red)">coffee, alcohol, fruit juice</span> ✗</div>`;
   // Yolk
   const yolks=(state.yolks||{})[wk]||0,limit=6,over=yolks>limit,atLimit=yolks===limit;
@@ -7818,7 +7818,7 @@ Wedding: 13 September — this is my deadline
 
 ━━ DAILY TARGETS ━━
 Calories: 1,500–1,600 kcal · Protein: 110–120g · Carbs: 120–140g
-Fat: 45–55g · Fibre: 30–35g · Salt: <1,500mg · Water: 2.5L
+Fat: 45–55g · Fibre: 30–35g · Salt: <1,500mg · Water: 2L
 
 ━━ MEAL STRUCTURE RULES ━━
 · Front-load protein and carbs — more at breakfast and lunch, less at dinner
